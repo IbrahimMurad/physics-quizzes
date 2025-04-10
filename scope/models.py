@@ -18,9 +18,9 @@ class Unit(models.Model):
 
     textbook = models.ForeignKey(TextBook, on_delete=models.CASCADE, related_name="units", related_query_name="unit")
     title = models.CharField(max_length=64)
-    caption = models.TextField()
-    ccover = models.ImageField()
-    in_scope_order = models.PositiveSmallIntegerField()
+    caption = models.TextField(blank=True, default="")
+    cover = models.ImageField(null=True, blank=True)
+    in_scope_order = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
         ordering = ["in_scope_order"]
@@ -35,9 +35,9 @@ class Chapter(models.Model):
 
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name="chapters", related_query_name="chapter")
     title = models.CharField(max_length=64)
-    caption = models.TextField()
-    ccover = models.ImageField()
-    in_scope_order = models.PositiveSmallIntegerField()
+    caption = models.TextField(blank=True, default="")
+    cover = models.ImageField(null=True, blank=True)
+    in_scope_order = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
         ordering = ["unit__in_scope_order", "in_scope_order"]
@@ -52,9 +52,9 @@ class Lesson(models.Model):
 
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name="lessons", related_query_name="lesson")
     title = models.CharField(max_length=64)
-    caption = models.TextField()
-    ccover = models.ImageField()
-    in_scope_order = models.PositiveSmallIntegerField()
+    caption = models.TextField(blank=True, default="")
+    cover = models.ImageField(null=True, blank=True)
+    in_scope_order = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
         ordering = ["chapter__in_scope_order", "in_scope_order"]
