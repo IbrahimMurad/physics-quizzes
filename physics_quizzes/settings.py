@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     # my apps
     "scope",
+    "problem",
 ]
 
 MIDDLEWARE = [
