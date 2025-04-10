@@ -24,10 +24,19 @@ class Unit(models.Model):
 
     class Meta:
         ordering = ["in_scope_order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["textbook", "in_scope_order"],
+                name="unique_unit_order_in_textbook"
+            )
+        ]
 
     def __str__(self):
         return self.title
 
+    def save(self):
+        self.full_clean()
+        super().save()
 
 class Chapter(models.Model):
     """This model represnets the chapters of a unit
@@ -41,10 +50,19 @@ class Chapter(models.Model):
 
     class Meta:
         ordering = ["unit__in_scope_order", "in_scope_order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["unit", "in_scope_order"],
+                name="unique_chapter_order_in_unit"
+            )
+        ]
 
     def __str__(self):
         return self.title
 
+    def save(self):
+        self.full_clean()
+        super().save()
 
 class Lesson(models.Model):
     """This model represnets the lessons of a chapter
@@ -58,7 +76,16 @@ class Lesson(models.Model):
 
     class Meta:
         ordering = ["chapter__in_scope_order", "in_scope_order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["chapter", "in_scope_order"],
+                name="unique_lesson_order_in_chapter"
+            )
+        ]
 
     def __str__(self):
         return self.title
 
+    def save(self):
+        self.full_clean()
+        super().save()
