@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static "css/scope.css" %}">
+    <title>Title</title>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Physics Quizzes</h1>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <div class="cards">
+          {% for textbook in textbooks %}
+            {% include "components/card.html" with title=textbook.title cover=textbook.cover caption=textbook.caption %}
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

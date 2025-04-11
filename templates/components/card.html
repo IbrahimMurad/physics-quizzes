@@ -1,0 +1,9 @@
+<div class="card">
+  <div class="cover">
+    <img src="{% if cover %} {{cover.url}} {% endif %}" alt="{{ title }}" />
+  </div>
+  <div class="card-content">
+    <h2 class="title">{{ title }}</h2>
+    <p>{{ caption }}</p>
+  </div>
+</div>
