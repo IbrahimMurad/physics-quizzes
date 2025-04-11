@@ -6,17 +6,23 @@ class TextBook(models.Model):
     could be for first year, second year, or any other textbooks
     """
 
-    name = models.CharField(max_length=64)
+    title = models.CharField(max_length=64)
+    caption = models.TextField(blank=True, default="")
+    cover = models.ImageField(null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Unit(models.Model):
-    """This model represnets the units of a textbook
-    """
+    """This model represnets the units of a textbook"""
 
-    textbook = models.ForeignKey(TextBook, on_delete=models.CASCADE, related_name="units", related_query_name="unit")
+    textbook = models.ForeignKey(
+        TextBook,
+        on_delete=models.CASCADE,
+        related_name="units",
+        related_query_name="unit",
+    )
     title = models.CharField(max_length=64)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
@@ -27,7 +33,7 @@ class Unit(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["textbook", "in_scope_order"],
-                name="unique_unit_order_in_textbook"
+                name="unique_unit_order_in_textbook",
             )
         ]
 
@@ -38,11 +44,16 @@ class Unit(models.Model):
         self.full_clean()
         super().save()
 
-class Chapter(models.Model):
-    """This model represnets the chapters of a unit
-    """
 
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name="chapters", related_query_name="chapter")
+class Chapter(models.Model):
+    """This model represnets the chapters of a unit"""
+
+    unit = models.ForeignKey(
+        Unit,
+        on_delete=models.CASCADE,
+        related_name="chapters",
+        related_query_name="chapter",
+    )
     title = models.CharField(max_length=64)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
@@ -52,8 +63,7 @@ class Chapter(models.Model):
         ordering = ["unit__in_scope_order", "in_scope_order"]
         constraints = [
             models.UniqueConstraint(
-                fields=["unit", "in_scope_order"],
-                name="unique_chapter_order_in_unit"
+                fields=["unit", "in_scope_order"], name="unique_chapter_order_in_unit"
             )
         ]
 
@@ -64,11 +74,16 @@ class Chapter(models.Model):
         self.full_clean()
         super().save()
 
-class Lesson(models.Model):
-    """This model represnets the lessons of a chapter
-    """
 
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name="lessons", related_query_name="lesson")
+class Lesson(models.Model):
+    """This model represnets the lessons of a chapter"""
+
+    chapter = models.ForeignKey(
+        Chapter,
+        on_delete=models.CASCADE,
+        related_name="lessons",
+        related_query_name="lesson",
+    )
     title = models.CharField(max_length=64)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
@@ -79,7 +94,7 @@ class Lesson(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["chapter", "in_scope_order"],
-                name="unique_lesson_order_in_chapter"
+                name="unique_lesson_order_in_chapter",
             )
         ]
 
