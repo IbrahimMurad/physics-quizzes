@@ -3,7 +3,9 @@
     <img src="{% if cover %} {{cover.url}} {% endif %}" alt="{{ title }}" />
   </div>
   <div class="card-content">
-    <h2 class="title">{{ title }}</h2>
+    <a class="title-link" href="{{explore_url}}">
+      <h2 class="title">{{ title }}</h2>
+    </a>
     <p>{{ caption }}</p>
   </div>
 </div>

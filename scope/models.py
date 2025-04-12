@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class TextBook(models.Model):
@@ -12,6 +13,12 @@ class TextBook(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("units", kwargs={"pk": self.pk})
+
+    def url(self):
+        return reverse("units", kwargs={"textbook_id": self.pk})
 
 
 class Unit(models.Model):
@@ -44,6 +51,12 @@ class Unit(models.Model):
         self.full_clean()
         super().save()
 
+    def get_absolute_url(self):
+        return reverse("chapters", kwargs={"pk": self.pk})
+
+    def url(self):
+        return reverse("chapters", kwargs={"unit_id": self.pk})
+
 
 class Chapter(models.Model):
     """This model represnets the chapters of a unit"""
@@ -73,6 +86,13 @@ class Chapter(models.Model):
     def save(self):
         self.full_clean()
         super().save()
+
+    def get_absolute_url(self):
+        return reverse("lessons", kwargs={"pk": self.pk})
+
+    @property
+    def url(self):
+        return reverse("lessons", kwargs={"chapter_id": self.pk})
 
 
 class Lesson(models.Model):

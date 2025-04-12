@@ -19,11 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from scope.views import index
+from scope.views import index, units, chapters, lessons
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),
+    path("textbook/<int:textbook_id>/units", units, name="units"),
+    path("unit/<int:unit_id>/chapters", chapters, name="chapters"),
+    path("chapter/<int:chapter_id>/lessons", lessons, name="lessons"),
 ]
 
 

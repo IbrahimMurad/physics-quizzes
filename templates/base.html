@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static "css/scope.css" %}">
+    <title>{% block title %}Physics quizzes{% endblock title %}</title>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Physics Quizzes</h1>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        {% block content %} {% endblock %}
+      </div>
+    </main>
+  </body>
+</html>
