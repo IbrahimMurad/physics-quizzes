@@ -120,3 +120,48 @@ header h1 {
   font-size: 1em;
   margin-bottom: 10px;
 }
+
+.breadcrumbs {
+  padding: 1rem 2rem;
+  background-color: #b98100;
+  border-radius: var(--component-border-radius);
+  box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
+  border: 1px solid var(--component-border-color);
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    li {
+      margin-right: 10px;
+      font-weight: 600;
+      color: var(--main-text-color);
+
+      a {
+        text-decoration: none;
+        font-weight: 600;
+        color: var(--component-secondary-color);
+
+        &:hover,
+        &:focus,
+        &:active {
+          color: var(--main-text-color);
+          text-decoration: underline;
+        }
+      }
+
+      &:not(:last-child)::after {
+        content: '>';
+        margin-left: 10px;
+        color: var(--component-secondary-color);
+      }
+    }
+    li:last-child {
+      margin-right: 0;
+    }
+  }
+}

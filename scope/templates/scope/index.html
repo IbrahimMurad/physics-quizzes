@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
+<div class="breadcrumbs">
+  <ul>
+    <li>
+      {% if not breadcrumbs %}
+        Textbooks
+      {% else %}
+        <a href="{% url 'index' %}">Textbooks</a>
+      {% endif %}
+    </li>
+    {% for breadcrumb in breadcrumbs %}
+      <li>
+        {% if forloop.last %}
+          {{ breadcrumb.title }}
+        {% else %}
+          <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 <div class="cards">
   {% for scope in scopes %}
     {% include "components/card.html" with title=scope.title cover=scope.cover caption=scope.caption explore_url=scope.url %}
