@@ -7,7 +7,7 @@ class TextBook(models.Model):
     could be for first year, second year, or any other textbooks
     """
 
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=256)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
 
@@ -15,7 +15,7 @@ class TextBook(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("units", kwargs={"pk": self.pk})
+        return reverse("units", kwargs={"textbook_id": self.pk})
 
     def url(self):
         return reverse("units", kwargs={"textbook_id": self.pk})
@@ -30,7 +30,7 @@ class Unit(models.Model):
         related_name="units",
         related_query_name="unit",
     )
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=256)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
     in_scope_order = models.PositiveSmallIntegerField(default=1)
@@ -52,7 +52,7 @@ class Unit(models.Model):
         super().save()
 
     def get_absolute_url(self):
-        return reverse("chapters", kwargs={"pk": self.pk})
+        return reverse("chapters", kwargs={"unit_id": self.pk})
 
     def url(self):
         return reverse("chapters", kwargs={"unit_id": self.pk})
@@ -67,7 +67,7 @@ class Chapter(models.Model):
         related_name="chapters",
         related_query_name="chapter",
     )
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=256)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
     in_scope_order = models.PositiveSmallIntegerField(default=1)
@@ -88,7 +88,7 @@ class Chapter(models.Model):
         super().save()
 
     def get_absolute_url(self):
-        return reverse("lessons", kwargs={"pk": self.pk})
+        return reverse("lessons", kwargs={"chapter_id": self.pk})
 
     @property
     def url(self):
@@ -104,7 +104,7 @@ class Lesson(models.Model):
         related_name="lessons",
         related_query_name="lesson",
     )
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=256)
     caption = models.TextField(blank=True, default="")
     cover = models.ImageField(null=True, blank=True)
     in_scope_order = models.PositiveSmallIntegerField(default=1)
