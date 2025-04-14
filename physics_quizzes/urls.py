@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from scope.views import index, units, chapters, lessons
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path("textbook/<int:textbook_id>/units", units, name="units"),
     path("unit/<int:unit_id>/chapters", chapters, name="chapters"),
     path("chapter/<int:chapter_id>/lessons", lessons, name="lessons"),
+    path(r"^_nested_admin/", include("nested_admin.urls")),
 ]
 
 

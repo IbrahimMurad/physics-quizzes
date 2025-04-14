@@ -1,43 +1,40 @@
 from django.contrib import admin
+import nested_admin
+from problem.admin import ProblemInline
 from .models import TextBook, Unit, Chapter, Lesson
 
 
-class UnitInline(admin.TabularInline):
-    model = Unit
-    extra = 1
-
-
-class ChapterInline(admin.TabularInline):
-    model = Chapter
-    extra = 1
-
-
-class LessonInline(admin.TabularInline):
+class LessonInline(nested_admin.NestedTabularInline):
     model = Lesson
-    extra = 1
+    extra = 0
 
 
-@admin.register(TextBook)
-class TextBookAdmin(admin.ModelAdmin):
-    inlines = [UnitInline]
-    list_display = ("title", "cover")
-
-
-@admin.register(Unit)
-class UnitAdmin(admin.ModelAdmin):
-    inlines = [ChapterInline]
-    list_display = ("title", "textbook", "cover")
+@admin.register(Lesson)
+class LessonAdmin(nested_admin.NestedModelAdmin):
+    inlines = [ProblemInline]
+    list_filter = ["chapter"]
 
 
 @admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     inlines = [LessonInline]
-    list_display = ("title", "unit", "cover")
 
 
-@admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
-    list_display = ("title", "chapter", "cover")
-    list_filter = ("chapter__unit__textbook",)
-    search_fields = ("title", "chapter__title")
-    ordering = ("chapter__unit__textbook", "chapter__unit", "chapter")
+class ChapterInline(nested_admin.NestedTabularInline):
+    model = Chapter
+    extra = 0
+    inlines = [LessonInline]
+
+
+@admin.register(Unit)
+class UnitAdmin(nested_admin.NestedModelAdmin):
+    inlines = [ChapterInline]
+
+
+class UnitInline(admin.StackedInline):
+    model = Unit
+
+
+@admin.register(TextBook)
+class TextBookAdmin(nested_admin.NestedModelAdmin):
+    inlines = [UnitInline]
