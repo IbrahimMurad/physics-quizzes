@@ -1,11 +1,10 @@
 <div class="card">
   <div class="cover">
-    <img src="{% if cover %} {{cover.url}} {% endif %}" alt="{{ title }}" />
+    <img src="{% if cover %}{{ cover.url }}{% endif %}" alt="{{ title }}" />
   </div>
   <div class="card-content">
-    <a class="title-link" href="{{explore_url}}">
-      <h2 class="title">{{ title }}</h2>
-    </a>
+    <h2 class="title">{{ title }}</h2>
     <p>{{ caption }}</p>
+    <a class="explore-btn" href="{{explore_url}}">Explore</a>
   </div>
 </div>

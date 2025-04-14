@@ -20,16 +20,24 @@ class LessonInline(admin.TabularInline):
 @admin.register(TextBook)
 class TextBookAdmin(admin.ModelAdmin):
     inlines = [UnitInline]
+    list_display = ("title", "cover")
 
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
     inlines = [ChapterInline]
+    list_display = ("title", "textbook", "cover")
 
 
 @admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     inlines = [LessonInline]
+    list_display = ("title", "unit", "cover")
 
 
-admin.site.register(Lesson)
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ("title", "chapter", "cover")
+    list_filter = ("chapter__unit__textbook",)
+    search_fields = ("title", "chapter__title")
+    ordering = ("chapter__unit__textbook", "chapter__unit", "chapter")
