@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # my apps
     "scope",
     "problem",
+    "exam",
 ]
 
 MIDDLEWARE = [
