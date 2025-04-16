@@ -7,7 +7,7 @@
       {% if not breadcrumbs %}
         Textbooks
       {% else %}
-        <a href="{% url 'index' %}">Textbooks</a>
+        <a href="{% url 'home' %}">Textbooks</a>
       {% endif %}
     </li>
     {% for breadcrumb in breadcrumbs %}
@@ -23,7 +23,7 @@
 </div>
 <div class="cards">
   {% for scope in scopes %}
-    {% include "components/card.html" with title=scope.title cover=scope.cover caption=scope.caption explore_url=scope.url %}
+    {% include "components/card.html" with scope=scope %}
   {% endfor %}
 </div>
 {% endblock content %}

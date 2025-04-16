@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ exam.title }}</h2>
+<p>Your exam has been generated successfuly.</p>
+<p>You can start it now or save it for later.</p>
+<a href="{% url "exam-solve" exam.id %}">Start Now</a>
+<p>Save for later? <a href="{% url "home" %}">go home</a></p>
+{% endblock content %}

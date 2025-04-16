@@ -17,8 +17,22 @@ class TextBook(models.Model):
     def get_absolute_url(self):
         return reverse("units", kwargs={"textbook_id": self.pk})
 
+    @property
     def url(self):
         return reverse("units", kwargs={"textbook_id": self.pk})
+
+    @property
+    def type(self):
+        return "Textbook"
+
+    @property
+    def problems(self):
+        """Get all problems of this textbook"""
+        from problem.models import Problem
+
+        return Problem.objects.filter(lesson__chapter__unit__textbook=self).values_list(
+            "id", flat=True
+        )
 
 
 class Unit(models.Model):
@@ -54,8 +68,22 @@ class Unit(models.Model):
     def get_absolute_url(self):
         return reverse("chapters", kwargs={"unit_id": self.pk})
 
+    @property
     def url(self):
         return reverse("chapters", kwargs={"unit_id": self.pk})
+
+    @property
+    def type(self):
+        return "Unit"
+
+    @property
+    def problems(self):
+        """Get all problems of this unit"""
+        from problem.models import Problem
+
+        return Problem.objects.filter(lesson__chapter__unit=self).values_list(
+            "id", flat=True
+        )
 
 
 class Chapter(models.Model):
@@ -94,6 +122,17 @@ class Chapter(models.Model):
     def url(self):
         return reverse("lessons", kwargs={"chapter_id": self.pk})
 
+    @property
+    def type(self):
+        return "Chapter"
+
+    @property
+    def problems(self):
+        """Get all problems of this chapter"""
+        from problem.models import Problem
+
+        return Problem.objects.filter(lesson__chapter=self).values_list("id", flat=True)
+
 
 class Lesson(models.Model):
     """This model represnets the lessons of a chapter"""
@@ -124,3 +163,14 @@ class Lesson(models.Model):
     def save(self):
         self.full_clean()
         super().save()
+
+    @property
+    def type(self):
+        return "Lesson"
+
+    @property
+    def problems(self):
+        """Get all problems of this lesson"""
+        from problem.models import Problem
+
+        return Problem.objects.filter(lesson=self).values_list("id", flat=True)

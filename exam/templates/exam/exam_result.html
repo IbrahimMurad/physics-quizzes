@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form>
+    <h2>{{ exam_title }} submitted by {{ submission.user.username }} </h2>
+    {% for answer in answers  %}
+    <fieldset>
+        <legend>{{ answer.problem.body }}</legend>
+        <div class="problem-options">
+            {% for choice in answer.problem.choices.all %}
+            <label class="problem-option {{ choice.is_correct|yesno:"correct,incorrect" }} {% if answer.choice == choice %}selected{% endif %}">
+                <input
+                    type="radio"
+                    name="problem_{{ answer.problem.id }}"
+                    value="{{ choice.id }}"
+                    disabled
+                    {% if answer.choice == choice %}checked{% endif %}
+                >
+                {{ choice.body }}
+            </label><br>
+            {% endfor %}
+        </div>
+    </fieldset>
+    {% endfor %}
+    <a href="{% url "home" %}">Go back home</a>
+</form>
+{% endblock content %}

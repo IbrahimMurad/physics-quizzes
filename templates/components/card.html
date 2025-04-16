@@ -1,10 +1,18 @@
 <div class="card">
   <div class="cover">
-    <img src="{% if cover %}{{ cover.url }}{% endif %}" alt="{{ title }}" />
+    <img src="{% if scope.cover %}{{ scope.cover.url }}{% endif %}" alt="{{ scope.title }}" />
   </div>
   <div class="card-content">
-    <h2 class="title">{{ title }}</h2>
-    <p>{{ caption }}</p>
-    <a class="explore-btn" href="{{explore_url}}">Explore</a>
+    <h2 class="title">{{ scope.title }}</h2>
+    <p>{{ scope.caption }}</p>
+    <div class="card-actions">
+      <form action="{% url "exam-create" %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="scope_type" value="{{ scope.type }}" />
+        <input type="hidden" name="scope_id" value="{{ scope.id }}" />
+        <button type="submit" class="create-exam-btn">Create Exam</button>
+      </form>
+      <a class="explore-btn" href="{{scope.url}}">Explore</a>
+    </div>
   </div>
 </div>
