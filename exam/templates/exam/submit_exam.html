@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 
-<form action="{% url 'exam-solve' exam.id %}" method="post">
+<form action="{% url 'exam-solve' exam.id %}" method="post" class="exam-form">
     {% csrf_token %}
-    <h2>{{ exam.title }}</h2>
+    <h2 class="exam-title">{{ exam.title }}</h2>
     {% for exam_problem in exam_problems  %}
-    <fieldset>
-        <legend>{{ exam_problem.order }}. {{ exam_problem.problem.body }}</legend>
-        <div class="problem-options">
-            {% for choice in exam_problem.problem.choices.all %}
-            <label>
-                <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}">
-                {{ choice.body }}
-            </label><br>
-            {% endfor %}
-        </div>
-    </fieldset>
+    <div class="problem">
+        <fieldset>
+            <legend class="problem-body">{{ exam_problem.order }}. {{ exam_problem.problem.body }}</legend>
+            <div class="problem-options">
+                {% for choice in exam_problem.problem.choices.all %}
+                <label class="problem-option">
+                    <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}">
+                    <p>{{ choice.body }}</p>
+                </label><br>
+                {% endfor %}
+            </div>
+        </fieldset>
+    </div>
     {% endfor %}
     <button type="submit" class="submit-exam-btn">Submit Exam</button>
 </form>

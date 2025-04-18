@@ -89,15 +89,13 @@ def submit_exam(request, exam_id):
     if request.method == "POST":
         score = 0
         for exam_problem in exam_problems:
-            print(request.POST)
             answer = request.POST.get(f"problem_{exam_problem.order}")
-            print(f"Answer for problem {exam_problem.order}: {answer}")
             if answer:
                 choice = Choice.objects.get(id=answer)
                 Answer.objects.create(
                     submission=submission,
                     problem=exam_problem.problem,
-                    choice=Choice.objects.get(id=answer),
+                    choice=choice,
                 )
                 if choice.is_correct:
                     score += 1
