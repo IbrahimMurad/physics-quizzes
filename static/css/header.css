@@ -1,0 +1,65 @@
+
+/* Header styles */
+
+header {
+  background-color: var(--main-background-color);
+  border-bottom: 1px solid var(--component-border-color);
+  box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
+  height: 4rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--main-text-color);
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  gap: 20px;
+
+  .logout-button,
+  .login-button {
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: var(--main-text-color);
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--component-main-color);
+      color: var(--main-background-color);
+      border-radius: var(--component-border-radius);
+      box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
+    }
+  }
+
+  .login-button:hover,
+  .login-button:focus,
+  .login-button:active {
+    background-color:#42AE5A;
+  }
+
+  .logout-button:hover,
+  .logout-button:focus,
+  .logout-button:active {
+    background-color: #FF4F4F;
+  }
+}

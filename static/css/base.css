@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'spacegrotesk';
+  src: url('../fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+:root {
+  --main-background-color: #FFFFFF;
+  --secondary-background-color: #FFF9E4;
+  --teriary-background-color: #FFD600;
+  --main-text-color: #000000;
+  --secondary-text-color: #96A2AE;
+  --component-main-color: #fab005;
+  --component-secondary-color: #F2E6D4;
+  --component-border-color: #000000;
+  --component-border-radius: 5px;
+  --component-border-width: 32px;
+  --component-wrong-background-color: #FF4F4F;
+  --component-right-background-color: #42AE5A;
+  --component-shadow-color: rgba(0, 0, 0, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'spacegrotesk', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+body {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--teriary-background-color);
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .container {
+      padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+      padding: 2px;
+  }
+}

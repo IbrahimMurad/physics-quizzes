@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ exam.title }}</h2>
-<p>Your exam has been generated successfuly.</p>
-<p>You can start it now or save it for later.</p>
-<a href="{% url "exam-solve" exam.id %}">Start Now</a>
-<p>Save for later? <a href="{% url "home" %}">go home</a></p>
+<div class="container">
+    <div class="breadcrumbs">
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+        </ul>
+    </div>
+    <div class="exam-container">
+        <h2 class="exam-title">{{ exam.title }}</h2>
+        <p class="exam-description">Your exam has been generated successfuly.</p>
+        <p class="exam-description">You can start it now or save it for later.</p>
+        <a class="exam-button" href="{% url "exam-solve" exam.id %}">Start Now</a>
+        <p class="exam-description">Save for later? <a href="{% url "home" %}">go home</a></p>
+    </div>
+</div>
 {% endblock content %}
