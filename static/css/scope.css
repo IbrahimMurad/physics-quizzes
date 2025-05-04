@@ -74,10 +74,12 @@ header {
   align-items: center;
 }
 
-header h1 {
+.logo {
   font-size: 1.5rem;
   font-weight: 900;
   cursor: pointer;
+  text-decoration: none;
+  color: var(--main-text-color);
 }
 
 .nav-list {
@@ -89,14 +91,14 @@ header h1 {
   gap: 20px;
 
   .logout-button,
-  &>li>a {
+  .login-button {
     text-decoration: none;
     background-color: transparent;
     border: none;
     color: var(--main-text-color);
     font-weight: 600;
     padding: 10px 20px;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s linear;
     cursor: pointer;
 
     &:hover,
@@ -107,6 +109,18 @@ header h1 {
       border-radius: var(--component-border-radius);
       box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
     }
+  }
+
+  .login-button:hover,
+  .login-button:focus,
+  .login-button:active {
+    background-color:#42AE5A;
+  }
+
+  .logout-button:hover,
+  .logout-button:focus,
+  .logout-button:active {
+    background-color: #FF4F4F;
   }
 }
 
@@ -173,7 +187,6 @@ header h1 {
   text-decoration: none;
   font-family: 'spacegrotesk', sans-serif;
   padding: 10px 20px;
-  background-color: #b98100;
   color: var(--component-secondary-color);
   border-radius: var(--component-border-radius);
   font-weight: bold;
@@ -182,7 +195,6 @@ header h1 {
   box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
 
   &:hover {
-    background-color: var(--component-secondary-color);
     color: #b98100;
     transform: translateY(-2px);
     box-shadow: 0px 5px 0px 0px var(--component-shadow-color);
@@ -191,6 +203,24 @@ header h1 {
   &:active {
     transform: translateY(0px);
     box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
+  }
+}
+
+.explore-btn {
+  background-color: cornflowerblue;
+
+  &:hover {
+    background-color: rgb(147, 174, 224);
+    color: var(--main-background-color);
+  }
+}
+
+.create-exam-btn {
+  background-color: #ff6347;
+
+  &:hover {
+    background-color: rgb(224, 147, 147);
+    color: var(--main-background-color);
   }
 }
 
@@ -204,7 +234,7 @@ header h1 {
 
 .breadcrumbs {
   padding: 1rem 2rem;
-  background-color: #b98100;
+  background-color: #fbf3d4;
   border-radius: var(--component-border-radius);
   box-shadow: 0px 3px 0px 0px var(--component-shadow-color);
   border: 1px solid var(--component-border-color);
@@ -222,25 +252,34 @@ header h1 {
       font-weight: 600;
       color: var(--main-text-color);
 
+      &::after {
+        content: '>';
+        margin-left: 10px;
+        color: var(--main-text-color);
+      }
+
       a {
         text-decoration: none;
         font-weight: 600;
-        color: var(--component-secondary-color);
+        color: black;
 
         &:hover,
         &:focus,
         &:active {
-          color: var(--main-text-color);
           text-decoration: underline;
         }
       }
 
-      &:not(:last-child)::after {
-        content: '>';
-        margin-left: 10px;
-        color: var(--component-secondary-color);
+      &:last-child {
+        color: #96A2AE;
+      
+        &::after {
+        content: '';
+        margin: 0;
+        }
       }
     }
+
     li:last-child {
       margin-right: 0;
     }
