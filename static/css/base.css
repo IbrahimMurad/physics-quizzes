@@ -8,19 +8,82 @@
 
 
 :root {
-  --main-background-color: #FFFFFF;
-  --secondary-background-color: #FFF9E4;
-  --teriary-background-color: #FFD600;
-  --main-text-color: #000000;
-  --secondary-text-color: #96A2AE;
-  --component-main-color: #fab005;
-  --component-secondary-color: #F2E6D4;
-  --component-border-color: #000000;
-  --component-border-radius: 5px;
-  --component-border-width: 32px;
-  --component-wrong-background-color: #FF4F4F;
-  --component-right-background-color: #42AE5A;
-  --component-shadow-color: rgba(0, 0, 0, 1);
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(222.2, 84%, 4.9%);
+
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222.2, 84%, 4.9%);
+
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222.2, 84%, 4.9%);
+
+  --primary: hsl(246, 84%, 59%);
+  --primary-foreground: hsl(210, 40%, 98%);
+
+  --secondary: hsl(210, 40%, 96.1%);
+  --secondary-foreground: hsl(222.2, 47.4%, 11.2%);
+
+  --muted: hsl(210, 40%, 96.1%);
+  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
+
+  --accent: hsl(173, 85%, 32%);
+  --accent-foreground: hsl(210, 40%, 98%);
+
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+
+  --border: hsl(214.3, 31.8%, 91.4%);
+  --input: hsl(214.3, 31.8%, 91.4%);
+  --ring: hsl(222.2, 84%, 4.9%);
+
+  --radius: 0.5rem;
+
+  --sidebar-background: hsl(0, 0%, 98%);
+  --sidebar-foreground: hsl(240, 5.3%, 26.1%);
+  --sidebar-primary: hsl(240, 5.9%, 10%);
+  --sidebar-primary-foreground: hsl(0, 0%, 98%);
+  --sidebar-accent: hsl(240, 4.8%, 95.9%);
+  --sidebar-accent-foreground: hsl(240, 5.9%, 10%);
+  --sidebar-border: hsl(220, 13%, 91%);
+  --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
+}
+
+.dark {
+  --background: hsl(222.2, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+
+  --card: hsl(222.2, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+
+  --popover: hsl(222.2, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+
+  --primary: hsl(246, 84%, 59%);
+  --primary-foreground: hsl(210, 40%, 98%);
+
+  --secondary: hsl(217.2, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+
+  --muted: hsl(217.2, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+
+  --accent: hsl(173, 85%, 32%);
+  --accent-foreground: hsl(210, 40%, 98%);
+
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+
+  --border: hsl(217.2, 32.6%, 17.5%);
+  --input: hsl(217.2, 32.6%, 17.5%);
+  --ring: hsl(212.7, 26.8%, 83.9%);
+  --sidebar-background: hsl(240, 5.9%, 10%);
+  --sidebar-foreground: hsl(240, 4.8%, 95.9%);
+  --sidebar-primary: hsl(224.3, 76.3%, 48%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(240, 3.7%, 15.9%);
+  --sidebar-accent-foreground: hsl(240, 4.8%, 95.9%);
+  --sidebar-border: hsl(240, 3.7%, 15.9%);
+  --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
 }
 
 * {
@@ -41,19 +104,34 @@ body {
 }
 
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 10px;
 }
 
-@media (max-width: 768px) {
+
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Small */
+@media (min-width: 768px) {
   .container {
-      padding: 5px;
+    width: 750px;
   }
 }
-
-@media (max-width: 480px) {
+/* Medium */
+@media (min-width: 992px) {
   .container {
-      padding: 2px;
+    width: 970px;
+  }
+}
+/* Large */
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
   }
 }
