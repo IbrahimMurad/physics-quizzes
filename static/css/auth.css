@@ -1,4 +1,4 @@
-.login-page {
+.auth-page {
     display: grid;
     place-items: center;
     min-height: 100vh;
@@ -6,7 +6,7 @@
     width: 100%;
 }
 
-.login-page-content {
+.auth-page-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,7 +16,7 @@
     width: 100%;
 }
 
-.login-header {
+.auth-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,7 +32,7 @@
     }
 }
 
-.login-form {
+.auth-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -68,7 +68,7 @@
 
 }
 
-.login-form-header {
+.auth-form-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -121,7 +121,8 @@
     position: relative;
     width: 100%;
 
-    .password-toggle {
+    .password-toggle,
+    .confirm-password-toggle {
         position: absolute;
         right: 1rem;
         top: 50%;
@@ -135,7 +136,12 @@
     }
 }
 
-#username-error, #password-error, .form-errors {
+#username-error,
+#password-error,
+#email-error,
+#confirm-password-error,
+.form-errors {
+    padding-left: 1rem;
     color: var(--destructive);
     font-size: 0.8rem;
 }

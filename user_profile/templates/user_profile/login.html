@@ -1,13 +1,26 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/auth.js' %}" defer></script>
+<script src="{% static 'js/login.js' %}" defer></script>
+{% endblock js %}
+
 {% block content %}
-<div class="login-page">
-    <div class="login-page-content">
-        <div class="login-header">
+<div class="auth-page">
+    <div class="auth-page-content">
+        <div class="auth-header">
             <h1>QuizCraft</h1>
             <p>Your personal study assistant</p>
         </div>
-        <div class="login-form">
-            <div class="login-form-header">
+        <div class="auth-form">
+            <div class="auth-form-header">
                 <h2>Welcome back!</h2>
                 <p>Login to your account to continue</p>
             </div>
@@ -16,7 +29,7 @@
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" placeholder="Enter your username" aria-describedby="username-error" required>
-                    <span id="username-error"></span>
+                    <span id="username-error" aria-live="polite"></span>
                 </div>
                 <div class="form-group">
                     <div class="form-group-header">
@@ -29,17 +42,17 @@
                             <i class="fas fa-eye"></i>
                         </span>
                     </div>
-                    <span id="password-error"></span>
+                    <span id="password-error" aria-live="polite"></span>
                 </div>
                 <button type="submit">Login</button>
             </form>
             {% if form.errors %}
-                <div class="form-errors">
+                <div class="form-errors" aria-live="polite">
                     <p>Invalid username or password</p>
                 </div>
             {% endif %}
             <div class="form-footer">
-                <p>Don't have an account? <a href="#">Register</a></p>
+                <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
             </div>
         </div>
         <p class="rights-reserved">

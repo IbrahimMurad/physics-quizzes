@@ -9,6 +9,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include, re_path
 from scope.views import index, units, chapters, lessons
 from exam.views import exam_create, exam_view, submit_exam, exam_result
+from user_profile.views import register
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -19,6 +20,11 @@ urlpatterns = [
             template_name="user_profile/login.html", redirect_authenticated_user=True
         ),
         name="login",
+    ),
+    path(
+        "auth/register/",
+        register,
+        name="register",
     ),
     path(
         "auth/logout/",
