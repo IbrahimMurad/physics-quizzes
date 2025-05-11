@@ -33,6 +33,11 @@
                 </div>
                 <button type="submit">Login</button>
             </form>
+            {% if form.errors %}
+                <div class="form-errors">
+                    <p>Invalid username or password</p>
+                </div>
+            {% endif %}
             <div class="form-footer">
                 <p>Don't have an account? <a href="#">Register</a></p>
             </div>

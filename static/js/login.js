@@ -11,6 +11,10 @@ loginForm.addEventListener('submit', (e) => {
     const username = usernameInput.value;
     const password = passwordInput.value;
 
+    if (username && password) {
+        e.target.submit();
+    }
+    
     if (username === '') {
         usernameError.textContent = 'Username is required';
     }

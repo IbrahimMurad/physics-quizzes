@@ -135,7 +135,7 @@
     }
 }
 
-#username-error, #password-error {
+#username-error, #password-error, .form-errors {
     color: var(--destructive);
     font-size: 0.8rem;
 }
