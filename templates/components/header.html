@@ -1,0 +1,78 @@
+{% load static %}
+<header class="main-header">
+  <div class="header-container">
+    <div class="header-content">
+      <div class="header-left-content">
+        <a href="{% url 'home' %}" class="logo">
+          <span>QuizCraft</span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li>
+              <a href="#">Dashboard</a>
+            </li>
+            <li>
+              <a href="#">Textbooks</a>
+            </li>
+            <li>
+              <button class="header-exam-button">
+                <span>Exams</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="header-exam-dropdown">
+                <ul>
+                  <li>
+                    <a href="#">All Exams</a>
+                  </li>
+                  <li>
+                    <a href="#">Solved Exams</a>
+                  </li>
+                  <li>
+                    <a href="#">Create Exam</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="header-right-content">
+        {% if user.is_authenticated %}
+        <strong>{{ user.username }}</strong>
+        {% include "components/logout_button.html" %}
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <span>/</span>
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+      </div>
+      <div class="menu-button">
+        <label for="menu-button-icon" class="menu-button-icon">
+          <i class="fa-solid fa-bars"></i>
+        </label>
+      </div>
+    </div>
+  </div>
+  <input type="checkbox" id="menu-button-icon" class="menu-button-icon-input">
+  <div class="header-mobile-menu">
+    <nav class="mobile-nav">
+      <ul>
+        <li>
+          <a {% if request.path == '/' %}class="active"{% endif %} href="#">Dashboard</a>
+        </li>
+        <li>
+          <a {% if request.path == '/textbooks/' %}class="active"{% endif %} href="#">Textbooks</a>
+        </li>
+        <li>
+          <a {% if request.path == '/exams/' %}class="active"{% endif %} href="#">All Exams</a>
+        </li>
+        <li>
+          <a {% if request.path == '/solved-exams/' %}class="active"{% endif %} href="#">Solved Exams</a>
+        </li>
+        <li>
+          <a {% if request.path == '/create-exam/' %}class="active"{% endif %} href="#">Create Exam</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
