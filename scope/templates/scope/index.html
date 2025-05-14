@@ -16,7 +16,7 @@
 
 {% include "components/header.html" %}
 <main class="container">
-  <section class="breadcrumbs"></section>
+  {% include "components/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
   {% if parent %}
   <section class="scope-parent" aria-label="Current Scope overview">
     <div class="scope-parent-thumbnail">

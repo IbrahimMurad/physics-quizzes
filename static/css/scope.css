@@ -1,4 +1,48 @@
 
+/* breadcrumbs section */
+
+.breadcrumbs {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-bottom: 1.5rem;
+
+  &>ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    list-style: none;
+
+    &>li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+}
+
+@media (min-width: 640px) {
+  .breadcrumbs>ul {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.breadcrumbs-link {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a.breadcrumbs-link {
+  color: var(--foreground);
+}
+
+a.breadcrumbs-link:hover {
+  text-decoration: underline;
+}
 /* scope parent section */
 
 .scope-parent {

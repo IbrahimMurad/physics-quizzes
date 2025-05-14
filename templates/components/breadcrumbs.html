@@ -1,0 +1,30 @@
+<nav class="breadcrumbs">
+  <ul>
+    {% if breadcrumbs|length > 0 %}
+      <li>
+        <a href="{% url 'home' %}" class="breadcrumbs-link">Textbooks</a>
+        <i class="fa-solid fa-chevron-right"></i>
+    </li>
+    {% else %}
+      <li>
+        <span class="breadcrumbs-link">
+          Textbooks
+        </span>
+      </li>
+    {% endif %}
+    {% for breadcrumb in breadcrumbs %}
+      <li>
+        {% if not forloop.last %}
+          <a href="{{ breadcrumb.url }}" class="breadcrumbs-link">
+            {{ breadcrumb.title }}
+          </a>
+          <i class="fa-solid fa-chevron-right"></i>
+        {% else %}
+          <span class="breadcrumbs-link">
+            {{ breadcrumb.title }}
+          </span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
