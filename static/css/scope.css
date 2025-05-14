@@ -1,3 +1,76 @@
+
+/* scope parent section */
+
+.scope-parent {
+  background-color: var(--background);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .scope-parent {
+    flex-direction: row;
+  }
+}
+
+.scope-parent-thumbnail {
+  width: 100%;
+
+  &>img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+}
+
+@media (min-width: 640px) {
+  .scope-parent-thumbnail {
+    width: 60%;
+  }
+}
+
+.scope-parent-content {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .scope-parent-content {
+    width: 66.666667%;
+  }
+}
+
+.scope-parent-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.scope-parent-description {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+}
+
+.cards-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  border-bottom: 3px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+/* cards section */
+
 .cards {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -95,13 +168,13 @@
   color: var(--secondary-foreground);
 }
 
-.card-actions>form {
+.create-exam-form {
   flex: 1 1 45%;
   height: 100%;
   margin: 0;
 }
 
-.card-actions>form>button {
+.create-exam-btn {
   width: 100%;
   font-size: 0.875rem;
   line-height: 1.125rem;
@@ -118,9 +191,13 @@
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card-actions form button:hover,
-.card-actions form button:focus,
-.card-actions form button:active {
+.scope-parent-content .create-exam-btn {
+  width: fit-content;
+}
+
+.create-exam-btn:hover,
+.create-exam-btn:focus,
+.create-exam-btn:active {
   background-color: var(--secondary);
   color: var(--secondary-foreground);
 }

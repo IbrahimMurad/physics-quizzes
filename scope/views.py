@@ -9,6 +9,7 @@ def index(request):
         "scope/index.html",
         context={
             "title": "Textbooks",
+            "list_title": "Textbooks",
             "scopes": textbooks,
             "breadcrumbs": [],
         },
@@ -23,6 +24,8 @@ def units(request, textbook_id):
         "scope/index.html",
         context={
             "title": textbook.title,
+            "list_title": "Units",
+            "parent": textbook,
             "scopes": units,
             "breadcrumbs": [textbook],
         },
@@ -36,7 +39,9 @@ def chapters(request, unit_id):
         request,
         "scope/index.html",
         context={
+            "parent": unit,
             "title": unit.title,
+            "list_title": "Chapters",
             "scopes": chapters,
             "breadcrumbs": [unit.textbook, unit],
         },
@@ -52,7 +57,9 @@ def lessons(request, chapter_id):
         request,
         "scope/index.html",
         context={
+            "parent": chapter,
             "title": chapter.title,
+            "list_title": "Lessons",
             "scopes": lessons,
             "breadcrumbs": [
                 chapter.unit.textbook,

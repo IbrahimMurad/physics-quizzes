@@ -1,0 +1,6 @@
+<form action="{% url 'exam-create' %}" method="post" class="create-exam-form">
+    {% csrf_token %}
+    <input type="hidden" name="scope_type" value="{{ type }}">
+    <input type="hidden" name="scope_id" value="{{ id }}">
+    <button type="submit" class="create-exam-btn">Create Exam</button>
+  </form>

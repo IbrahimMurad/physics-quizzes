@@ -16,8 +16,26 @@
 
 {% include "components/header.html" %}
 <main class="container">
-  <div class="breadcrumbs"></div>
-  <div class="cards">
+  <section class="breadcrumbs"></section>
+  {% if parent %}
+  <section class="scope-parent" aria-label="Current Scope overview">
+    <div class="scope-parent-thumbnail">
+      <img src="{{ parent.cover.url }}" alt="{{ parent.title }}" width="400">
+    </div>
+    <div class="scope-parent-content">
+      <h3 class="scope-parent-title">{{ parent.title }}</h3>
+      <p class="scope-parent-description">{{ parent.caption }}</p>
+      <form action="{% url 'exam-create' %}" method="post" class="create-exam-form">
+        {% csrf_token %}
+        <input type="hidden" name="scope_type" value="{{ parent.type }}">
+        <input type="hidden" name="scope_id" value="{{ parent.id }}">
+        <button type="submit" class="create-exam-btn">Create Full {{ parent.type }} Exam</button>
+      </form>
+    </div>
+  </section>
+  {% endif %}
+  <h2 class="cards-title">{{ list_title }}</h2>
+  <section class="cards">
     {% for scope in scopes %}
       {% include "components/card.html" with scope=scope %}
     {% endfor %}
