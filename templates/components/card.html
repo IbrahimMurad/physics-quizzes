@@ -1,18 +1,20 @@
 <div class="card">
-  <div class="cover">
-    <img src="{% if scope.cover %}{{ scope.cover.url }}{% endif %}" alt="{{ scope.title }}" />
+  <div class="thumbnail">
+    <img src="{{ scope.cover.url }}" alt="{{ scope.title }}" width="400">
   </div>
   <div class="card-content">
-    <h2 class="title">{{ scope.title }}</h2>
-    <p>{{ scope.caption }}</p>
+    <h3 class="card-title">{{ scope.title }}</h3>
+    <p class="card-caption">{{ scope.caption }}</p>
     <div class="card-actions">
-      <form action="{% url "exam-create" %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="scope_type" value="{{ scope.type }}" />
-        <input type="hidden" name="scope_id" value="{{ scope.id }}" />
-        <button type="submit" class="create-exam-btn">Create Exam</button>
-      </form>
-      <a class="explore-btn" href="{{scope.url}}">Explore</a>
+      {% if scope.type != "Lesson" %}
+        <a href="{{ scope.url }}">Explore</a>
+      {% endif %}
+        <form action="{% url 'exam-create' %}" method="post" class="create-exam-form">
+          {% csrf_token %}
+          <input type="hidden" name="scope_type" value="{{ scope.type }}">
+          <input type="hidden" name="scope_id" value="{{ scope.id }}">
+          <button type="submit" class="create-exam-btn">Create Exam</button>
+        </form>
     </div>
   </div>
 </div>

@@ -102,39 +102,25 @@ body {
   min-height: 100vh;
   width: 100%;
   background-color: var(--teriary-background-color);
-  color: #333;
-  line-height: 1.6;
 }
 
 .container {
-  width: 100%;
-  max-width: 1200px;
+  max-width: 80rem;
   margin: 0 auto;
-  padding: 10px;
+  padding: 2rem 1rem;
 }
 
-
-.container {
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-left: auto;
-  margin-right: auto;
-}
-/* Small */
-@media (min-width: 768px) {
-  .container {
-    width: 750px;
-  }
-}
 /* Medium */
-@media (min-width: 992px) {
+@media (min-width: 640px) {
   .container {
-    width: 970px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 /* Large */
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   .container {
-    width: 1170px;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
