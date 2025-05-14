@@ -2,5 +2,5 @@
     {% csrf_token %}
     <input type="hidden" name="scope_type" value="{{ type }}">
     <input type="hidden" name="scope_id" value="{{ id }}">
-    <button type="submit" class="create-exam-btn">Create Exam</button>
+    <button type="submit" class="create-exam-btn">Create {% if not is_card %}Full {{ type }} {% endif %} Exam</button>
   </form>

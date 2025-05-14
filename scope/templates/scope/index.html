@@ -25,12 +25,7 @@
     <div class="scope-parent-content">
       <h3 class="scope-parent-title">{{ parent.title }}</h3>
       <p class="scope-parent-description">{{ parent.caption }}</p>
-      <form action="{% url 'exam-create' %}" method="post" class="create-exam-form">
-        {% csrf_token %}
-        <input type="hidden" name="scope_type" value="{{ parent.type }}">
-        <input type="hidden" name="scope_id" value="{{ parent.id }}">
-        <button type="submit" class="create-exam-btn">Create Full {{ parent.type }} Exam</button>
-      </form>
+      {% include "components/create_exam.html" with is_card=False type=parent.type id=parent.id %}
     </div>
   </section>
   {% endif %}

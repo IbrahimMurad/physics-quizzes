@@ -9,7 +9,7 @@
       {% if scope.type != "Lesson" %}
         <a href="{{ scope.url }}">Explore</a>
       {% endif %}
-      {% include "components/create_exam.html" with type=scope.type id=scope.id %}
+      {% include "components/create_exam.html" with is_card=True type=scope.type id=scope.id %}
     </div>
   </div>
 </div>
