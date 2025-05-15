@@ -9,8 +9,45 @@
     margin-bottom: 1rem;
 }
 
+.submission-statistics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    font-size: 1.125rem;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.correct-incorrect {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.correct-answers,
+.incorrect-answers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.correct-answers span {
+    color: hsla(120, 100%, 33%, 1);
+}
+
+.incorrect-answers span {
+    color: hsla(10, 100%, 33%, 1);
+}
+
 .exam-header>h1 {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: var(--foreground);
 }
@@ -23,6 +60,22 @@
     justify-content: space-between;
     font-size: 0.875rem;
 }
+
+.progress-bar {
+    width: 100%;
+    height: 0.75rem;
+    background-color: var(--border);
+    border-radius: 0.5rem;
+}
+
+.progress-bar .progress {
+    height: 100%;
+    background-color: var(--primary);
+    border-radius: 0.5rem;
+}
+
+
+
 
 .exam-form {
     display: flex;
@@ -41,7 +94,36 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: var(--destructive);
 }
+
+.problem.answered-correctly {
+    border-left-color: hsla(120, 100%, 33%, 1);
+}
+
+.problem-option.checked {
+    background-color: hsla(10, 100%, 33%, 0.1);
+    border: 1px solid hsla(10, 100%, 33%, 1);
+
+    i {
+        border-color: hsla(10, 100%, 33%, 1);
+        background-color: hsla(10, 100%, 33%, 1);
+    }
+}
+
+.problem-option.correct {
+    background-color: hsla(120, 100%, 33%, 0.1);
+    border: 1px solid hsla(120, 100%, 33%, 1);
+
+    i {
+        border-color: hsla(120, 100%, 33%, 1);
+        background-color: hsla(120, 100%, 33%, 1);
+    }
+}
+
+
 
 .problem>h3 {
     font-size: 1rem;
@@ -62,12 +144,26 @@
 
 .problem-option {
     border: 1px solid var(--border);
-    padding: 0.8rem;
     border-radius: 0.5rem;
+    position: relative;
     display: flex;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
-    cursor: pointer;
+
+    i {
+        font-size: 0.875rem;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+        color: var(--background);
+    }
 }
 
 .submit-exam-btn {
@@ -86,4 +182,29 @@
 
 .submit-exam-btn:hover {
     background-color: var(--accent);
+}
+
+.exit-exam-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin-top: 1rem;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+
+    a {
+        text-decoration: none;
+        color: var(--primary-foreground);
+        font-weight: 600;
+    }
+
+    &:hover {
+        background-color: var(--accent);
+    }
 }

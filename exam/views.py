@@ -111,20 +111,35 @@ def submit_exam(request, exam_id):
 
 def exam_result(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
-    exam_title = submission.exam.title
-    answers = (
-        submission.answers.all()
-        .prefetch_related("problem", "choice")
-        .prefetch_related("problem__choices")
-    )
-    print(submission)
+    answers = submission.answers.values_list("choice", flat=True)
+
+    context = {
+        "score": submission.score,
+        "wrong_answers": submission.wrong_answers,
+        "percentage": submission.percentage,
+        "exam_length": submission.exam.problems.count,
+        "exam_title": submission.exam.title,
+        "problems": [
+            {
+                "id": problem.id,
+                "body": problem.body,
+                "choices": [
+                    {
+                        "id": choice.id,
+                        "body": choice.body,
+                        "is_correct": choice.is_correct,
+                        "checked": choice.id in answers,
+                    }
+                    for choice in problem.choices.all()
+                ],
+                "answered_correctly": Choice.objects.get(answer__submission=submission, answer__problem=problem).is_correct,
+            }
+            for problem in submission.exam.problems.all()
+        ],
+    }
 
     return render(
         request,
         "exam/exam_result.html",
-        {
-            "submission": submission,
-            "exam_title": exam_title,
-            "answers": answers,
-        },
+        context=context,
     )

@@ -64,6 +64,14 @@ class Submission(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.exam.title} - {self.score}"
 
+    @property
+    def percentage(self):
+        return self.score / self.exam.problems.count() * 100
+
+    @property
+    def wrong_answers(self):
+        return self.exam.problems.count() - self.score
+
 
 class Answer(models.Model):
     """

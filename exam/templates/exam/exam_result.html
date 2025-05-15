@@ -8,45 +8,54 @@
 {% endblock css %}
 
 {% block title %}
-{{ exam.title }}
+{{ exam_title }}
 {% endblock title %}
 
 {% block content %}
 {% include "components/header.html" %}
 <div class="container">
     <div class="exam-header">
-        <h1>{{ exam.title }}</h1>
+        <h1>{{ exam_title }}</h1>
         <div class="submission-statistics">
             <p class="score">
-                {{ correct_answers }} / {{ exam.questions|length }} ({{ score_percentage }}%)
+                Score: {{ score }} / {{ exam_length }} ({{ percentage }}%)
             </p>
             <p class="score-comment"></p>
             <div class="correct-incorrect">
-                <div class="correct-answers"><span>{{ correct_answers }}</span> <span>correct</span></div>
-                <div class="incorrect-answers"><span>{{ incorrect_answers }}</span> <span>incorrect</span></div>
+                <div class="correct-answers"><span>{{ score }}</span> <span>correct</span></div>
+                <div class="incorrect-answers"><span>{{ wrong_answers }}</span> <span>incorrect</span></div>
             </div>
             <div class="progress-bar">
-                <div class="progress" style="width: {{ score_percentage }}%"></div>
+                <div class="progress" style="width: {{ percentage }}%"></div>
             </div>
         </div>
     </div>
     <div class="exam-form">
-        {% csrf_token %}
-        {% for exam_problem in exam_problems %}
-        <div class="problem">
+        {% for problem in problems %}
+        <div class="problem {% if problem.answered_correctly %}answered-correctly{% endif %}">
             <h3>Question {{ forloop.counter }}</h3>
-            <p>{{ exam_problem.problem.body }}</p>
+            <p>{{ problem.body }}</p>
             <div class="problem-options">
-                {% for choice in exam_problem.problem.choices.all %}
-                <label class="problem-option">
-                    <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}">
+                {% for choice in problem.choices %}
+                <div class="problem-option {% if choice.is_correct %}correct{% endif %} {% if choice.checked %}checked{% endif %}">
                     <p>{{ choice.body }}</p>
-                </label>
+                    {% if choice.is_correct %}
+                    <i class="fas fa-check"></i>
+                    {% endif %}
+                    {% if choice.checked and not choice.is_correct %}
+                    <i class="fas fa-times"></i>
+                    {% endif %}
+                </div>
                 {% endfor %}
             </div>
         </div>
         {% endfor %}
-        <button type="submit" class="submit-exam-btn">Submit Exam</button>
+    </div>
+    <div class="exit-exam-btn">
+        <a href="{% url 'home' %}">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
     </div>
 </div>
 {% endblock content %}
