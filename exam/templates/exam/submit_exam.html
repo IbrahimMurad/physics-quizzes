@@ -1,24 +1,43 @@
 {% extends "base.html" %}
-{% block content %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/exam_submition.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock css %}
 
-<form action="{% url 'exam-solve' exam.id %}" method="post" class="exam-form">
-    {% csrf_token %}
-    <h2 class="exam-title">{{ exam.title }}</h2>
-    {% for exam_problem in exam_problems  %}
-    <div class="problem">
-        <fieldset>
-            <legend class="problem-body">{{ exam_problem.order }}. {{ exam_problem.problem.body }}</legend>
-            <div class="problem-options">
+{% block title %}
+{{ exam.title }}
+{% endblock title %}
+
+{% block content %}
+{% include "components/header.html" %}
+<div class="container">
+    <div class="exam-header">
+        <h1>{{ exam.title }}</h1>
+        <div class="exam-info">
+            <div class="duration-countdown"></div>
+            <p class="questions-answered"><span class="answered"></span> / {{ exam.questions|length }} answered</p>
+        </div>
+    </div>
+    <form action="{% url 'exam-solve' exam.id %}" method="post" class="exam-form">
+        {% csrf_token %}
+        {% for exam_problem in exam_problems %}
+        <div class="problem">
+            <h3>Question {{ forloop.counter }}</h3>
+            <p>{{ exam_problem.problem.body }}</p>
+            <fieldset class="problem-options">
                 {% for choice in exam_problem.problem.choices.all %}
                 <label class="problem-option">
                     <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}">
                     <p>{{ choice.body }}</p>
-                </label><br>
+                </label>
                 {% endfor %}
-            </div>
-        </fieldset>
-    </div>
-    {% endfor %}
-    <button type="submit" class="submit-exam-btn">Submit Exam</button>
-</form>
+            </fieldset>
+        </div>
+        {% endfor %}
+        <button type="submit" class="submit-exam-btn">Submit Exam</button>
+    </form>
+</div>
 {% endblock content %}

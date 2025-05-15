@@ -1,29 +1,52 @@
 {% extends "base.html" %}
-{% block content %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/exam_submition.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock css %}
 
-<form class="exam-result">
-    <h2 class="exam-title">{{ exam_title }} submitted by {{ submission.user.username }} </h2>
-    {% for answer in answers  %}
-    <div class="problem">
-        <fieldset>
-            <legend class="problem-body">{{ answer.problem.body }}</legend>
+{% block title %}
+{{ exam.title }}
+{% endblock title %}
+
+{% block content %}
+{% include "components/header.html" %}
+<div class="container">
+    <div class="exam-header">
+        <h1>{{ exam.title }}</h1>
+        <div class="submission-statistics">
+            <p class="score">
+                {{ correct_answers }} / {{ exam.questions|length }} ({{ score_percentage }}%)
+            </p>
+            <p class="score-comment"></p>
+            <div class="correct-incorrect">
+                <div class="correct-answers"><span>{{ correct_answers }}</span> <span>correct</span></div>
+                <div class="incorrect-answers"><span>{{ incorrect_answers }}</span> <span>incorrect</span></div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width: {{ score_percentage }}%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="exam-form">
+        {% csrf_token %}
+        {% for exam_problem in exam_problems %}
+        <div class="problem">
+            <h3>Question {{ forloop.counter }}</h3>
+            <p>{{ exam_problem.problem.body }}</p>
             <div class="problem-options">
-                {% for choice in answer.problem.choices.all %}
-                <label class="problem-option {{ choice.is_correct|yesno:"correct,incorrect" }} {% if answer.choice == choice %}selected{% endif %}">
-                    <input
-                        type="radio"
-                        name="problem_{{ answer.problem.id }}"
-                        value="{{ choice.id }}"
-                        disabled
-                        {% if answer.choice == choice %}checked{% endif %}
-                    >
+                {% for choice in exam_problem.problem.choices.all %}
+                <label class="problem-option">
+                    <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}">
                     <p>{{ choice.body }}</p>
-                </label><br>
+                </label>
                 {% endfor %}
             </div>
-        </fieldset>
+        </div>
+        {% endfor %}
+        <button type="submit" class="submit-exam-btn">Submit Exam</button>
     </div>
-    {% endfor %}
-    <a class="go-to-home-btn" href="{% url "home" %}">Go back home</a>
-</form>
+</div>
 {% endblock content %}

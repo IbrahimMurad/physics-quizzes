@@ -20,7 +20,7 @@
   {% if parent %}
   <section class="scope-parent" aria-label="Current Scope overview">
     <div class="scope-parent-thumbnail">
-      <img src="{{ parent.cover.url }}" alt="{{ parent.title }}" width="400">
+      <img src="{% if parent.cover %}{{ parent.cover.url }}{% else %}''{% endif %}" alt="{{ parent.title }}" width="400">
     </div>
     <div class="scope-parent-content">
       <h3 class="scope-parent-title">{{ parent.title }}</h3>

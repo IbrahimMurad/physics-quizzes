@@ -117,6 +117,7 @@ def exam_result(request, submission_id):
         .prefetch_related("problem", "choice")
         .prefetch_related("problem__choices")
     )
+    print(submission)
 
     return render(
         request,

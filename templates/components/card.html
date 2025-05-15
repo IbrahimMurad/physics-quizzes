@@ -1,6 +1,6 @@
 <div class="card">
   <div class="thumbnail">
-    <img src="{{ scope.cover.url }}" alt="{{ scope.title }}" width="400">
+    <img src="{% if scope.cover %}{{ scope.cover.url }}{% else %}''{% endif %}" alt="{{ scope.title }}" width="400">
   </div>
   <div class="card-content">
     <h3 class="card-title">{{ scope.title }}</h3>
