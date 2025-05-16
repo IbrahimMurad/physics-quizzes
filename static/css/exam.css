@@ -32,8 +32,7 @@
   font-weight: 600;
   transition: all 0.3s ease-in-out;
   &:hover {
-    background-color: var(--muted-foreground);
-    transform: scale(1.05);
+    background-color: var(--accent);
     transition: all 0.3s ease-in-out;
   }
 }
@@ -64,4 +63,8 @@
     padding: 0.5rem 1rem;
     border-radius: var(--radius);
     border: 1px solid var(--destructive);
+
+    & strong {
+        background: transparent;
+    }
 }

@@ -32,7 +32,7 @@
     </div>
     <div class="exam-form">
         {% for problem in problems %}
-        <div class="problem {% if problem.answered_correctly %}answered-correctly{% endif %}">
+        <div class="problem {% if problem.answered_correctly %}answered-correctly{% else %}answered-incorrectly{% endif %}">
             <h3>Question {{ forloop.counter }}</h3>
             <p>{{ problem.body }}</p>
             <div class="problem-options">

@@ -1,7 +1,6 @@
 .main-header {
-  background-color: white;
-  --tw-bg-opacity: 1;
-  border-bottom: 1px solid rgb(229 231 235);
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -47,13 +46,13 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  color: var(--primary);
   text-decoration: none;
 
   &>span {
     font-size: 1.75rem;
     line-height: 1.75rem;
     font-weight: 700;
+    color: var(--primary);
   }
 }
 
@@ -85,12 +84,12 @@
 }
 
 .main-nav>ul>li>a {
-  color: var(--foreground);
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
   padding: 0.5rem 0.75rem;
-  text-decoration: inherit;
+  text-decoration: none;
+  color: var(--foreground);
 
   &:hover {
     color: var(--primary);
@@ -104,12 +103,13 @@
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
-  background-color: transparent;
   border: none;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
   padding: 0.5rem 0.75rem;
+  background-color: transparent;
+  color: var(--foreground);
 
   &:hover{
     color: var(--primary);
@@ -157,6 +157,10 @@
         line-height: 1.25rem;
         padding: 0.5rem 0.75rem;
         text-decoration: inherit;
+
+        &:hover {
+          background-color: inherit;
+        }
       }
     }
   }
@@ -218,12 +222,13 @@
 .logout-button {
   padding: 0.5rem 1rem;
   &>button {
-    background-color: transparent;
     border: none;
     cursor: pointer;
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
+    background-color: transparent;
+    color: var(--foreground);
 
     &:hover {
       color: var(--destructive);
@@ -239,6 +244,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  border-radius: var(--radius);
 }
 
 @media (min-width: 1024px) {
@@ -252,7 +258,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
   border: none;
   cursor: pointer;
   height: 2.5rem;
@@ -263,8 +268,11 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
-  --tw-ring-offset-color: var(--background);
   transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
+
+  & i {
+    background-color: transparent;
+  }
 }
 
 .menu-button-icon:hover {
@@ -328,16 +336,11 @@
         width: 100%;
         border-left: 2px solid transparent;
 
-        &.active {
-          color: var(--primary);
-          background-color: var(--secondary);
-          border-left-color: var(--primary);
-        }
-
+        &.active,
         &:hover {
           color: var(--primary);
           background-color: var(--secondary);
-          border-left-color: var(--sidebar-foreground);
+          border-left-color: var(--primary);
         }
       }
     }

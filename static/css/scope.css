@@ -138,7 +138,6 @@ a.breadcrumbs-link:hover {
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background-color: var(--background);
   display: flex;
   flex-direction: column;
 }
@@ -214,8 +213,6 @@ a.breadcrumbs-link:hover {
 
 .create-exam-form {
   flex: 1 1 45%;
-  height: 100%;
-  margin: 0;
 }
 
 .create-exam-btn {

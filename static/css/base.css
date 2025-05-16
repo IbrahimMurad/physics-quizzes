@@ -6,7 +6,6 @@
   font-display: swap;
 }
 
-
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(222.2, 84%, 4.9%);
@@ -49,7 +48,7 @@
 }
 
 .dark {
-  --background: hsl(215, 28%, 17%);
+  --background: hsl(222.2, 84%, 4.9%);
   --foreground: hsl(210, 40%, 98%);
 
   --card: hsl(222.2, 84%, 4.9%);
@@ -76,6 +75,7 @@
   --border: hsl(217.2, 32.6%, 17.5%);
   --input: hsl(217.2, 32.6%, 17.5%);
   --ring: hsl(212.7, 26.8%, 83.9%);
+  
   --sidebar-background: hsl(240, 5.9%, 10%);
   --sidebar-foreground: hsl(240, 4.8%, 95.9%);
   --sidebar-primary: hsl(224.3, 76.3%, 48%);
@@ -101,7 +101,8 @@ html {
 body {
   min-height: 100vh;
   width: 100%;
-  background-color: var(--teriary-background-color);
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .container {
