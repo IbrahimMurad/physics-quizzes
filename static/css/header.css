@@ -169,10 +169,11 @@
 
 
 .header-right-content {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   justify-content: flex-end;
+  position: relative;
 
   &>a {
     text-decoration: none;
@@ -187,13 +188,20 @@
   }
 }
 
+.auth-container {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 @media (min-width: 1024px) {
-  .header-right-content {
+  .auth-container {
     display: flex;
   }
 }
 
-.header-right-content>strong {
+.header-right-content strong,
+.header-mobile-auth-container>strong {
   color: inherit;
   cursor: pointer;
   text-decoration-line: underline;
@@ -226,7 +234,8 @@
 
 /* menu button */
 
-.menu-button {
+.menu-button,
+.theme-toggle-button {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -238,7 +247,8 @@
   }
 }
 
-.menu-button-icon {
+.menu-button-icon,
+.theme-toggle-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -262,6 +272,11 @@
   color: var(--accent-foreground);
 }
 
+.theme-toggle-button:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
 .menu-button-icon-input {
   display: none;
 }
@@ -274,6 +289,7 @@
 
 .menu-button-icon-input:checked + .header-mobile-menu {
   display: flex;
+  flex-direction: column;
 }
 
 @media (min-width: 1024px) {
@@ -326,4 +342,50 @@
       }
     }
   }
+}
+
+.header-mobile-auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  border-top: 1px solid var(--border);
+  height: 3rem;
+}
+
+.header-mobile-login-register-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-mobile-login-register-container a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.logout-button-container {
+  display: none;
+  position: absolute;
+  bottom: -2.5rem;
+  right: 0;
+  background-color: var(--secondary);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+  z-index: 10;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.logout-button-container.active {
+  display: block;
 }

@@ -37,19 +37,24 @@
         </nav>
       </div>
       <div class="header-right-content">
-        {% if user.is_authenticated %}
-        <strong>{{ user.username }}</strong>
-        {% include "components/logout_button.html" %}
-        {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <span>/</span>
-        <a href="{% url 'register' %}">Register</a>
-        {% endif %}
-      </div>
-      <div class="menu-button">
-        <label for="menu-button-icon" class="menu-button-icon">
-          <i class="fa-solid fa-bars"></i>
-        </label>
+        <span class="theme-toggle-button"></span>
+        <div class="auth-container">
+          {% if user.is_authenticated %}
+          <strong class="user-name">{{ user.username }}</strong>
+          <div class="logout-button-container">
+            {% include "components/logout_button.html" %}
+          </div>
+          {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <span>/</span>
+          <a href="{% url 'register' %}">Register</a>
+          {% endif %}
+        </div>
+        <div class="menu-button">
+          <label for="menu-button-icon" class="menu-button-icon">
+            <i class="fa-solid fa-bars"></i>
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -74,5 +79,17 @@
         </li>
       </ul>
     </nav>
+    <div class="header-mobile-auth-container">
+      {% if user.is_authenticated %}
+      <strong>{{ user.username }}</strong>
+      {% include "components/logout_button.html" %}
+      {% else %}
+      <div class="header-mobile-login-register-container">
+        <a href="{% url 'login' %}">Login</a>
+        <span>/</span>
+        <a href="{% url 'register' %}">Register</a>
+      </div>
+      {% endif %}
+    </div>
   </div>
 </header>
