@@ -23,6 +23,9 @@
     <title>{% block title %}Physics quizzes{% endblock title %}</title>
   </head>
   <body>
+    {% if messages %}
+      {% include "components/messages.html" with messages=messages %}
+    {% endif %}
     {% block content %}
     {% endblock content %}
   </body>

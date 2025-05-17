@@ -4,7 +4,7 @@
     const themeToggleButton = document.querySelectorAll(".theme-toggle-button");
     const userName = document.querySelectorAll(".user-name");
     const logoutButtonContainer = document.querySelectorAll(".logout-button-container");
-
+    const messages = document.querySelectorAll(".message");
 
     function setTheme(mode) {
         if (mode !== "light" && mode !== "dark" && mode !== "auto") {
@@ -59,12 +59,38 @@
             console.log(btn);
         });
 
+        setTimeout(showMessages, 100);
+
         userName.forEach((name) => {
             name.addEventListener("click", () => {
                 logoutButtonContainer.forEach((container) => {
                     container.classList.toggle("active");
                 });
             });
+        });
+    });
+
+    function showMessages() {
+        messages.forEach((message) => {
+            message.classList.add("active");
+        })
+        setTimeout(hideMessages, 5000);
+    }
+
+    function hideMessages() {
+        messages.forEach((message) => {
+            message.classList.remove("active");
+        })
+        setTimeout(() => {
+            messages.forEach((message) => {
+                message.remove();
+            })
+        }, 500)
+    }
+
+    messages.forEach((message) => {
+        message.addEventListener("click", () => {
+            message.remove();
         });
     });
 

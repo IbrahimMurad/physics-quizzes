@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 import random
+from django.contrib import messages
 
 
 scope_types = {
@@ -29,19 +30,24 @@ def exam_create(request):
     scope_type = request.POST.get("scope_type")
     scope_id = request.POST.get("scope_id")
 
+    print(scope_type, scope_id)
+
     if scope_type not in ["Lesson", "Chapter", "Unit", "Textbook"]:
-        return JsonResponse({"error": "Invalid scope type"}, status=400)
+        messages.error(request, "Invalid scope type")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
 
     try:
         scope = scope_types[scope_type].objects.get(id=scope_id)
     except scope_types[scope_type].DoesNotExist:
-        return JsonResponse({"error": "Scope not found"}, status=404)
+        messages.error(request, "Scope not found")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+    if scope.problems.count() < scope_problem_number[scope_type]:
+        messages.warning(request, "Unfortunatly, there are no enough problems for this scope")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
 
     problems = list(scope.problems)
     random.shuffle(problems)
-
-    if not problems:
-        return JsonResponse({"error": "No problems found for this scope"}, status=404)
 
     exam = Exam.objects.create(
         title=f"Exam for {scope_type}: {scope.title} - created by {request.user.username}",

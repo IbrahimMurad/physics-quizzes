@@ -28,6 +28,15 @@
   --accent: hsl(173, 85%, 32%);
   --accent-foreground: hsl(210, 40%, 98%);
 
+  --message-warning-fg: rgb(102, 60, 0);
+  --message-warning-bg: rgb(255, 244, 229);
+
+  --message-error-fg: rgb(152, 0, 0);
+  --message-error-bg: rgb(255, 226, 183);
+
+  --message-success-fg: rgb(1, 164, 1);
+  --message-success-bg: rgb(226, 255, 226);
+
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(210, 40%, 98%);
 
@@ -69,8 +78,20 @@
   --accent: hsl(173, 85%, 32%);
   --accent-foreground: hsl(210, 40%, 98%);
 
+  --message-warning-fg: rgb(255, 226, 183);
+  --message-warning-bg: rgb(25, 18, 7);
+
+  --message-error-fg: rgb(244, 199, 199);
+  --message-error-bg: rgb(22, 11, 11);
+
+  --message-success-fg: rgb(1, 164, 1);
+  --message-success-bg: rgb(22, 11, 11);
+
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(210, 40%, 98%);
+
+  --warning-message-fg: rgb(245, 245, 0);
+  --warning-message-bg: var(--background);
 
   --border: hsl(217.2, 32.6%, 17.5%);
   --input: hsl(217.2, 32.6%, 17.5%);
@@ -103,6 +124,11 @@ body {
   width: 100%;
   background-color: var(--background);
   color: var(--foreground);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items:stretch;
+  justify-content: center;
 }
 
 .container {
@@ -124,4 +150,71 @@ body {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+
+/* Messages */
+.messages {
+  position: relative;
+  z-index: 1000;
+  color: black;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 40rem;
+}
+
+.message-container {
+    position: absolute;
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.message {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  border-width: 1.5px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  top: 1rem;
+  transform: translateY(-150%);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.message.active {
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.message.success {
+  border-color: var(--message-success-fg);
+  color: var(--message-success-fg);
+  background-color: var(--message-success-bg);
+}
+
+.message.warning {
+  border-color: var(--message-warning-fg);
+  color: var(--message-warning-fg);
+  background-color: var(--message-warning-bg);
+}
+
+.message.error {
+  border-color: var(--message-error-fg);
+  color: var(--message-error-fg);
+  background-color: var(--message-error-bg);
+}
+
+.message-text {
+  flex: 1;
 }

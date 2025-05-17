@@ -1,0 +1,21 @@
+<div class="messages">
+    <div class="message-container">
+        {% for message in messages %}
+            <p class="message {{ message.tags }}">
+                <span class="message-icon">
+                {% if message.tags == 'warning' %}
+                    <i class="fas fa-exclamation-triangle"></i>
+                {% elif message.tags == 'error' %}
+                    <i class="fas fa-exclamation-circle"></i>
+                {% elif message.tags == 'success' %}
+                    <i class="fas fa-check-circle"></i>
+                {% endif %}
+            </span>
+            <span class="message-text">
+                {{ message }}
+            </span>
+        </p>
+    {% endfor %}
+    </div>
+</div>
+
