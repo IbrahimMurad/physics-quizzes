@@ -27,6 +27,7 @@
             </div>
             <form id="login-form" method="post" action="{% url 'login' %}" novalidate>
                 {% csrf_token %}
+                <input type="text" name="next" value="{{ next }}" hidden>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" placeholder="Enter your username" aria-describedby="username-error" required>

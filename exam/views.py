@@ -7,6 +7,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 import random
 from django.contrib import messages
+from exam.utils import reload
 
 
 scope_types = {
@@ -34,13 +35,14 @@ def exam_create(request):
 
     if scope_type not in ["Lesson", "Chapter", "Unit", "Textbook"]:
         messages.error(request, "Invalid scope type")
-        return redirect(request.META.get("HTTP_REFERER", "/"))
+        return reload(request)
 
     try:
         scope = scope_types[scope_type].objects.get(id=scope_id)
     except scope_types[scope_type].DoesNotExist:
         messages.error(request, "Scope not found")
-        return redirect(request.META.get("HTTP_REFERER", "/"))
+        return reload(request)
+
 
     if scope.problems.count() < scope_problem_number[scope_type]:
         messages.warning(request, "Unfortunatly, there are no enough problems for this scope")
@@ -63,15 +65,14 @@ def exam_create(request):
     return redirect("exam", exam_id=exam.id)
 
 
-@login_required
+@login_required(redirect_field_name="next")
 @require_http_methods(["GET"])
 def exam_view(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
 
     if exam.created_by != request.user and not exam.is_published:
-        return JsonResponse(
-            {"error": "You do not have permission to view this exam"}, status=403
-        )
+        messages.error(request, "You do not have permission to view this exam")
+        return reload(request)
     return render(request, "exam/exam.html", {"exam": exam})
 
 
@@ -81,9 +82,8 @@ def submit_exam(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
 
     if exam.created_by != request.user and not exam.is_published:
-        return JsonResponse(
-            {"error": "You do not have permission to view this exam"}, status=403
-        )
+        messages.error(request, "You do not have permission to view this exam")
+        return reload(request)
 
     exam_problems = exam.exam_problems.all().prefetch_related("problem__choices")
 
@@ -115,8 +115,15 @@ def submit_exam(request, exam_id):
     )
 
 
+@require_http_methods(["GET"])
+@login_required
 def exam_result(request, submission_id):
     submission = get_object_or_404(Submission, id=submission_id)
+
+    if submission.user != request.user:
+        messages.error(request, "You do not have permission to view this result")
+        return reload(request)
+
     answers = submission.answers.values_list("choice", flat=True)
 
     context = {
