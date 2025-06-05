@@ -30,7 +30,7 @@
             <fieldset class="problem-options">
                 {% for choice in exam_problem.problem.choices.all %}
                 <label class="problem-option">
-                    <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}">
+                    <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}" required>
                     <p>{{ choice.body }}</p>
                 </label>
                 {% endfor %}
