@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import random
 from django.contrib import messages
 from exam.utils import reload
+from django.urls import reverse
 
 
 scope_types = {
@@ -25,9 +26,14 @@ scope_problem_number = {
 }
 
 
-@login_required
 @require_http_methods(["POST"])
 def exam_create(request):
+
+    if request.user.is_anonymous:
+        messages.error(request, "You must be logged in to create an exam")
+        redirect_url = f"{reverse('login')}?next={request.META.get('HTTP_REFERER', '/')}"
+        return redirect(redirect_url)
+
     scope_type = request.POST.get("scope_type")
     scope_id = request.POST.get("scope_id")
 
@@ -65,7 +71,7 @@ def exam_create(request):
     return redirect("exam", exam_id=exam.id)
 
 
-@login_required(redirect_field_name="next")
+@login_required
 @require_http_methods(["GET"])
 def exam_view(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
