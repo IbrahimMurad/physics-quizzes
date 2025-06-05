@@ -130,6 +130,20 @@ def exam_result(request, submission_id):
         messages.error(request, "You do not have permission to view this result")
         return reload(request)
 
+    if submission.status == Submission.Status.EXITED_UNEXPECTEDLY:
+        messages.error(request, "You exited this exam unexpectedly, so there is no results.")
+        return render(
+            request,
+            "exam/exam_result.html",
+            {
+                "score": "-",
+                "wrong_answers": "-",
+                "percentage": "-",
+                "exam_length": submission.exam.problems.count(),
+                "exam_title": submission.exam.title,
+            },
+        )
+
     answers = submission.answers.values_list("choice", flat=True)
 
     context = {
@@ -151,7 +165,7 @@ def exam_result(request, submission_id):
                     }
                     for choice in problem.choices.all()
                 ],
-                "answered_correctly": Choice.objects.get(answer__submission=submission, answer__problem=problem).is_correct,
+                "answered_correctly": Choice.objects.get(answer__submission=submission, answer__problem=problem).is_correct if answers else False,
             }
             for problem in submission.exam.problems.all()
         ],
