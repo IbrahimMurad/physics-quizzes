@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock css %}
 
+{% block js %}
+<script src="{% static 'js/exam.js' %}" defer></script>
+{% endblock js %}
+
 {% block title %}
 {{ exam.title }}
 {% endblock title %}
@@ -18,7 +22,7 @@
         <h1>{{ exam.title }}</h1>
         <div class="exam-info">
             <div class="duration-countdown"></div>
-            <p class="questions-answered"><span class="answered"></span> / {{ exam.questions|length }} answered</p>
+            <p class="questions-answered"><span class="answered">0</span> / {{ exam_problems|length }} answered</p>
         </div>
     </div>
     <form action="{% url 'exam-solve' exam.id %}" method="post" class="exam-form">
