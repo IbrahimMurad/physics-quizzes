@@ -26,7 +26,7 @@
                 <div class="incorrect-answers"><span>{{ wrong_answers }}</span> <span>incorrect</span></div>
             </div>
             <div class="progress-bar">
-                <div class="progress" style="width: {% if percentage == '-' %}0{% else %}percentage{% endif %}%"></div>
+                <div class="progress" style="width: {% if percentage == '-' %}0{% else %}{{ percentage }}{% endif %}%"></div>
             </div>
         </div>
     </div>
