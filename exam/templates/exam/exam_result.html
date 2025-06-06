@@ -33,12 +33,23 @@
     <div class="exam-form">
         {% for problem in problems %}
         <div class="problem {% if problem.answered_correctly %}answered-correctly{% else %}answered-incorrectly{% endif %}">
-            <h3>Question {{ forloop.counter }}</h3>
-            <p>{{ problem.body }}</p>
+            <div class="problem-body">
+                <div class="problem-text">
+                    <h3>Question {{ forloop.counter }}</h3>
+                    <p>{{ problem.body }}</p>
+                </div>
+                {% if problem.figure %}
+                <img src="{{ problem.figure.url }}" alt="{{ problem.figure.name }}" class="problem-figure">
+                {% endif %}
+            </div>
             <div class="problem-options">
                 {% for choice in problem.choices %}
                 <div class="problem-option {% if choice.is_correct %}correct{% endif %} {% if choice.checked %}checked{% endif %}">
+                    {% if choice.figure %}
+                    <img src="{{ choice.figure.url }}" alt="{{ choice.figure.name }}" class="choice-figure">
+                    {% else %}
                     <p>{{ choice.body }}</p>
+                    {% endif %}
                     {% if choice.is_correct %}
                     <i class="fas fa-check"></i>
                     {% endif %}

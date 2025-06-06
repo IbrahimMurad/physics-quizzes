@@ -157,10 +157,12 @@ def exam_result(request, submission_id):
             {
                 "id": problem.id,
                 "body": problem.body,
+                "figure": problem.figure,
                 "choices": [
                     {
                         "id": choice.id,
                         "body": choice.body,
+                        "figure": choice.figure,
                         "is_correct": choice.is_correct,
                         "checked": choice.id in answers,
                     }

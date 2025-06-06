@@ -31,11 +31,18 @@
         <div class="problem">
             <h3>Question {{ forloop.counter }}</h3>
             <p>{{ exam_problem.problem.body }}</p>
+            {% if exam_problem.problem.figure %}
+            <img src="{{ exam_problem.problem.figure.url }}" alt="{{ exam_problem.problem.figure.name }}" class="problem-figure">
+            {% endif %}
             <fieldset class="problem-options">
                 {% for choice in exam_problem.problem.choices.all %}
                 <label class="problem-option">
                     <input type="radio" name="problem_{{ exam_problem.order }}" value="{{ choice.id }}" required>
+                    {% if choice.figure %}
+                    <img src="{{ choice.figure.url }}" alt="{{ choice.figure.name }}" class="choice-figure">
+                    {% else %}
                     <p>{{ choice.body }}</p>
+                    {% endif %}
                 </label>
                 {% endfor %}
             </fieldset>
