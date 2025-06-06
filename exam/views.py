@@ -112,6 +112,7 @@ def submit_exam(request, exam_id):
                 if choice.is_correct:
                     score += 1
         submission.score = score
+        submission.status = Submission.Status.COMPLETED
         submission.save()
 
         return redirect("exam-result", submission_id=submission.id)
