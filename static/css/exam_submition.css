@@ -100,6 +100,8 @@
 }
 
 .problem.answered-correctly {
+    border-left-width: 4px;
+    border-left-style: solid;
     border-left-color: hsla(120, 100%, 33%, 1);
 }
 
