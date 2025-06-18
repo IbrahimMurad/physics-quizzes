@@ -56,7 +56,6 @@
     window.addEventListener('load', () => {
         themeToggleButton.forEach((btn) => {
             btn.addEventListener("click", cycleTheme);
-            console.log(btn);
         });
 
         setTimeout(showMessages, 100);

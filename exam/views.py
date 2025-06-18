@@ -36,14 +36,14 @@ def exam_create(request):
 
     scope_type = request.POST.get("scope_type")
     scope_id = request.POST.get("scope_id")
-
-    print(scope_type, scope_id)
+    exam_title = request.POST.get("exam_title")
 
     if scope_type not in ["Lesson", "Chapter", "Unit", "Textbook"]:
         messages.error(request, "Invalid scope type")
         return reload(request)
 
     try:
+        print(scope_type, scope_id)
         scope = scope_types[scope_type].objects.get(id=scope_id)
     except scope_types[scope_type].DoesNotExist:
         messages.error(request, "Scope not found")
@@ -58,7 +58,7 @@ def exam_create(request):
     random.shuffle(problems)
 
     exam = Exam.objects.create(
-        title=f"Exam for {scope_type}: {scope.title} - created by {request.user.username}",
+        title=exam_title or f"Exam for {scope_type}: {scope.title} - created by {request.user.username}",
         created_by=request.user,
         scope_type=scope_type,
         scope_id=scope_id,
@@ -179,3 +179,31 @@ def exam_result(request, submission_id):
         "exam/exam_result.html",
         context=context,
     )
+
+
+@require_http_methods(["GET"])
+def get_units(request, textbook_id):
+    textbook = get_object_or_404(TextBook, id=textbook_id)
+    units = textbook.units.values("id", "title")
+    return JsonResponse(list(units), safe=False)
+
+@require_http_methods(["GET"])
+def get_chapters(request, unit_id):
+    unit = get_object_or_404(Unit, id=unit_id)
+    chapters = unit.chapters.values("id", "title")
+    return JsonResponse(list(chapters), safe=False)
+
+@require_http_methods(["GET"])
+def get_lessons(request, chapter_id):
+    chapter = get_object_or_404(Chapter, id=chapter_id)
+    lessons = chapter.lessons.values("id", "title")
+    return JsonResponse(list(lessons), safe=False)
+
+
+@require_http_methods(["GET"])
+@login_required
+def create_custom_exam(request):
+    context = {
+        "textbooks": TextBook.objects.all()
+    }
+    return render(request, "exam/create_exam.html", context)

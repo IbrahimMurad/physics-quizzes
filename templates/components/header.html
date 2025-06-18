@@ -28,7 +28,7 @@
                     <a href="#">Solved Exams</a>
                   </li>
                   <li>
-                    <a href="#">Create Exam</a>
+                    <a href="{% url 'exam-custom' %}">Create Exam</a>
                   </li>
                 </ul>
               </div>
@@ -75,7 +75,7 @@
           <a {% if request.path == '/solved-exams/' %}class="active"{% endif %} href="#">Solved Exams</a>
         </li>
         <li>
-          <a {% if request.path == '/create-exam/' %}class="active"{% endif %} href="#">Create Exam</a>
+          <a {% if request.path == '/exam/custom/' %}class="active"{% endif %} href="#">Create Exam</a>
         </li>
       </ul>
     </nav>

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Create New Exam
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/create_exam.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/createExam.js' %}" defer></script>
+{% endblock js %}
+
+{% block content %}
+{% include "components/header.html" %}
+
+<div class="container">
+    <form action="{% url 'exam-create' %}" method="post" class="custom-exam-form">
+        {% csrf_token %}
+        <h2>Create An Exam</h2>
+        <fieldset>
+            <legend>Select Scope</legend>
+            <label for="textbook-radio">
+                <input id="textbook-radio" type="radio" name="scope_type" value="Textbook" checked required>
+                Textbook
+            </label>
+            <label for="unit-radio">
+                <input id="unit-radio" type="radio" name="scope_type" value="Unit" required>
+                Unit
+            </label>
+            <label for="chapter-radio">
+                <input id="chapter-radio" type="radio" name="scope_type" value="Chapter" required>
+                Chapter
+            </label>
+            <label for="lesson-radio">
+                <input id="lesson-radio" type="radio" name="scope_type" value="Lesson" required>
+                Lesson
+            </label>
+        </fieldset>
+        <div id="textbooks" class="scope">
+            <label for="textbook-select">Textbook</label>
+            <select id="textbook-select" name="textbook_id" required>
+                <option value="">Select Textbook</option>
+                {% for textbook in textbooks %}
+                <option value="{{ textbook.id }}">{{ textbook.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="units" class="scope">
+            <label for="unit-select">Unit</label>
+            <select id="unit-select" name="unit_id" required>
+            </select>
+        </div>
+        <div id="chapters" class="scope">
+            <label for="chapter-select">Chapter</label>
+            <select id="chapter-select" name="chapter_id" required></select>
+        </div>
+        <div id="lessons" class="scope">
+            <label for="lesson-select">Lesson</label>
+            <select id="lesson-select" name="lesson_id" required></select>
+        </div>
+        <div class="exam-title">
+            <label for="exam-title">Exam Title</label>
+            <input id="exam-title" type="text" name="exam_title" placeholder="Test exam for ....." required>
+        </div>
+        <input type="hidden" name="scope_id" id="scope-id-input">
+        <div class="action-buttons">
+            <button type="reset">Cancel</button>
+            <button type="submit">Create</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
