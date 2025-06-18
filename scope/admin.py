@@ -1,7 +1,9 @@
-from django.contrib import admin
 import nested_admin
+from django.contrib import admin
+
 from problem.admin import ProblemInline
-from .models import TextBook, Unit, Chapter, Lesson
+
+from .models import Chapter, Lesson, TextBook, Unit
 
 
 class LessonInline(nested_admin.NestedTabularInline):

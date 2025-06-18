@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("scope", "0003_alter_chapter_unique_together_and_more"),
     ]

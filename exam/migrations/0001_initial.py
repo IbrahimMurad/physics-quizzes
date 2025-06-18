@@ -6,70 +6,181 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('problem', '0001_initial'),
+        ("problem", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Exam',
+            name="Exam",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=256)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('scope_type', models.CharField(choices=[('Lesson', 'Lesson'), ('Chapter', 'Chapter'), ('Unit', 'Unit'), ('Textbook', 'Textbook')], default='Lesson', max_length=10)),
-                ('scope_id', models.PositiveIntegerField()),
-                ('is_published', models.BooleanField(default=False)),
-                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='exams', related_query_name='exam', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=256)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "scope_type",
+                    models.CharField(
+                        choices=[
+                            ("Lesson", "Lesson"),
+                            ("Chapter", "Chapter"),
+                            ("Unit", "Unit"),
+                            ("Textbook", "Textbook"),
+                        ],
+                        default="Lesson",
+                        max_length=10,
+                    ),
+                ),
+                ("scope_id", models.PositiveIntegerField()),
+                ("is_published", models.BooleanField(default=False)),
+                (
+                    "created_by",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="exams",
+                        related_query_name="exam",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ExamProblem',
+            name="ExamProblem",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('exam', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='exam_problems', to='exam.exam')),
-                ('problem', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='exam_problems', to='problem.problem')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("order", models.PositiveIntegerField(default=0)),
+                (
+                    "exam",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="exam_problems",
+                        to="exam.exam",
+                    ),
+                ),
+                (
+                    "problem",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="exam_problems",
+                        to="problem.problem",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['order'],
+                "ordering": ["order"],
             },
         ),
         migrations.AddField(
-            model_name='exam',
-            name='problems',
-            field=models.ManyToManyField(related_name='exams', related_query_name='exam', through='exam.ExamProblem', to='problem.problem'),
+            model_name="exam",
+            name="problems",
+            field=models.ManyToManyField(
+                related_name="exams",
+                related_query_name="exam",
+                through="exam.ExamProblem",
+                to="problem.problem",
+            ),
         ),
         migrations.CreateModel(
-            name='Submission',
+            name="Submission",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('score', models.FloatField(null=True)),
-                ('is_published', models.BooleanField(default=False)),
-                ('exam', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='submissions', to='exam.exam')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='submissions', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("score", models.FloatField(null=True)),
+                ("is_published", models.BooleanField(default=False)),
+                (
+                    "exam",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="submissions",
+                        to="exam.exam",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="submissions",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created_at'],
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='Answer',
+            name="Answer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('choice', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='problem.choice')),
-                ('problem', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='problem.problem')),
-                ('submission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answers', related_query_name='answer', to='exam.submission')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "choice",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="problem.choice",
+                    ),
+                ),
+                (
+                    "problem",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="problem.problem",
+                    ),
+                ),
+                (
+                    "submission",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answers",
+                        related_query_name="answer",
+                        to="exam.submission",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['problem'],
-                'constraints': [models.UniqueConstraint(fields=('problem', 'submission'), name='unique_answer')],
+                "ordering": ["problem"],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("problem", "submission"), name="unique_answer"
+                    )
+                ],
             },
         ),
     ]

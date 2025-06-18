@@ -4,15 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('exam', '0001_initial'),
+        ("exam", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='submission',
-            name='status',
-            field=models.CharField(choices=[('exited_unexpectedly', 'Exited Unexpectedly'), ('completed', 'Completed')], default='exited_unexpectedly', max_length=20),
+            model_name="submission",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("exited_unexpectedly", "Exited Unexpectedly"),
+                    ("completed", "Completed"),
+                ],
+                default="exited_unexpectedly",
+                max_length=20,
+            ),
         ),
     ]

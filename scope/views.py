@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from scope.models import TextBook, Unit, Chapter, Lesson
+from django.shortcuts import get_object_or_404, render
+
+from scope.models import Chapter, Lesson, TextBook, Unit
 
 
 def index(request):

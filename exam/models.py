@@ -1,11 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import User
-from problem.models import Problem, Choice
 from django.core.exceptions import ValidationError
+from django.db import models
+
+from problem.models import Choice, Problem
 
 
 class Exam(models.Model):
-
     class ScopeChoice(models.TextChoices):
         LESSON = "Lesson", "Lesson"
         CHAPTER = "Chapter", "Chapter"
@@ -62,7 +62,9 @@ class Submission(models.Model):
         EXITED_UNEXPECTEDLY = "exited_unexpectedly", "Exited Unexpectedly"
         COMPLETED = "completed", "Completed"
 
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.EXITED_UNEXPECTEDLY)
+    status = models.CharField(
+        max_length=20, choices=Status.choices, default=Status.EXITED_UNEXPECTEDLY
+    )
 
     class Meta:
         ordering = ["-created_at"]

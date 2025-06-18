@@ -4,25 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('scope', '0004_alter_chapter_unique_together_and_more'),
+        ("scope", "0004_alter_chapter_unique_together_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='textbook',
-            old_name='name',
-            new_name='title',
+            model_name="textbook",
+            old_name="name",
+            new_name="title",
         ),
         migrations.AddField(
-            model_name='textbook',
-            name='caption',
-            field=models.TextField(blank=True, default=''),
+            model_name="textbook",
+            name="caption",
+            field=models.TextField(blank=True, default=""),
         ),
         migrations.AddField(
-            model_name='textbook',
-            name='cover',
-            field=models.ImageField(blank=True, null=True, upload_to=''),
+            model_name="textbook",
+            name="cover",
+            field=models.ImageField(blank=True, null=True, upload_to=""),
         ),
     ]

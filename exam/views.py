@@ -1,15 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Exam, Submission, Answer, ExamProblem
-from problem.models import Problem, Choice
-from scope.models import TextBook, Unit, Chapter, Lesson
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
 import random
-from django.contrib import messages
-from exam.utils import reload
-from django.urls import reverse
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.decorators.http import require_http_methods
+
+from exam.utils import reload
+from problem.models import Choice, Problem
+from scope.models import Chapter, Lesson, TextBook, Unit
+
+from .models import Answer, Exam, ExamProblem, Submission
 
 scope_types = {
     "Lesson": Lesson,
@@ -28,10 +30,11 @@ scope_problem_number = {
 
 @require_http_methods(["POST"])
 def exam_create(request):
-
     if request.user.is_anonymous:
         messages.error(request, "You must be logged in to create an exam")
-        redirect_url = f"{reverse('login')}?next={request.META.get('HTTP_REFERER', '/')}"
+        redirect_url = (
+            f"{reverse('login')}?next={request.META.get('HTTP_REFERER', '/')}"
+        )
         return redirect(redirect_url)
 
     scope_type = request.POST.get("scope_type")
@@ -43,22 +46,23 @@ def exam_create(request):
         return reload(request)
 
     try:
-        print(scope_type, scope_id)
         scope = scope_types[scope_type].objects.get(id=scope_id)
     except scope_types[scope_type].DoesNotExist:
         messages.error(request, "Scope not found")
         return reload(request)
 
-
     if scope.problems.count() < scope_problem_number[scope_type]:
-        messages.warning(request, "Unfortunatly, there are no enough problems for this scope")
+        messages.warning(
+            request, "Unfortunatly, there are no enough problems for this scope"
+        )
         return redirect(request.META.get("HTTP_REFERER", "/"))
 
     problems = list(scope.problems)
     random.shuffle(problems)
 
     exam = Exam.objects.create(
-        title=exam_title or f"Exam for {scope_type}: {scope.title} - created by {request.user.username}",
+        title=exam_title
+        or f"Exam for {scope_type}: {scope.title} - created by {request.user.username}",
         created_by=request.user,
         scope_type=scope_type,
         scope_id=scope_id,
@@ -132,7 +136,9 @@ def exam_result(request, submission_id):
         return reload(request)
 
     if submission.status == Submission.Status.EXITED_UNEXPECTEDLY:
-        messages.error(request, "You exited this exam unexpectedly, so there is no results.")
+        messages.error(
+            request, "You exited this exam unexpectedly, so there is no results."
+        )
         return render(
             request,
             "exam/exam_result.html",
@@ -168,7 +174,11 @@ def exam_result(request, submission_id):
                     }
                     for choice in problem.choices.all()
                 ],
-                "answered_correctly": Choice.objects.get(answer__submission=submission, answer__problem=problem).is_correct if answers else False,
+                "answered_correctly": Choice.objects.get(
+                    answer__submission=submission, answer__problem=problem
+                ).is_correct
+                if answers
+                else False,
             }
             for problem in submission.exam.problems.all()
         ],
@@ -187,11 +197,13 @@ def get_units(request, textbook_id):
     units = textbook.units.values("id", "title")
     return JsonResponse(list(units), safe=False)
 
+
 @require_http_methods(["GET"])
 def get_chapters(request, unit_id):
     unit = get_object_or_404(Unit, id=unit_id)
     chapters = unit.chapters.values("id", "title")
     return JsonResponse(list(chapters), safe=False)
+
 
 @require_http_methods(["GET"])
 def get_lessons(request, chapter_id):
@@ -203,7 +215,5 @@ def get_lessons(request, chapter_id):
 @require_http_methods(["GET"])
 @login_required
 def create_custom_exam(request):
-    context = {
-        "textbooks": TextBook.objects.all()
-    }
+    context = {"textbooks": TextBook.objects.all()}
     return render(request, "exam/create_exam.html", context)

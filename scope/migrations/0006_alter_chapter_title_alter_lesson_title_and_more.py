@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('scope', '0005_rename_name_textbook_title_textbook_caption_and_more'),
+        ("scope", "0005_rename_name_textbook_title_textbook_caption_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='chapter',
-            name='title',
+            model_name="chapter",
+            name="title",
             field=models.CharField(max_length=256),
         ),
         migrations.AlterField(
-            model_name='lesson',
-            name='title',
+            model_name="lesson",
+            name="title",
             field=models.CharField(max_length=256),
         ),
         migrations.AlterField(
-            model_name='textbook',
-            name='title',
+            model_name="textbook",
+            name="title",
             field=models.CharField(max_length=256),
         ),
         migrations.AlterField(
-            model_name='unit',
-            name='title',
+            model_name="unit",
+            name="title",
             field=models.CharField(max_length=256),
         ),
     ]

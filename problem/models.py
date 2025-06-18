@@ -1,5 +1,7 @@
 from django.db import models
+
 from scope.models import Lesson
+
 
 class Problem(models.Model):
     """This model represents the problems of a lesson"""
@@ -10,11 +12,18 @@ class Problem(models.Model):
         HARD = 3, "Hard"
         EXTRA = 4, "Extra hard"
 
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="lessons", related_query_name="problem")
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="lessons",
+        related_query_name="problem",
+    )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     figure = models.ImageField(upload_to="problems/", null=True, blank=True)
-    difficulty = models.PositiveSmallIntegerField(choices=Difficulty, default=Difficulty.EASY)
+    difficulty = models.PositiveSmallIntegerField(
+        choices=Difficulty, default=Difficulty.EASY
+    )
 
     class Meta:
         ordering = ["difficulty", "created_at"]
@@ -30,7 +39,7 @@ class Choice(models.Model):
         Problem,
         on_delete=models.CASCADE,
         related_name="choices",
-        related_query_name="choice"
+        related_query_name="choice",
     )
     body = models.CharField(max_length=256, null=True, blank=True)
     figure = models.ImageField(upload_to="choices/", null=True, blank=True)
@@ -38,4 +47,3 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.body or self.figure.name
-

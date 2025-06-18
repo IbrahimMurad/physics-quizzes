@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("scope", "0002_remove_chapter_ccover_remove_lesson_ccover_and_more"),
     ]

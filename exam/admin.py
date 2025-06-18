@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Exam, ExamProblem, Submission, Answer
+
+from .models import Answer, Exam, ExamProblem, Submission
 
 
 class ExamProblemInline(admin.TabularInline):

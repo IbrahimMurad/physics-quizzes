@@ -1,6 +1,7 @@
-from django.contrib import admin
-from .models import Problem, Choice
 import nested_admin
+from django.contrib import admin
+
+from .models import Choice, Problem
 
 
 class NestedChoiceInline(nested_admin.NestedTabularInline):

@@ -6,18 +6,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path, include, re_path
-from scope.views import index, units, chapters, lessons
+from django.urls import include, path, re_path
+
 from exam.views import (
-    exam_create,
-    exam_view,
-    submit_exam,
-    exam_result,
     create_custom_exam,
-    get_units,
+    exam_create,
+    exam_result,
+    exam_view,
     get_chapters,
-    get_lessons
+    get_lessons,
+    get_units,
+    submit_exam,
 )
+from scope.views import chapters, index, lessons, units
 from user_profile.views import register
 
 urlpatterns = [
