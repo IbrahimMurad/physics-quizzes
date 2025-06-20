@@ -74,7 +74,9 @@ class Submission(models.Model):
 
     @property
     def percentage(self):
-        return self.score / self.exam.problems.count() * 100
+        if self.score:
+            return self.score / self.exam.problems.count() * 100
+        return None
 
     @property
     def wrong_answers(self):

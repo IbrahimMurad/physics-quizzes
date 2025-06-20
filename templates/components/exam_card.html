@@ -1,0 +1,41 @@
+{% load exam_filters %}
+<div class="exam-card">
+    <div class="exam-card-header">
+      <div class="exam-status">
+        {% if submission.is_solved %}
+          <p class="badge badge-complete">✔ Completed</p>
+        {% else %}
+          <p class="badge badge-pending">⏵ Pending</p>
+        {% endif %}
+      </div>
+      <div class="exam-card-main">
+        <h2>{{ submission.exam.title }}</h2>
+        <div class="exam-meta">
+          <div class="exam-scope"> 
+            <i class="fa-solid fa-book-open"></i>
+            {{ submission.exam.scope_type }}: {{ submission.exam.scope_title }}
+          </div>
+          <div class="exam-created"> 
+            <i class="fa-solid fa-calendar"></i>
+            {{ submission.exam.created_at|date:"F j, Y" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="exam-card-body">
+      <div class="exam-stats">
+        <span>Questions: <strong>{{ submission.exam_length }}</strong></span>
+        {% if submission.is_solved and submission.score %}
+        <span>Score: <strong class="{{ submission.score|get_score_color }}">{{ submission.score }}%</strong></span>
+        {% endif %}
+      </div>
+      <div class="exam-actions">
+        {% if submission.is_solved %}
+          <a href="{% url 'exam-result' submission.id %}" class="btn btn-outline">View Results</a>
+        {% else %}
+          <a href="{% url 'exam-solve' submission.exam.id %}" class="btn btn-primary">Solve Exam</a>
+        {% endif %}
+      </div>
+    </div>
+</div>

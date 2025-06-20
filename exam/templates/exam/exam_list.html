@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Exam List
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/exam_list.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/examList.js' %}" defer></script>
+{% endblock js %}
+
+{% block content %}
+{% include "components/header.html" %}
+
+<div class="container">
+  <div class="exam-header">
+    <h1>My Exams</h1>
+  </div>
+
+  <div class="exam-grid">
+    {% for submission in submissions %}
+      {% include "components/exam_card.html" with submission=submission %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

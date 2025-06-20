@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.db.models import F, Prefetch
 
 from exam.utils import reload
 from problem.models import Choice, Problem
@@ -217,3 +218,33 @@ def get_lessons(request, chapter_id):
 def create_custom_exam(request):
     context = {"textbooks": TextBook.objects.all()}
     return render(request, "exam/create_exam.html", context)
+
+
+@require_http_methods(["GET"])
+@login_required
+def exam_list(request):
+    submissions = Submission.objects.filter(user=request.user)
+    context = {
+        "submissions": [
+            {
+                "id": submission.id,
+                "exam": {
+                    "id": submission.exam.id,
+                    "title": submission.exam.title,
+                    "scope_type": submission.exam.scope_type,
+                    "scope_title": scope_types[submission.exam.scope_type]
+                    .objects.get(id=submission.exam.scope_id)
+                    .title,
+                    "created_at": submission.exam.created_at,
+                },
+                "score": submission.score,
+                "percentage": submission.percentage,
+                "exam_length": submission.exam.problems.count(),
+                "is_solved": submission.status == Submission.Status.COMPLETED
+                and submission.score,
+            }
+            for submission in submissions
+        ]
+    }
+    print(context)
+    return render(request, "exam/exam_list.html", context)
