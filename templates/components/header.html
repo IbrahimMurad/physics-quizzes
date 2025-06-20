@@ -9,10 +9,10 @@
         <nav class="main-nav">
           <ul>
             <li>
-              <a href="#">Dashboard</a>
+              <a href="{% url 'home' %}">Dashboard</a>
             </li>
             <li>
-              <a href="#">Textbooks</a>
+              <a href="{% url 'home' %}">Textbooks</a>
             </li>
             <li>
               <button class="header-exam-button">
@@ -22,10 +22,10 @@
               <div class="header-exam-dropdown">
                 <ul>
                   <li>
-                    <a href="#">All Exams</a>
+                    <a href="{% url 'exam-list' %}">All Exams</a>
                   </li>
                   <li>
-                    <a href="#">Solved Exams</a>
+                    <a href="{% url 'exam-list' %}">Solved Exams</a>
                   </li>
                   <li>
                     <a href="{% url 'exam-custom' %}">Create Exam</a>
@@ -63,19 +63,19 @@
     <nav class="mobile-nav">
       <ul>
         <li>
-          <a {% if request.path == '/' %}class="active"{% endif %} href="#">Dashboard</a>
+          <a {% if request.path == '/' %}class="active"{% endif %} href="{% url 'home' %}">Dashboard</a>
         </li>
         <li>
-          <a {% if request.path == '/textbooks/' %}class="active"{% endif %} href="#">Textbooks</a>
+          <a {% if request.path == '/' %}class="active"{% endif %} href="{% url 'home' %}">Textbooks</a>
         </li>
         <li>
-          <a {% if request.path == '/exams/' %}class="active"{% endif %} href="#">All Exams</a>
+          <a {% if request.path == '/exams/' %}class="active"{% endif %} href="{% url 'exam-list' %}">All Exams</a>
         </li>
         <li>
-          <a {% if request.path == '/solved-exams/' %}class="active"{% endif %} href="#">Solved Exams</a>
+          <a {% if request.path == '/solved-exams/' %}class="active"{% endif %} href="{% url 'exam-list' %}">Solved Exams</a>
         </li>
         <li>
-          <a {% if request.path == '/exam/custom/' %}class="active"{% endif %} href="#">Create Exam</a>
+          <a {% if request.path == '/exam/custom/' %}class="active"{% endif %} href="{% url 'exam-custom' %}">Create Exam</a>
         </li>
       </ul>
     </nav>
