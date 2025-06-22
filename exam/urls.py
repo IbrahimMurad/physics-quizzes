@@ -1,6 +1,13 @@
 from django.urls import path
 
-from exam.views import exam_list, exam_create, submit_exam, exam_result, create_custom_exam, exam_view
+from exam.views import (
+    create_custom_exam,
+    exam_create,
+    exam_list,
+    exam_result,
+    exam_view,
+    submit_exam,
+)
 
 urlpatterns = [
     path("", exam_list, name="exam-list"),

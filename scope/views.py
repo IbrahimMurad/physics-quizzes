@@ -1,4 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_http_methods
 
 from scope.models import Chapter, Lesson, TextBook, Unit
 
@@ -69,3 +71,24 @@ def lessons(request, chapter_id):
             ],
         },
     )
+
+
+@require_http_methods(["GET"])
+def get_units(request, textbook_id):
+    textbook = get_object_or_404(TextBook, id=textbook_id)
+    units = textbook.units.values("id", "title")
+    return JsonResponse(list(units), safe=False)
+
+
+@require_http_methods(["GET"])
+def get_chapters(request, unit_id):
+    unit = get_object_or_404(Unit, id=unit_id)
+    chapters = unit.chapters.values("id", "title")
+    return JsonResponse(list(chapters), safe=False)
+
+
+@require_http_methods(["GET"])
+def get_lessons(request, chapter_id):
+    chapter = get_object_or_404(Chapter, id=chapter_id)
+    lessons = chapter.lessons.values("id", "title")
+    return JsonResponse(list(lessons), safe=False)
