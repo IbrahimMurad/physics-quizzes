@@ -68,7 +68,7 @@ class Submission(models.Model):
     )
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return f"{self.user.username} - {self.exam.title} - {self.score}"

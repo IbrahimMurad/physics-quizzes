@@ -3,7 +3,7 @@ from django.db.models import Avg
 from django.shortcuts import render, reverse
 
 from exam.models import Submission
-from scope.models import TextBook
+from exam.utils import get_submissions
 
 
 @login_required
@@ -38,9 +38,6 @@ def dashboard(request):
             },
         ],
         "My_lessons": request.user.profile.lessons.all(),
-        "recent_exams": Submission.objects.filter(user=request.user).exclude(
-            status=Submission.Status.EXITED_UNEXPECTEDLY
-        ),
+        "recent_exams": get_submissions(request=request, limit=5),
     }
-    print(context)
     return render(request, "dashboard/dashboard.html", context)

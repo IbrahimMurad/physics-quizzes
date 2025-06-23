@@ -157,13 +157,15 @@
 }
 
 .tabs {
+    position: relative;
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     margin-bottom: 1.2rem;
     border-radius: var(--radius);
     background-color: var(--secondary);
     color: var(--secondary-foreground);
-    width: fit-content;
+    width: 20rem;
+    height: 2.6rem;
     padding: 0.3rem 0.5rem;
 }
 
@@ -174,64 +176,57 @@
     color: var(--foreground);
     border: none;
     border-radius: var(--radius);
+    min-width: 9rem;
+    height: 2rem;
+    z-index: 10;
 }
 
 .tab-trigger.active {
-    background: var(--background);
     font-weight: bold;
 }
 
+.tab-switcher {
+    position: absolute;
+    min-width: 9rem;
+    left: 0.5rem;
+    top: 0.3rem;
+    min-height: 2rem;
+    border-radius: var(--radius);
+    background-color: var(--background);
+    z-index: 1;
+    transition: left 0.3s ease-in-out;
+}
+
+.tab-switcher.right {
+    left: 10.5rem;
+}
+
 .tab-content {
-    display: block;
+    display: none;
 }
 
 .tab-content.active {
     display: block;
 }
 
-.content-card,
-.recent-exam-card,
-.recommend-card {
-    border: 1px solid var(--border);
+.all-exams {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background-color: transparent;
     border-radius: var(--radius);
-    padding: 1.2rem;
-    background: var(--background);
-}
-
-.recommend-card .badge-high {
-    background: var(--destructive);
-    color: var(--destructive-foreground);
-    padding: 2px 6px;
-    border-radius: var(--radius);
-}
-
-.recommend-card .badge-medium {
-    background: var(--destructive);
-    color: var(--destructive-foreground);
-    padding: 2px 6px;
-    border-radius: var(--radius);
-}
-
-.score-green {
-    color: var(--success);
-}
-
-.score-blue {
+    border: 1px solid var(--primary);
     color: var(--primary);
-}
+    width: fit-content;
 
-.score-yellow {
-    color: var(--warning);
-}
+    &>a {
+        text-decoration: none;
+        border: none;
+    }
 
-.score-red {
-    color: var(--destructive);
-}
-
-.improvement.positive {
-    color: var(--success);
-}
-
-.improvement.negative {
-    color: var(--destructive);
+    &:hover {
+        background-color: var(--primary);
+        color: var(--primary-foreground);
+    }
 }
