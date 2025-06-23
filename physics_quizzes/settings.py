@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # third parties
     "nested_admin",
     # my apps
+    "profile",
     "scope",
     "problem",
     "exam",

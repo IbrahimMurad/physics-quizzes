@@ -1,9 +1,18 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from scope.models import Lesson
+
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="profile",
+        related_query_name="profile",
+    )
+    lessons = models.ManyToManyField(Lesson)
+
     # profile_picture = models.ImageField(
     #     upload_to="profile_pictures/", blank=True, null=True
     # )

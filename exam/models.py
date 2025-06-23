@@ -49,6 +49,7 @@ class ExamProblem(models.Model):
 
 class Submission(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     exam = models.ForeignKey(
         Exam, on_delete=models.CASCADE, related_name="submissions", null=True
     )

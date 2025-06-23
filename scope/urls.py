@@ -11,7 +11,7 @@ from scope.views import (
 )
 
 urlpatterns = [
-    path("", index, name="home"),
+    path("", index, name="textbooks"),
     path("textbook/<int:textbook_id>/units/", units, name="units"),
     path("unit/<int:unit_id>/chapters/", chapters, name="chapters"),
     path("chapter/<int:chapter_id>/lessons/", lessons, name="lessons"),

@@ -1,5 +1,5 @@
 <div class="content-card">
-  <img src="{{ tb.cover.url }}" alt="{{ tb.title }}">
+  <img src="{% if tb.cover %}tb.cover.url{% endif %}" alt="{{ tb.title }}">
   <div class="card-body">
     <h3>{{ tb.title }}</h3>
     <p>{{ tb.caption }}</p>

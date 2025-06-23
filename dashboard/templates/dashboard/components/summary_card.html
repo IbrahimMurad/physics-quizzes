@@ -1,10 +1,20 @@
 <div class="summary-card">
   <div class="icon" data-type="{{ title|slugify }}">{{ icon }}</div>
   <div class="info">
-    <h2>{{ count }}</h2>
-    <p>{{ title }}</p>
+    <h2>{{ count|floatformat:2 }}</h2>
+    <p>
+      {{ title }}
+      {% if url %}
+      <a href="{{ url }}" class="quick-link">
+        <i class="fa-solid fa-external-link"></i>
+      </a>
+      {% endif %}
+    </p>
   </div>
-  {% if trend %}
-    <span class="trend">{{ trend }}</span>
+  {% if trend is not None %}
+    <span class="trend" data-value="{{ trend }}">
+      {{ trend|floatformat:2 }}
+      <i class="fa-solid {% if trend > 0 %}fa-arrow-trend-up{% elif trend < 0 %}fa-arrow-trend-down{% else %}fa-arrow-right{% endif %}"></i>
+    </span>
   {% endif %}
 </div>
