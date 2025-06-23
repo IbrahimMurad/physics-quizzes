@@ -1,0 +1,12 @@
+<div class="content-card">
+  <img src="{{ tb.cover.url }}" alt="{{ tb.title }}">
+  <div class="card-body">
+    <h3>{{ tb.title }}</h3>
+    <p>{{ tb.caption }}</p>
+    <p>Last accessed: {{ tb.last_accessed }}</p>
+    <div class="card-actions">
+      <a href="{{ tb.url }}" class="btn-primary">Continue</a>
+      <a href="{% url 'exam-create' %}?scope_type=Textbook&scope_id={{ tb.id }}" class="btn-secondary">Create Exam</a>
+    </div>
+  </div>
+</div>

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "problem",
     "exam",
     "user_profile",
+    "dashboard",
 ]
 
 MIDDLEWARE = [

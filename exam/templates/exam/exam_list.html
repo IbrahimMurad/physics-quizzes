@@ -19,7 +19,7 @@ Exam List
 {% block content %}
 {% include "components/header.html" %}
 
-<div class="container">
+<main class="container">
   <div class="exam-header">
     <h1>My Exams</h1>
   </div>
@@ -29,5 +29,5 @@ Exam List
       {% include "components/exam_card.html" with submission=submission %}
     {% endfor %}
   </div>
-</div>
+</main>
 {% endblock %}

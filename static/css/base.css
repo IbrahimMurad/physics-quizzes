@@ -96,7 +96,7 @@
   --border: hsl(217.2, 32.6%, 17.5%);
   --input: hsl(217.2, 32.6%, 17.5%);
   --ring: hsl(212.7, 26.8%, 83.9%);
-  
+
   --sidebar-background: hsl(240, 5.9%, 10%);
   --sidebar-foreground: hsl(240, 4.8%, 95.9%);
   --sidebar-primary: hsl(224.3, 76.3%, 48%);
@@ -127,13 +127,14 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items:stretch;
+  align-items: stretch;
 }
 
 .container {
   max-width: 80rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+  width: 100%;
 }
 
 /* Medium */
@@ -143,6 +144,7 @@ body {
     padding-right: 1.5rem;
   }
 }
+
 /* Large */
 @media (min-width: 1024px) {
   .container {
@@ -163,9 +165,9 @@ body {
 }
 
 .message-container {
-    position: absolute;
-    padding: 1rem;
-    width: 100%;
+  position: absolute;
+  padding: 1rem;
+  width: 100%;
 }
 
 .message {

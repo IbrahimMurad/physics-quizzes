@@ -1,0 +1,21 @@
+<div class="recent-exam-card">
+  <div class="header">
+    <h3>{{ ex.exam.title }}</h3>
+    <span class="badge">{{ ex.difficulty }}</span>
+    <span class="score {{ ex.score }}">{{ ex.score }}%</span>
+  </div>
+  <div class="meta">
+    <span>{{ ex.total_questions }} questions</span> ·
+    <span>{{ ex.time_spent }}</span> ·
+    <span>Completed {{ ex.updated_at }}</span>
+  </div>
+  <div class="footer">
+    <span class="improvement {% if ex.improvement|slice:":1" == "+" %}positive{% else %}negative{% endif %}">
+      {{ ex.improvement }} vs last attempt
+    </span>
+    <div class="actions">
+      <a href="{% url 'exam-result' ex.id %}" class="btn-outline-sm">View Results</a>
+      <a href="{% url 'exam-solve' ex.exam.id %}" class="btn-primary-sm">Retake Exam</a>
+    </div>
+  </div>
+</div>

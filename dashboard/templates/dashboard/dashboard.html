@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+{% load exam_filters %}
+
+{% block title %}Dashboard{% endblock %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock css %}
+
+
+{% block content %}
+{% include "components/header.html" %}
+<main class="container">
+  <div class="dashboard-header">
+    <div>
+      <h1>Welcome back, {{ user.username }}!</h1>
+      <div class="dashboard-subheader">
+        <p>Track your progress and continue your studies</p>
+        <span class="badge">Last active: {{ user.last_login|date:"d-m-Y" }}</span>
+      </div>
+    </div>
+    <a href="{% url 'exam-custom' %}" class="btn-primary">
+      <i class="fa-solid fa-plus"></i>
+      Create Exam
+    </a>
+  </div>
+
+  <section class="summary-grid">
+    {% include "dashboard/components/summary_card.html" with title="Textbooks" count=textbooks_count icon="📚" url=textbooks_url %}
+    {% include "dashboard/components/summary_card.html" with title="Exams Completed" count=exams_completed icon="⏱️" url=exams_url %}
+    {% include "dashboard/components/summary_card.html" with title="Average Score" count=average_score icon="⭐" url=None %}
+  </section>
+
+  <nav class="tabs">
+    <button data-tab="textbooks" class="tab-trigger">My Textbooks ({{ textbooks|length }})</button>
+    <button data-tab="recent" class="tab-trigger">Recent Exams ({{ recent_exams|length }})</button>
+    <button data-tab="recommended" class="tab-trigger">Recommended ({{ recommendations|length }})</button>
+  </nav>
+
+  <div id="tab-textbooks" class="tab-content">
+    <div class="content-grid">
+      {% for tb in textbooks %}
+        {% include "dashboard/components/content_card.html" with tb=tb %}
+      {% endfor %}
+    </div>
+    <div class="center">
+      <a href="{{ textbooks_url }}" class="btn-outline">View All Textbooks</a>
+    </div>
+  </div>
+
+  <div id="tab-recent" class="tab-content">
+    {% for ex in recent_exams %}
+      {% include "dashboard/components/recent_exam_card.html" with ex=ex %}
+    {% endfor %}
+    <div class="center">
+      <a href="{{ exams_url }}" class="btn-outline">View All Exams</a>
+    </div>
+  </div>
+
+  <div id="tab-recommended" class="tab-content">
+    {% for rec in recommendations %}
+      <div class="recommend-card">
+        <h3>{{ rec.title }} <span class="badge {% if rec.priority == 'high' %}badge-high{% else %}badge-medium{% endif %}">
+          {% if rec.priority == 'high' %}High Priority{% else %}Recommended{% endif %}
+        </span></h3>
+        <p>{{ rec.subtitle }}</p>
+        <p>{{ rec.reason }}</p>
+        <a href="{{ rec.link }}" class="btn-primary">{{ rec.type }}</a>
+      </div>
+    {% endfor %}
+    <div class="center">
+      <a href="#" class="btn-outline">Get More Recommendations</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

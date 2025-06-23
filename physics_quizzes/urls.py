@@ -7,8 +7,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 
+from dashboard.views import dashboard
+
 urlpatterns = [
     path("", include("scope.urls")),
+    path("dashboard/", dashboard, name="dashboard"),
     path("exam/", include("exam.urls")),
     path("auth/", include("user_profile.urls")),
     path("admin/", admin.site.urls),
