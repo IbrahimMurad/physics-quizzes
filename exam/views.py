@@ -2,6 +2,7 @@ import random
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -114,11 +115,23 @@ def submit_exam(request, exam_id):
 @require_http_methods(["GET"])
 @login_required
 def exam_result(request, submission_id):
-    submission = get_object_or_404(Submission, id=submission_id)
+    submission = (
+        Submission.objects.select_related("exam")
+        .prefetch_related(
+            "answers__choice",
+            "answers__problem",
+            Prefetch(
+                "exam__problems", queryset=Problem.objects.prefetch_related("choices")
+            ),
+        )
+        .get(id=submission_id)
+    )
 
     if submission.user != request.user:
         messages.error(request, "You do not have permission to view this result")
         return reload(request)
+
+    problems = list(submission.exam.problems.all())
 
     if submission.status == Submission.Status.EXITED_UNEXPECTEDLY:
         messages.error(
@@ -131,42 +144,49 @@ def exam_result(request, submission_id):
                 "score": "-",
                 "wrong_answers": "-",
                 "percentage": "-",
-                "exam_length": submission.exam.problems.count(),
+                "exam_length": len(problems),
                 "exam_title": submission.exam.title,
             },
         )
 
-    answers = submission.answers.values_list("choice", flat=True)
+    answers = submission.answers.all()
+
+    chosen_choices_ids = set(a.choice_id for a in answers if a.choice_id)
+    problem_correct_map = {
+        a.problem_id: a.choice.is_correct for a in answers if a.choice_id
+    }
+
+    problem_data = []
+
+    for problem in problems:
+        choices = [
+            {
+                "id": choice.id,
+                "body": choice.body,
+                "figure": choice.figure,
+                "is_correct": choice.is_correct,
+                "checked": choice.id in chosen_choices_ids,
+            }
+            for choice in problem.choices.all()
+        ]
+
+        problem_data.append(
+            {
+                "id": problem.id,
+                "body": problem.body,
+                "figure": problem.figure,
+                "choices": choices,
+                "answered_correctly": problem_correct_map.get(problem.id, False),
+            }
+        )
 
     context = {
         "score": submission.score,
         "wrong_answers": submission.wrong_answers,
         "percentage": submission.percentage,
-        "exam_length": submission.exam.problems.count,
+        "exam_length": len(problems),
         "exam_title": submission.exam.title,
-        "problems": [
-            {
-                "id": problem.id,
-                "body": problem.body,
-                "figure": problem.figure,
-                "choices": [
-                    {
-                        "id": choice.id,
-                        "body": choice.body,
-                        "figure": choice.figure,
-                        "is_correct": choice.is_correct,
-                        "checked": choice.id in answers,
-                    }
-                    for choice in problem.choices.all()
-                ],
-                "answered_correctly": Choice.objects.get(
-                    answer__submission=submission, answer__problem=problem
-                ).is_correct
-                if answers
-                else False,
-            }
-            for problem in submission.exam.problems.all()
-        ],
+        "problems": problem_data,
     }
 
     return render(
