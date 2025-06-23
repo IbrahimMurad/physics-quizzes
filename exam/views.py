@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from exam.utils import get_submissions, reload, scope_problem_number, scope_types
-from problem.models import Choice, Problem
+from problem.models import Problem
 from scope.models import TextBook
 
 from .models import Answer, Exam, ExamProblem, Submission
@@ -37,13 +37,13 @@ def exam_create(request):
         messages.error(request, "Scope not found")
         return reload(request)
 
-    if scope.problems.count() < scope_problem_number[scope_type]:
+    problems = list(scope.problems)
+    if len(problems) < scope_problem_number[scope_type]:
         messages.warning(
             request, "Unfortunatly, there are no enough problems for this scope"
         )
         return redirect(request.META.get("HTTP_REFERER", "/"))
 
-    problems = list(scope.problems)
     random.shuffle(problems)
 
     exam = Exam.objects.create(
@@ -75,13 +75,15 @@ def exam_view(request, exam_id):
 @login_required
 @require_http_methods(["POST", "GET"])
 def submit_exam(request, exam_id):
-    exam = get_object_or_404(Exam, id=exam_id)
+    exam = Exam.objects.prefetch_related(
+        "exam_problems__problem", "exam_problems__problem__choices"
+    ).get(id=exam_id)
 
     if exam.created_by != request.user and not exam.is_published:
         messages.error(request, "You do not have permission to view this exam")
         return reload(request)
 
-    exam_problems = exam.exam_problems.all().prefetch_related("problem__choices")
+    exam_problems = list(exam.exam_problems.all())
 
     submission = Submission.objects.create(
         user=request.user,
@@ -90,21 +92,44 @@ def submit_exam(request, exam_id):
 
     if request.method == "POST":
         score = 0
+
+        all_choices = {
+            choice.id: choice
+            for ep in exam_problems
+            for choice in ep.problem.choices.all()
+        }
+
+        answers = []
+
         for exam_problem in exam_problems:
-            answer = request.POST.get(f"problem_{exam_problem.order}")
-            if answer:
-                choice = Choice.objects.get(id=answer)
-                Answer.objects.create(
-                    submission=submission,
-                    problem=exam_problem.problem,
-                    choice=choice,
-                )
-                if choice.is_correct:
-                    score += 1
+            choice_id = request.POST.get(f"problem_{exam_problem.order}")
+
+            if choice_id:
+                try:
+                    choice_id = int(choice_id)
+                    choice = all_choices.get(choice_id)
+                    if (
+                        choice is not None
+                        and choice.problem_id == exam_problem.problem.id
+                    ):
+                        answers.append(
+                            Answer(
+                                submission=submission,
+                                problem=exam_problem.problem,
+                                choice=choice,
+                            )
+                        )
+                        if choice.is_correct:
+                            score += 1
+                except (ValueError, TypeError):
+                    pass  # silently ignore invalid input
+
+        # Bulk insert answers
+        Answer.objects.bulk_create(answers)
+
         submission.score = score
         submission.status = Submission.Status.COMPLETED
         submission.save()
-
         return redirect("exam-result", submission_id=submission.id)
 
     return render(
