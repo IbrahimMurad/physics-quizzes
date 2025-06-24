@@ -18,13 +18,6 @@ class Problem(models.Model):
         related_name="problems",
         related_query_name="problem",
         limit_choices_to={"level": 3},
-        null=True,
-    )
-    lesson = models.ForeignKey(
-        Lesson,
-        on_delete=models.CASCADE,
-        related_name="problems",
-        related_query_name="problem",
     )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
