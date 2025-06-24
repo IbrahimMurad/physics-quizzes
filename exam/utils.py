@@ -1,7 +1,6 @@
 from django.shortcuts import redirect
 
 from exam.models import Submission
-from scope.models import Scope
 
 scope_problem_number = {
     "Lesson": 10,
