@@ -1,6 +1,6 @@
 from django.db import models
 
-from scope.models import Lesson
+from scope.models import Lesson, Scope
 
 
 class Problem(models.Model):
@@ -12,10 +12,18 @@ class Problem(models.Model):
         HARD = 3, "Hard"
         EXTRA = 4, "Extra hard"
 
+    scope = models.ForeignKey(
+        Scope,
+        on_delete=models.CASCADE,
+        related_name="problems",
+        related_query_name="problem",
+        limit_choices_to={"level": 3},
+        null=True,
+    )
     lesson = models.ForeignKey(
         Lesson,
         on_delete=models.CASCADE,
-        related_name="lessons",
+        related_name="problems",
         related_query_name="problem",
     )
     body = models.TextField()
