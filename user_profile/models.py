@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from scope.models import Lesson
+from scope.models import Scope
 
 
 class Profile(models.Model):
@@ -11,7 +11,7 @@ class Profile(models.Model):
         related_name="profile",
         related_query_name="profile",
     )
-    lessons = models.ManyToManyField(Lesson)
+    scopes = models.ManyToManyField(Scope)
 
     # profile_picture = models.ImageField(
     #     upload_to="profile_pictures/", blank=True, null=True

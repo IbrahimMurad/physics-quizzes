@@ -1,6 +1,6 @@
 from django.db import models
 
-from scope.models import Lesson, Scope
+from scope.models import Scope
 
 
 class Problem(models.Model):

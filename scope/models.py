@@ -4,8 +4,6 @@ from django.db import models
 # from django.urls import reverse
 from django.utils.text import slugify
 
-from problem.models import Problem
-
 
 class Scope(models.Model):
     """This model represents all the scope types,
@@ -66,7 +64,6 @@ class Scope(models.Model):
                 current = current.parent
 
     def save(self, *args, **kwargs):
-        print(self.__dict__)
         if not self.slug:
             base_slug = slugify(f"{self.LevelChoices(self.level).label} {self.title}")
             self.slug = base_slug
@@ -103,6 +100,9 @@ class Scope(models.Model):
 
     @property
     def problems(self):
+        """returns all the probelms under this scope"""
+        from problem.models import Problem
+
         if self.level == 0:
             return Problem.objects.filter(scope__parent__parent__parent=self)
         elif self.level == 1:

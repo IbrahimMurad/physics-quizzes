@@ -7,9 +7,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from exam.utils import get_submissions, reload, scope_problem_number, scope_types
+from exam.utils import get_submissions, reload, scope_problem_number
 from problem.models import Problem
-from scope.models import TextBook
+from scope.models import Scope
 
 from .models import Answer, Exam, ExamProblem, Submission
 
@@ -23,22 +23,17 @@ def exam_create(request):
         )
         return redirect(redirect_url)
 
-    scope_type = request.POST.get("scope_type")
-    scope_id = request.POST.get("scope_id")
+    scope_id = request.POST.get("scope")
     exam_title = request.POST.get("exam_title")
 
-    if scope_type not in ["Lesson", "Chapter", "Unit", "Textbook"]:
-        messages.error(request, "Invalid scope type")
-        return reload(request)
-
     try:
-        scope = scope_types[scope_type].objects.get(id=scope_id)
-    except scope_types[scope_type].DoesNotExist:
+        scope = Scope.objects.get(id=scope_id)
+    except Scope.DoesNotExist:
         messages.error(request, "Scope not found")
         return reload(request)
 
     problems = list(scope.problems)
-    if len(problems) < scope_problem_number[scope_type]:
+    if len(problems) < scope_problem_number[scope.type]:
         messages.warning(
             request, "Unfortunatly, there are no enough problems for this scope"
         )
@@ -48,13 +43,12 @@ def exam_create(request):
 
     exam = Exam.objects.create(
         title=exam_title
-        or f"Exam for {scope_type}: {scope.title} - created by {request.user.username}",
+        or f"Exam for {scope.type}: {scope.title} - created by {request.user.username}",
         created_by=request.user,
-        scope_type=scope_type,
-        scope_id=scope_id,
+        scope=scope,
     )
 
-    for order, problem_id in enumerate(problems[: scope_problem_number[scope_type]]):
+    for order, problem_id in enumerate(problems[: scope_problem_number[scope.type]]):
         problem = Problem.objects.get(id=problem_id)
         ExamProblem.objects.create(exam=exam, problem=problem, order=(order + 1))
 
@@ -224,7 +218,7 @@ def exam_result(request, submission_id):
 @require_http_methods(["GET"])
 @login_required
 def create_custom_exam(request):
-    context = {"textbooks": TextBook.objects.all()}
+    context = {"textbooks": Scope.objects.filter(level=0)}
     return render(request, "exam/create_exam.html", context)
 
 

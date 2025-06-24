@@ -1,14 +1,7 @@
 from django.shortcuts import redirect
 
 from exam.models import Submission
-from scope.models import Chapter, Lesson, TextBook, Unit
-
-scope_types = {
-    "Lesson": Lesson,
-    "Chapter": Chapter,
-    "Unit": Unit,
-    "Textbook": TextBook,
-}
+from scope.models import Scope
 
 scope_problem_number = {
     "Lesson": 10,
@@ -27,7 +20,7 @@ def get_submissions(request, limit=None) -> list:
     """returns the context for exams list"""
     submissions = (
         Submission.objects.filter(user=request.user)
-        .select_related("exam")
+        .select_related("exam", "exam__scope")
         .prefetch_related("exam__exam_problems")
     )
     if limit:
@@ -39,15 +32,15 @@ def get_submissions(request, limit=None) -> list:
                 "exam": {
                     "id": submission.exam.id,
                     "title": submission.exam.title,
-                    "scope_type": submission.exam.scope_type,
-                    "scope_title": scope_types[submission.exam.scope_type]
-                    .objects.get(id=submission.exam.scope_id)
-                    .title,
+                    "scope": {
+                        "type": submission.exam.scope.type,
+                        "title": submission.exam.scope.title,
+                    },
                     "created_at": submission.exam.created_at,
                 },
                 "score": submission.score,
                 "percentage": submission.percentage,
-                "exam_length": submission.exam.problems.count(),
+                "exam_length": scope_problem_number[str(submission.exam.scope.type)],
                 "is_solved": submission.status == Submission.Status.COMPLETED
                 and submission.score,
             }
