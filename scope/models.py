@@ -65,6 +65,7 @@ class Scope(models.Model):
                 current = current.parent
 
     def save(self, *args, **kwargs):
+        print(self.__dict__)
         if not self.slug:
             base_slug = slugify(f"{self.LevelChoices(self.level).label} {self.title}")
             self.slug = base_slug
