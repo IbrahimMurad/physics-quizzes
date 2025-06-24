@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from problem.models import Choice, Problem
+from scope.models import Scope
 
 
 class Exam(models.Model):
@@ -18,10 +19,9 @@ class Exam(models.Model):
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="exams", related_query_name="exam"
     )
-    scope_type = models.CharField(
-        max_length=10, choices=ScopeChoice.choices, default=ScopeChoice.LESSON
+    scope = models.ForeignKey(
+        Scope, on_delete=models.CASCADE, related_name="exams", related_query_name="exam"
     )
-    scope_id = models.PositiveIntegerField()
     problems = models.ManyToManyField(
         Problem, through="ExamProblem", related_name="exams", related_query_name="exam"
     )
