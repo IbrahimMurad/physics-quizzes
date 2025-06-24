@@ -15,7 +15,7 @@ class Problem(models.Model):
     scope = models.ForeignKey(
         Scope,
         on_delete=models.CASCADE,
-        related_name="problems",
+        related_name="problems_set",
         related_query_name="problem",
         limit_choices_to={"level": 3},
     )

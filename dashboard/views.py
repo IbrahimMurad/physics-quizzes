@@ -16,9 +16,11 @@ def dashboard(request):
 
     avg_score = submissions.aggregate(avg_score=Avg("score"))["avg_score"]
 
-    prev_avg_score = submissions[: submissions_count - 1].aggregate(
-        avg_score=Avg("score")
-    )["avg_score"]
+    prev_avg_score = 0
+    if submissions_count > 1:
+        prev_avg_score = submissions[: submissions_count - 1].aggregate(
+            avg_score=Avg("score")
+        )["avg_score"]
 
     context = {
         "stats": [
@@ -37,7 +39,7 @@ def dashboard(request):
                 "trend": avg_score - prev_avg_score,
             },
         ],
-        "My_lessons": request.user.profile.lessons.all(),
+        "My_lessons": request.user.profile.scopes.all(),
         "recent_exams": get_submissions(request=request, limit=5),
     }
     return render(request, "dashboard/dashboard.html", context)

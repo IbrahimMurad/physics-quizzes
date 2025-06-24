@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-
-# from django.urls import reverse
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -87,12 +86,12 @@ class Scope(models.Model):
     def __str__(self):
         return f"{self.type}: {self.title}"
 
-    # def get_absolute_url(self):
-    #     return reverse("units", kwargs={"textbook_id": self.pk})
+    def get_absolute_url(self):
+        return reverse("scope-details", kwargs={"slug": self.slug})
 
-    # @property
-    # def url(self):
-    #     return reverse("units", kwargs={"textbook_id": self.pk})
+    @property
+    def url(self):
+        return reverse("scope-details", kwargs={"slug": self.slug})
 
     @property
     def type(self):

@@ -1,21 +1,12 @@
 from django.urls import path
 
 from scope.views import (
-    chapters,
-    get_chapters,
-    get_lessons,
-    get_units,
-    index,
-    lessons,
-    units,
+    scope_browser,
+    scope_list_api,
 )
 
 urlpatterns = [
-    path("", index, name="textbooks"),
-    path("textbook/<int:textbook_id>/units/", units, name="units"),
-    path("unit/<int:unit_id>/chapters/", chapters, name="chapters"),
-    path("chapter/<int:chapter_id>/lessons/", lessons, name="lessons"),
-    path("textbook/<int:textbook_id>/units/json/", get_units, name="get_units"),
-    path("unit/<int:unit_id>/chapters/json/", get_chapters, name="get_chapters"),
-    path("chapter/<int:chapter_id>/lessons/json/", get_lessons, name="get_lessons"),
+    path("textbooks/", scope_browser, name="textbooks"),
+    path("s/<slug:slug>", scope_browser, name="scope-details"),
+    path("scope/<int:id>/", scope_list_api, name="scope-api"),
 ]

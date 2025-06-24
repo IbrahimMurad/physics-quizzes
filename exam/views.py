@@ -48,8 +48,7 @@ def exam_create(request):
         scope=scope,
     )
 
-    for order, problem_id in enumerate(problems[: scope_problem_number[scope.type]]):
-        problem = Problem.objects.get(id=problem_id)
+    for order, problem in enumerate(problems[: scope_problem_number[scope.type]]):
         ExamProblem.objects.create(exam=exam, problem=problem, order=(order + 1))
 
     return redirect("exam", exam_id=exam.id)
