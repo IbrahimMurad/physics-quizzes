@@ -23,16 +23,18 @@ def exam_create(request):
         )
         return redirect(redirect_url)
 
-    scope_id = request.POST.get("scope")
+    id = request.POST.get("id")
     exam_title = request.POST.get("exam_title")
 
     try:
-        scope = Scope.objects.get(id=scope_id)
+        scope = Scope.objects.get(id=id)
     except Scope.DoesNotExist:
         messages.error(request, "Scope not found")
         return reload(request)
 
     problems = list(scope.problems)
+    print(len(problems))
+    print(scope.type)
     if len(problems) < scope_problem_number[scope.type]:
         messages.warning(
             request, "Unfortunatly, there are no enough problems for this scope"
