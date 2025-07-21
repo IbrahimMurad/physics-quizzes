@@ -25,9 +25,16 @@ Exam List
   </div>
 
   <div class="exam-grid">
+    {% if submissions %}
     {% for submission in submissions %}
       {% include "components/exam_card.html" with submission=submission %}
     {% endfor %}
+    {% else %}
+    <div>
+      <p class="empty">No exams found</p>
+      <a href="{% url 'exam-custom' %}" class="btn-primary">Create Exam</a>
+    </div>
+    {% endif %}
   </div>
 </main>
 {% endblock %}

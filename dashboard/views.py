@@ -36,7 +36,9 @@ def dashboard(request):
                 "count": avg_score,
                 "icon": "⭐",
                 "url": None,
-                "trend": avg_score - prev_avg_score,
+                "trend": avg_score - prev_avg_score
+                if avg_score and prev_avg_score
+                else None,
             },
         ],
         "My_lessons": request.user.profile.scopes.all(),

@@ -226,5 +226,6 @@ def create_custom_exam(request):
 @require_http_methods(["GET"])
 @login_required
 def exam_list(request):
-    context = get_submissions(request=request)
+    solved = request.GET.get("solved", False)
+    context = get_submissions(request=request, solved=solved)
     return render(request, "exam/exam_list.html", context)

@@ -27,32 +27,6 @@
     color: var(--foreground);
 }
 
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    white-space: nowrap;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    outline: none;
-    transition: background-color 0.2s, color 0.2s;
-    color: var(--primary-foreground);
-    background-color: var(--primary);
-    height: 2.5rem;
-    padding: 0.5rem 1rem;
-}
-
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    transform: translateY(-2px);
-}
-
 .summary-grid {
     display: grid;
     grid-template-columns: 1fr;

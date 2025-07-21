@@ -27,7 +27,7 @@
       <div class="exam-stats">
         <span>Questions: <strong>{{ submission.exam_length }}</strong></span>
         {% if submission.is_solved and submission.score %}
-        <span>Score: <strong class="{{ submission.score|get_score_color }}">{{ submission.score }}%</strong></span>
+        <span>Score: <strong class="{{ submission.percentage|get_score_color }}">{{ submission.score|floatformat:0 }} / {{ submission.exam_length }} &nbsp; ({{ submission.percentage }}%)</strong></span>
         {% endif %}
       </div>
       <div class="exam-actions">

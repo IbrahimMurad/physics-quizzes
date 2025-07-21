@@ -15,7 +15,7 @@ def reload(request):
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
-def get_submissions(request, limit=None) -> list:
+def get_submissions(request, limit=None, solved=False) -> list:
     """returns the context for exams list"""
     submissions = (
         Submission.objects.filter(user=request.user)
@@ -24,6 +24,8 @@ def get_submissions(request, limit=None) -> list:
     )
     if limit:
         submissions = submissions[:limit]
+    if solved:
+        submissions = submissions.filter(status=Submission.Status.COMPLETED)
     context = {
         "submissions": [
             {

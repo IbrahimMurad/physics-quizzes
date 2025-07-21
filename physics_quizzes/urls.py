@@ -10,8 +10,8 @@ from django.urls import include, path, re_path
 from dashboard.views import dashboard
 
 urlpatterns = [
-    path("", include("scope.urls")),
-    path("dashboard/", dashboard, name="dashboard"),
+    path("", dashboard, name="dashboard"),
+    path("scope/", include("scope.urls")),
     path("exam/", include("exam.urls")),
     path("auth/", include("user_profile.urls")),
     path("admin/", admin.site.urls),
