@@ -1,121 +1,105 @@
+let selectedScopeType = "textbook";
+const scopeTypes = ["textbook", "unit", "chapter", "lesson"];
+const scopeContainers = document.querySelectorAll(".scope");
+const scopeRadioButtons = document.querySelectorAll("input[name='scope_type']");
+const scopeSelects = document.querySelectorAll("select");
 
-// the create exam form
-const form = document.querySelector(".custom-exam-form");
+// handle the change of selected scope type
+scopeRadioButtons.forEach((radioButton) => {
+    radioButton.addEventListener("change", () => {
+        selectedScopeType = radioButton.value;
+        adjustScopeFields();
+    })
+})
 
+// adjust scope fields based on the selected scope type
+function adjustScopeFields() {
+    let i;
 
-// Radio buttons that specifies the scope_type
-const radios = {
-    textbook: document.getElementById("textbook-radio"),
-    unit: document.getElementById("unit-radio"),
-    chapter: document.getElementById("chapter-radio"),
-    lesson: document.getElementById("lesson-radio"),
-};
+    // show scope select fields up to the selected scope type
+    for (i = 0; i < scopeTypes.length; i++) {
+        const scopeSelect = scopeSelects[i];
 
+        if (scopeTypes.indexOf(selectedScopeType) === i) {
+            if (selectedScopeType !== "textbook") {
+                showScopeField(i);
+            }
+            break;
+        }
+        if (!scopeContainers[i].classList.contains("active")) {
+            scopeContainers[i].classList.add("active")
+            fillScopeSelect(i, scopeSelects[i - 1].value);
+        }
+        scopeSelect.removeAttribute("name");
+        scopeSelect.removeAttribute("required");
+    }
 
-// All scope sections
-const sections = {
-    units: document.getElementById("units"),
-    chapters: document.getElementById("chapters"),
-    lessons: document.getElementById("lessons"),
-};
-
-// All scope selections
-const selects = {
-    textbook: document.getElementById("textbook-select"),
-    unit: document.getElementById("unit-select"),
-    chapter: document.getElementById("chapter-select"),
-    lesson: document.getElementById("lesson-select"),
-};
-
-
-// Utility: show/hide sections
-function toggleSections(activeKeys = []) {
-    Object.entries(sections).forEach(([key, el]) => {
-        el.classList.toggle("active", activeKeys.includes(key));
-    });
+    // hide other scope select fields
+    for (let j = i + 1; j < scopeTypes.length; j++) {
+        hideScopeField(j);
+    }
 }
 
+// show scope select fields
+function showScopeField(containerIndex) {
+    // shows the scope container and adds name and requried attributes from select element
 
-// Utility: fetch and populate a select
-function populateSelect(url, selectElement) {
-    selects[selectElement].innerHTML = '';
-    fetch(url)
-        .then(res => res.json())
+    const scopeSelect = scopeSelects[containerIndex];
+    scopeSelect.setAttribute("name", "id");
+    scopeSelect.setAttribute("required", "required");
+    scopeContainers[containerIndex].classList.add("active");
+    fillScopeSelect(containerIndex, scopeSelects[containerIndex - 1].value);
+}
+
+// hide scope select fields
+function hideScopeField(containerIndex) {
+    // hides the scope container and removes name and requried attributes from select element
+
+    const scopeSelect = scopeSelects[containerIndex];
+    scopeSelect.removeAttribute("name");
+    scopeSelect.removeAttribute("required");
+    scopeSelect.innerHTML = "";
+    scopeContainers[containerIndex].classList.remove("active");
+}
+
+// fill scope select fields with data from the server
+function fillScopeSelect(containerIndex, parentId) {
+    if (containerIndex >= scopeSelects.length || scopeTypes.indexOf(selectedScopeType) < containerIndex) {
+        return;
+    }
+    fetch(`/scope/${parentId}/`)
+        .then(response => response.json())
         .then(data => {
+            const scopeSelect = scopeSelects[containerIndex];
+            scopeSelect.innerHTML = "";
             data.forEach(item => {
                 const option = document.createElement("option");
                 option.value = item.id;
                 option.textContent = item.title;
-                selects[selectElement].appendChild(option);
-            });
-            if (selectElement === "textbook") {
-                populateSelect(`/scope/${selects.textbook.value}/`, "unit");
+                scopeSelect.appendChild(option);
+            })
+            fillScopeSelect(containerIndex + 1, scopeSelect.value)
+        })
+        .catch(error => {
+            console.error(error);
+            for (let j = containerIndex; j < scopeSelects.length; j++) {
+                scopeSelects[j].innerHTML = "";
             }
-            if (selectElement === "unit") {
-                populateSelect(`/scope/${selects.unit.value}/`, "chapter");
-            }
-            if (selectElement === "chapter") {
-                populateSelect(`/scope/${selects.chapter.value}/`, "lesson");
-            }
-        });
+        })
 }
 
-// Radio change handlers
-radios.textbook.addEventListener("change", () => {
-    toggleSections([]);
-});
+// handle the change of selected scope value for any scope type and its subsequent scopes
+scopeSelects.forEach((select) => {
+    select.addEventListener("change", () => {
+        let parentId = select.value;
+        const i = Array.from(scopeSelects).indexOf(select);
+        fillScopeSelect(i + 1, parentId);
+    })
+})
 
-radios.unit.addEventListener("change", () => {
-    toggleSections(["units"]);
-    if (selects.textbook.value) {
-        populateSelect(`/scope/${selects.textbook.value}/`, "unit");
-    }
-});
-
-radios.chapter.addEventListener("change", () => {
-    toggleSections(["units", "chapters"]);
-    if (selects.unit.value) {
-        populateSelect(`/scope/${selects.unit.value}/`, "chapter");
-    }
-});
-
-radios.lesson.addEventListener("change", () => {
-    toggleSections(["units", "chapters", "lessons"]);
-    if (selects.chapter.value) {
-        populateSelect(`/scope/${selects.chapter.value}/`, "lesson");
-    }
-});
-
-Object.entries(selects).forEach(([, element], index) => {
-    console.log(element, ["unit", "chapter", "lesson"].at(index))
-    element.addEventListener("change", () => populateSelect(`/scope/${element.value}/`, ["unit", "chapter", "lesson"].at(index)))
-} )
-
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-    }
-});
-
-const scopeRadios = document.querySelectorAll('input[name="scope_type"]');
-
-function updateSelectName() {
-    console.log("initial updateSelectName");
-    const selected = document.querySelector('input[name="scope_type"]:checked').value;
-    console.log(selected);
-    Object.entries(selects).forEach(([key, select]) => {
-        if (key === selected) {
-            select.setAttribute('name', 'id');
-        } else {
-            select.removeAttribute('name');
-        }
-    });
-}
-
-updateSelectName();
-
-scopeRadios.forEach(radio => {
-    radio.addEventListener('change', updateSelectName);
-});
+// handle reset button to resets the form to its initial state
+document.querySelector("button[type='reset']").addEventListener("click", () => {
+    document.querySelector("form").reset();
+    selectedScopeType = "textbook";
+    adjustScopeFields();
+})
