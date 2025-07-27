@@ -52,7 +52,7 @@ def scope_browser(request, slug=None):
         "scope/index.html",
         context={
             "title": scope.title if scope else "Textbooks",
-            "list_title": f"{scope.type}s" if scope else "Textbooks",
+            "list_title": f"{children[0].type}s" if scope else "Textbooks",
             "parent": scope,
             "scopes": children,
             "breadcrumbs": breadcrumbs,
