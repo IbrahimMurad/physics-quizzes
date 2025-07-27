@@ -11,7 +11,7 @@ class Profile(models.Model):
         related_name="profile",
         related_query_name="profile",
     )
-    scopes = models.ManyToManyField(Scope)
+    favorites = models.ManyToManyField(Scope)
 
     # profile_picture = models.ImageField(
     #     upload_to="profile_pictures/", blank=True, null=True

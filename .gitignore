@@ -1,3 +1,6 @@
 .venv
 *__pycache__*
 staticfiles/
+physics-quizzes.pdf
+physics-quizzes.md
+physics-quizzes.html
