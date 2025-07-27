@@ -60,11 +60,12 @@ class Submission(models.Model):
     is_published = models.BooleanField(default=False)
 
     class Status(models.TextChoices):
+        SOLVING = "solving", "Solving"
         EXITED_UNEXPECTEDLY = "exited_unexpectedly", "Exited Unexpectedly"
         COMPLETED = "completed", "Completed"
 
     status = models.CharField(
-        max_length=20, choices=Status.choices, default=Status.EXITED_UNEXPECTEDLY
+        max_length=20, choices=Status.choices, default=Status.SOLVING
     )
 
     class Meta:

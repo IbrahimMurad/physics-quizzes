@@ -78,14 +78,32 @@ def submit_exam(request, exam_id):
         messages.error(request, "You do not have permission to view this exam")
         return reload(request)
 
+    if request.method == "GET":
+        if exam.submissions.filter(user=request.user).exists():
+            submission = exam.submissions.get(user=request.user)
+
+            if submission.status == Submission.Status.COMPLETED:
+                return redirect("exam-result", submission_id=submission.id)
+
+            if (
+                submission.status == Submission.Status.EXITED_UNEXPECTEDLY
+                or submission.status == Submission.Status.SOLVING
+            ):
+                submission.status = Submission.Status.EXITED_UNEXPECTEDLY
+                submission.save()
+                return redirect("exam-result", submission_id=submission.id)
+        else:
+            submission = Submission.objects.create(
+                user=request.user,
+                exam=exam,
+                status=Submission.Status.SOLVING,
+            )
+
     exam_problems = list(exam.exam_problems.all())
 
-    submission = Submission.objects.create(
-        user=request.user,
-        exam=exam,
-    )
-
     if request.method == "POST":
+        submission = exam.submissions.get(user=request.user)
+
         score = 0
 
         all_choices = {
