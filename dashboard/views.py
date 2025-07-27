@@ -41,7 +41,7 @@ def dashboard(request):
                 else None,
             },
         ],
-        "My_lessons": request.user.profile.favorites.all(),
+        "favorites": request.user.profile.favorites.all(),
         "recent_exams": get_submissions(request=request, limit=5),
     }
     return render(request, "dashboard/dashboard.html", context)

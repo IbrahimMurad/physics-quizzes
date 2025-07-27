@@ -1,4 +1,4 @@
-from email import message
+from django.db.models import Exists, OuterRef
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
@@ -16,13 +16,35 @@ def _get_breadcrumbs(scope) -> list[Scope]:
 
 
 def scope_browser(request, slug=None):
+    """
+    Renders the scope browser page
+
+    If the slug parameter is given, it renders the page for that scope.
+    Otherwise, it renders the page for the textbooks.
+
+    The page shows the given scope and its children, and also includes
+    the breadcrumbs to the given scope.
+
+    The children are annotated with a boolean field "is_fav" indicating
+    whether the user has favorited the scope.
+
+    If the user is anonymous, all scopes are treated as not favorited.
+    """
+    if not request.user.is_authenticated:
+        # If anonymous, treat all as not favorite
+        favorites_subquery = Scope.objects.none()
+    else:
+        favorites_subquery = request.user.profile.favorites.filter(id=OuterRef("id"))
+
     if slug:
         scope = get_object_or_404(Scope.objects.prefetch_related("children"), slug=slug)
-        children = scope.children.all()
+        children = scope.children.annotate(is_fav=Exists(favorites_subquery))
         breadcrumbs = _get_breadcrumbs(scope)
     else:
         scope = None
-        children = Scope.objects.filter(parent__isnull=True)
+        children = Scope.objects.filter(parent__isnull=True).annotate(
+            is_fav=Exists(favorites_subquery)
+        )
         breadcrumbs = []
 
     return render(
@@ -49,10 +71,10 @@ def scope_list_api(request, id):
 def favorites(request):
     """Add and remove scopes from user favorites"""
 
-    favorites = request.user.profile.favorites.all()
+    favorites = request.user.profile.favorites
     scope_id = request.POST.get("scope_id")
     scope = get_object_or_404(Scope, id=scope_id)
-    if scope in favorites:
+    if favorites.filter(id=scope_id).exists():
         favorites.remove(scope)
         message = f"{scope} removed from favorites successfully"
     else:

@@ -44,15 +44,15 @@
 
   <nav class="tabs">
     <div class="tab-switcher"></div>
-    <button data-tab="lessons" class="tab-trigger active">My Favorites ({{ My_lessons|length }})</button>
+    <button data-tab="lessons" class="tab-trigger active">My Favorites ({{ favorites|length }})</button>
     <button data-tab="recent" class="tab-trigger">Recent Exams ({{ recent_exams.submissions|length }})</button>
   </nav>
 
   <div id="tab-lessons" class="tab-content active">
     <div class="content-grid">
-      {% if My_lessons %}
-        {% for lesson in My_lessons %}
-          {% include "components/card.html" with scope=lesson %}
+      {% if favorites %}
+        {% for scope in favorites %}
+          {% include "components/card.html" with scope=scope %}
         {% endfor %}
       {% else %}
         <p class="empty">No favorites found</p>

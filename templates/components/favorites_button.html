@@ -1,0 +1,22 @@
+<form method="post" action="{% url 'favorites' %}" class="favorite-form" data-scope-id="{{ scope.id }}">
+    {% csrf_token %}
+    <input type="hidden" name="scope_id" value="{{ scope.id }}">
+    <button type="submit" aria-label="Toggle Favorite" class="favorite-btn">
+        <!-- Filled heart -->
+        <svg class="heart-icon filled" viewBox="0 0 24 24" fill="red" width="24" height="24" style="{% if is_fav %}display:inline{% else %}display:none{% endif %}">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                     2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                     C13.09 3.81 14.76 3 16.5 3
+                     19.58 3 22 5.42 22 8.5
+                     c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <!-- Outline heart -->
+        <svg class="heart-icon outline" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="24" height="24" style="{% if is_fav %}display:none{% else %}display:inline{% endif %}">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                     2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                     C13.09 3.81 14.76 3 16.5 3
+                     19.58 3 22 5.42 22 8.5
+                     c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+    </button>
+</form>

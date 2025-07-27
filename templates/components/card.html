@@ -1,5 +1,8 @@
 <div class="card">
   <div class="thumbnail">
+    {% if request.path != '/' %}
+      {% include "components/favorites_button.html" with scope_id=scope.id is_fav=scope.is_fav %}
+    {% endif %}
     <img src="{% if scope.cover %}{{ scope.cover.url }}{% else %}''{% endif %}" alt="{{ scope.title }}" width="400">
   </div>
   <div class="card-content">

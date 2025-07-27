@@ -9,6 +9,6 @@ from scope.views import (
 urlpatterns = [
     path("textbooks/", scope_browser, name="textbooks"),
     path("<int:id>/", scope_list_api, name="scope-api"),
-    path("<slug:slug>/", scope_browser, name="scope-details"),
     path("favorites/", favorites, name="favorites"),
+    path("<slug:slug>/", scope_browser, name="scope-details"),
 ]
