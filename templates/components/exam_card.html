@@ -2,22 +2,26 @@
 <div class="exam-card">
     <div class="exam-card-header">
       <div class="exam-status">
-        {% if submission.is_solved %}
-          <p class="badge badge-complete">✔ Completed</p>
+        {% if exam.submission %}
+          {% if exam.submission.status == "completed" %}
+            <p class="badge badge-complete"><i class="fa-solid fa-check"></i> Completed</p>
+          {% else %}
+            <p class="badge badge-incomplete"><i class="fa-solid fa-xmark"></i> aborted</p>
+          {% endif %}
         {% else %}
-          <p class="badge badge-pending">⏵ Pending</p>
+          <p class="badge badge-pending"><i class="fa-solid fa-play"></i> Pending</p>
         {% endif %}
       </div>
       <div class="exam-card-main">
-        <h2>{{ submission.exam.title }}</h2>
+        <h2>{{ exam.title }}</h2>
         <div class="exam-meta">
           <div class="exam-scope"> 
             <i class="fa-solid fa-book-open"></i>
-            {{ submission.exam.scope_type }}: {{ submission.exam.scope_title }}
+            {{ exam.scope.type }}: {{ exam.scope.title }}
           </div>
           <div class="exam-created"> 
             <i class="fa-solid fa-calendar"></i>
-            {{ submission.exam.created_at|date:"F j, Y" }}
+            {{ exam.created_at|date:"F j, Y" }}
           </div>
         </div>
       </div>
@@ -25,16 +29,16 @@
   
     <div class="exam-card-body">
       <div class="exam-stats">
-        <span>Questions: <strong>{{ submission.exam_length }}</strong></span>
-        {% if submission.is_solved and submission.score %}
-        <span>Score: <strong class="{{ submission.percentage|get_score_color }}">{{ submission.score|floatformat:0 }} / {{ submission.exam_length }} &nbsp; ({{ submission.percentage }}%)</strong></span>
+        <span>Questions: <strong>{{ exam.exam_length }}</strong></span>
+        {% if exam.submission %}
+        <span>Score: <strong class="{{ exam.submission.percentage|get_score_color }}">{{ exam.submission.score|floatformat:0 }} / {{ exam.exam_length }} &nbsp; ({{ exam.submission.percentage }}%)</strong></span>
         {% endif %}
       </div>
       <div class="exam-actions">
-        {% if submission.is_solved %}
-          <a href="{% url 'exam-result' submission.id %}" class="btn btn-outline">View Results</a>
+        {% if exam.submission %}
+          <a href="{% url 'exam-result' exam.submission.id %}" class="btn btn-outline">View Results</a>
         {% else %}
-          <a href="{% url 'exam-solve' submission.exam.id %}" class="btn btn-primary">Solve Exam</a>
+          <a href="{% url 'exam-solve' exam.id %}" class="btn btn-primary">Solve Exam</a>
         {% endif %}
       </div>
     </div>

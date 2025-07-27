@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from exam.utils import get_submissions, reload, scope_problem_number
+from exam.utils import get_exams, reload, scope_problem_number
 from problem.models import Problem
 from scope.models import Scope
 
@@ -205,5 +205,5 @@ def create_custom_exam(request):
 @login_required
 def exam_list(request):
     solved = request.GET.get("solved", False)
-    context = get_submissions(request=request, solved=solved)
+    context = get_exams(request=request, solved=solved)
     return render(request, "exam/exam_list.html", context)

@@ -25,9 +25,9 @@ Exam List
   </div>
 
   <div class="exam-grid">
-    {% if submissions %}
-    {% for submission in submissions %}
-      {% include "components/exam_card.html" with submission=submission %}
+    {% if exams %}
+    {% for exam in exams %}
+      {% include "components/exam_card.html" with exam=exam %}
     {% endfor %}
     {% else %}
     <div>

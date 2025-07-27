@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 
-from exam.models import Submission
+from exam.models import Exam, Submission
 
 scope_problem_number = {
     "Lesson": 10,
@@ -15,38 +15,44 @@ def reload(request):
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
-def get_submissions(request, limit=None, solved=False) -> list:
+def get_exams(request, limit=None, solved=False) -> dict:
     """returns the context for exams list"""
-    submissions = (
-        Submission.objects.filter(user=request.user)
-        .select_related("exam", "exam__scope")
-        .prefetch_related("exam__exam_problems")
+
+    exams = (
+        Exam.objects.filter(created_by=request.user)
+        .select_related("scope")
+        .prefetch_related("submissions", "exam_problems")
     )
     if limit:
-        submissions = submissions[:limit]
+        exams = exams[:limit]
     if solved:
-        submissions = submissions.filter(status=Submission.Status.COMPLETED)
+        exams = exams.filter(submissions__user=request.user)
     context = {
-        "submissions": [
+        "exams": [
             {
-                "id": submission.id,
-                "exam": {
-                    "id": submission.exam.id,
-                    "title": submission.exam.title,
-                    "scope": {
-                        "type": submission.exam.scope.type,
-                        "title": submission.exam.scope.title,
-                    },
-                    "created_at": submission.exam.created_at,
+                "id": exam.id,
+                "title": exam.title,
+                "scope": {
+                    "type": exam.scope.type,
+                    "title": exam.scope.title,
                 },
-                "score": submission.score,
-                "percentage": submission.percentage,
-                "exam_length": scope_problem_number[str(submission.exam.scope.type)],
-                "is_solved": submission.status == Submission.Status.COMPLETED
-                and submission.score,
+                "exam_length": scope_problem_number[str(exam.scope.type)],
+                "created_at": exam.created_at,
+                "submission": (
+                    {
+                        "id": exam.submissions.first().id,
+                        "score": exam.submissions.first().score,
+                        "percentage": exam.submissions.first().percentage,
+                        "status": exam.submissions.first().status,
+                    }
+                    if exam.submissions.exists()
+                    else None
+                ),
             }
-            for submission in submissions
-        ]
+            for exam in exams
+        ],
     }
+
+    print(context)
 
     return context

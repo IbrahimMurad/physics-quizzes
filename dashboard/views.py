@@ -3,7 +3,7 @@ from django.db.models import Avg, Count
 from django.shortcuts import render, reverse
 
 from exam.models import Submission
-from exam.utils import get_submissions
+from exam.utils import get_exams
 
 
 @login_required
@@ -42,6 +42,6 @@ def dashboard(request):
             },
         ],
         "favorites": request.user.profile.favorites.all(),
-        "recent_exams": get_submissions(request=request, limit=5),
+        "recent_exams": get_exams(request=request, limit=5),
     }
     return render(request, "dashboard/dashboard.html", context)

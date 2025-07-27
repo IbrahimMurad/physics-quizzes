@@ -66,6 +66,11 @@
   color: #227a34;
 }
 
+.badge-incomplete {
+  background-color: #ffd1cd;
+  color: #dc3545;
+}
+
 .badge-pending {
   background-color: #fff3cd;
   color: #856404;

@@ -56,7 +56,7 @@ class Submission(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="submissions", null=True
     )
-    score = models.FloatField(null=True)
+    score = models.FloatField(default=0.0)
     is_published = models.BooleanField(default=False)
 
     class Status(models.TextChoices):
@@ -75,7 +75,7 @@ class Submission(models.Model):
 
     @property
     def percentage(self):
-        if self.score:
+        if self.score is not None:
             return (self.score / self.exam.problems.count()) * 100
         return None
 
