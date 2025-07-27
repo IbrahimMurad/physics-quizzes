@@ -1,6 +1,6 @@
+from email import message
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from scope.models import Scope
@@ -43,3 +43,19 @@ def scope_list_api(request, id):
     scope = get_object_or_404(Scope.objects.prefetch_related("children"), id=id)
     children = scope.children.values("id", "title")
     return JsonResponse(list(children), safe=False)
+
+
+@require_http_methods(["POST"])
+def favorites(request):
+    """Add and remove scopes from user favorites"""
+
+    favorites = request.user.profile.favorites.all()
+    scope_id = request.POST.get("scope_id")
+    scope = get_object_or_404(Scope, id=scope_id)
+    if scope in favorites:
+        favorites.remove(scope)
+        message = f"{scope} removed from favorites successfully"
+    else:
+        favorites.add(scope)
+        message = f"{scope} added to favorites successfully"
+    return JsonResponse({"message": message}, status=200)
