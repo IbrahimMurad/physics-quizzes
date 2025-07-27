@@ -11,7 +11,8 @@ from exam.utils import get_submissions, reload, scope_problem_number
 from problem.models import Problem
 from scope.models import Scope
 
-from .models import Answer, Exam, ExamProblem, Submission
+from .models import Exam, ExamProblem, Submission
+from .service import correct_exam
 
 
 @require_http_methods(["POST"])
@@ -33,8 +34,6 @@ def exam_create(request):
         return reload(request)
 
     problems = list(scope.problems)
-    print(len(problems))
-    print(scope.type)
     if len(problems) < scope_problem_number[scope.type]:
         messages.warning(
             request, "Unfortunatly, there are no enough problems for this scope"
@@ -78,76 +77,37 @@ def submit_exam(request, exam_id):
         messages.error(request, "You do not have permission to view this exam")
         return reload(request)
 
-    if request.method == "GET":
-        if exam.submissions.filter(user=request.user).exists():
-            submission = exam.submissions.get(user=request.user)
+    exam_problems = exam.exam_problems.all()
 
-            if submission.status == Submission.Status.COMPLETED:
-                return redirect("exam-result", submission_id=submission.id)
-
-            if (
-                submission.status == Submission.Status.EXITED_UNEXPECTEDLY
-                or submission.status == Submission.Status.SOLVING
-            ):
-                submission.status = Submission.Status.EXITED_UNEXPECTEDLY
-                submission.save()
-                return redirect("exam-result", submission_id=submission.id)
-        else:
-            submission = Submission.objects.create(
-                user=request.user,
-                exam=exam,
-                status=Submission.Status.SOLVING,
-            )
-
-    exam_problems = list(exam.exam_problems.all())
-
-    if request.method == "POST":
+    if exam.submissions.filter(user=request.user).exists():
+        # this handles the second visit to the page
+        # so it gets the submission first
         submission = exam.submissions.get(user=request.user)
 
-        score = 0
+        # If the method is POST correct the exam
+        if request.method == "POST":
+            if submission.status == Submission.Status.COMPLETED:
+                messages.error(request, "You have already completed this exam")
+                return reload(request)
+            correct_exam(exam_problems, submission, request.POST)
+            return redirect("exam-result", submission_id=submission.id)
 
-        all_choices = {
-            choice.id: choice
-            for ep in exam_problems
-            for choice in ep.problem.choices.all()
-        }
-
-        answers = []
-
-        for exam_problem in exam_problems:
-            choice_id = request.POST.get(f"problem_{exam_problem.order}")
-
-            if choice_id:
-                try:
-                    choice_id = int(choice_id)
-                    choice = all_choices.get(choice_id)
-                    if (
-                        choice is not None
-                        and choice.problem_id == exam_problem.problem.id
-                    ):
-                        answers.append(
-                            Answer(
-                                submission=submission,
-                                problem=exam_problem.problem,
-                                choice=choice,
-                            )
-                        )
-                        if choice.is_correct:
-                            score += 1
-                except (ValueError, TypeError):
-                    pass  # silently ignore invalid input
-
-        # Bulk insert answers
-        Answer.objects.bulk_create(answers)
-
-        submission.score = score
-        submission.status = Submission.Status.COMPLETED
-        submission.save()
-        return redirect("exam-result", submission_id=submission.id)
-
-    return render(
-        request, "exam/submit_exam.html", {"exam": exam, "exam_problems": exam_problems}
-    )
+        # if the method is GET, redirect the user to the corrected page of this exam
+        # since it has only one trial of solving the exam
+        else:
+            return redirect("exam-result", submission_id=submission.id)
+    else:
+        # this handles the first visit to the page
+        # so it creates a submission for this user and this exam
+        submission = Submission.objects.create(
+            user=request.user,
+            exam=exam,
+        )
+        return render(
+            request,
+            "exam/submit_exam.html",
+            {"exam": exam, "exam_problems": exam_problems},
+        )
 
 
 @require_http_methods(["GET"])
