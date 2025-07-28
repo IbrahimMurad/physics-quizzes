@@ -68,8 +68,9 @@ def exam_create(request):
         title=exam_title
         or f"Exam for {scopes[0].type}: {scopes[0].title} - created by {request.user.username}",
         created_by=request.user,
-        scope=scope_ids,
     )
+    exam.scopes.set(scopes)
+    exam.save()
 
     for order, problem in enumerate(problems[:number_of_problems]):
         ExamProblem.objects.create(exam=exam, problem=problem, order=(order + 1))
@@ -219,6 +220,7 @@ def exam_result(request, submission_id):
 @require_http_methods(["GET"])
 @login_required
 def create_custom_exam(request):
+    """This view renders the create exam page, but does not handle the creation of the exam"""
     context = {"textbooks": Scope.objects.filter(level=0)}
     return render(request, "exam/create_exam.html", context)
 

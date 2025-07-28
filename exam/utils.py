@@ -18,10 +18,8 @@ def reload(request):
 def get_exams(request, limit=None, solved=False) -> list:
     """returns the context for exams list"""
 
-    exams = (
-        Exam.objects.filter(created_by=request.user)
-        .select_related("scope")
-        .prefetch_related("submissions", "exam_problems")
+    exams = Exam.objects.filter(created_by=request.user).prefetch_related(
+        "scopes", "submissions", "exam_problems"
     )
     if limit:
         exams = exams[:limit]
@@ -32,10 +30,10 @@ def get_exams(request, limit=None, solved=False) -> list:
             "id": exam.id,
             "title": exam.title,
             "scope": {
-                "type": exam.scope.type,
-                "title": exam.scope.title,
+                "type": "single" if exam.scopes.count() == 1 else "multiple",
+                "title": ", ".join(str(scope) for scope in exam.scopes.all()),
             },
-            "exam_length": scope_problem_number[str(exam.scope.type)],
+            "exam_length": exam.exam_problems.count(),
             "created_at": exam.created_at,
             "submission": (
                 {
