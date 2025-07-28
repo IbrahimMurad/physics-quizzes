@@ -3,6 +3,66 @@ const scopeTypes = ["textbook", "unit", "chapter", "lesson"];
 const scopeContainers = document.querySelectorAll(".scope");
 const scopeRadioButtons = document.querySelectorAll("input[name='scope_type']");
 const scopeSelects = document.querySelectorAll("select");
+const examTypeRadioButtons = document.querySelectorAll("input[name='exam_type']");
+const addBtns = document.querySelectorAll("button.add-btn");
+
+// handle the change of selected exam type
+examTypeRadioButtons.forEach((radioButton) => {
+    radioButton.addEventListener("change", () => {
+        if (radioButton.value === "single_scope") {
+            document.querySelector(".scope-selector").style.display = "flex";
+            hideScopeField(1)
+            hideScopeField(2)
+            hideScopeField(3)
+            hideAddBtns()
+            document.querySelector(".multiple-scope-exam-scopes").style.display = "none";
+        } else {
+            document.querySelector(".scope-selector").style.display = "none";
+            showScopeField(1)
+            showScopeField(2)
+            showScopeField(3)
+            showAddBtns()
+            document.querySelector(".multiple-scope-exam-scopes").style.display = "flex";
+        }
+    })
+})
+
+function hideAddBtns() {
+    addBtns.forEach((btn) => {
+        btn.style.display = "none";
+    })
+}
+
+function showAddBtns() {
+    addBtns.forEach((btn) => {
+        btn.style.display = "block";
+    })
+}
+
+
+function addScope(scope_id, scope_type, scope_title) {
+    const div = document.createElement("div");
+    div.classList.add("selected-scope");
+    div.innerHTML = `
+        <input type="checkbox" name="id" value="${scope_id}" hidden checked>
+        <label>
+            ${scope_type} : <span class="selected-scope-title">${scope_title}</span>
+        </label>
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">remove</button>
+    `;
+    document.getElementById("selected-scopes").appendChild(div);
+}
+
+addBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const scopeSelect = btn.previousElementSibling;
+        const scope_id = scopeSelect.value;
+        const scope_type = btn.parentElement.previousElementSibling.textContent;
+        const scope_title = scopeSelect.options[scopeSelect.selectedIndex].textContent;
+        addScope(scope_id, scope_type, scope_title);
+    })
+})
+
 
 // handle the change of selected scope type
 scopeRadioButtons.forEach((radioButton) => {
