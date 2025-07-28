@@ -205,5 +205,8 @@ def create_custom_exam(request):
 @login_required
 def exam_list(request):
     solved = request.GET.get("solved", False)
-    context = get_exams(request=request, solved=solved)
-    return render(request, "exam/exam_list.html", context)
+    return render(
+        request,
+        "exam/exam_list.html",
+        {"exams": get_exams(request=request, solved=solved)},
+    )

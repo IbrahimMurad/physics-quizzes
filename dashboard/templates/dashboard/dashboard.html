@@ -45,7 +45,7 @@
   <nav class="tabs">
     <div class="tab-switcher"></div>
     <button data-tab="lessons" class="tab-trigger active">My Favorites ({{ favorites|length }})</button>
-    <button data-tab="recent" class="tab-trigger">Recent Exams ({{ recent_exams.submissions|length }})</button>
+    <button data-tab="recent" class="tab-trigger">Recent Exams ({{ recent_exams|length }})</button>
   </nav>
 
   <div id="tab-lessons" class="tab-content active">
@@ -62,9 +62,9 @@
 
   <div id="tab-recent" class="tab-content">
     <div class="exam-grid">
-      {% if recent_exams.submissions %}
-        {% for submission in recent_exams.submissions %}
-          {% include "components/exam_card.html" with submission=submission %}
+      {% if recent_exams %}
+        {% for exam in recent_exams %}
+          {% include "components/exam_card.html" with exam=exam %}
         {% endfor %}
       {% else %}
         <p class="empty">No recent exams found</p>

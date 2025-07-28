@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 
-from exam.models import Exam, Submission
+from exam.models import Exam
 
 scope_problem_number = {
     "Lesson": 10,
@@ -15,7 +15,7 @@ def reload(request):
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
-def get_exams(request, limit=None, solved=False) -> dict:
+def get_exams(request, limit=None, solved=False) -> list:
     """returns the context for exams list"""
 
     exams = (
@@ -27,32 +27,26 @@ def get_exams(request, limit=None, solved=False) -> dict:
         exams = exams[:limit]
     if solved:
         exams = exams.filter(submissions__user=request.user)
-    context = {
-        "exams": [
-            {
-                "id": exam.id,
-                "title": exam.title,
-                "scope": {
-                    "type": exam.scope.type,
-                    "title": exam.scope.title,
-                },
-                "exam_length": scope_problem_number[str(exam.scope.type)],
-                "created_at": exam.created_at,
-                "submission": (
-                    {
-                        "id": exam.submissions.first().id,
-                        "score": exam.submissions.first().score,
-                        "percentage": exam.submissions.first().percentage,
-                        "status": exam.submissions.first().status,
-                    }
-                    if exam.submissions.exists()
-                    else None
-                ),
-            }
-            for exam in exams
-        ],
-    }
-
-    print(context)
-
-    return context
+    return [
+        {
+            "id": exam.id,
+            "title": exam.title,
+            "scope": {
+                "type": exam.scope.type,
+                "title": exam.scope.title,
+            },
+            "exam_length": scope_problem_number[str(exam.scope.type)],
+            "created_at": exam.created_at,
+            "submission": (
+                {
+                    "id": exam.submissions.first().id,
+                    "score": exam.submissions.first().score,
+                    "percentage": exam.submissions.first().percentage,
+                    "status": exam.submissions.first().status,
+                }
+                if exam.submissions.exists()
+                else None
+            ),
+        }
+        for exam in exams
+    ]
