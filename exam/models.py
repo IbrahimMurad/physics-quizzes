@@ -19,8 +19,8 @@ class Exam(models.Model):
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="exams", related_query_name="exam"
     )
-    scope = models.ForeignKey(
-        Scope, on_delete=models.CASCADE, related_name="exams", related_query_name="exam"
+    scopes = models.ManyToManyField(
+        Scope, related_name="exams", related_query_name="exam"
     )
     problems = models.ManyToManyField(
         Problem, through="ExamProblem", related_name="exams", related_query_name="exam"

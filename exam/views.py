@@ -24,19 +24,41 @@ def exam_create(request):
         )
         return redirect(redirect_url)
 
-    id = request.POST.get("id")
+    ids = request.POST.get("id")
     exam_title = request.POST.get("exam_title")
+    exam_type = request.POST.get("exam-type", "single_scope")
+    number_of_problems = request.POST.get("number_of_problems")
 
-    try:
-        scope = Scope.objects.get(id=id)
-    except Scope.DoesNotExist:
+    if exam_type == "single_scope":
+        scope_ids = [ids]
+    else:
+        # TO DO: a limiter for the number of scopes in multiple-scopes exams
+
+        # get the list of unique scopes
+        scope_ids = list(set(ids.split(",")))
+
+    # To Do: A check to ensure all the provided ids are legitimate
+
+    scopes = Scope.objects.filter(id__in=scope_ids)
+
+    if not scopes:
         messages.error(request, "Scope not found")
         return reload(request)
 
-    problems = list(scope.problems)
-    if len(problems) < scope_problem_number[scope.type]:
+    problems = []
+
+    for scope in scopes:
+        problems.extend(list(scope.problems))
+
+    if exam_type == "single_scope":
+        number_of_problems = scope_problem_number[scopes[0].type]
+    else:
+        number_of_problems = int(number_of_problems)
+
+    if len(problems) < number_of_problems:
         messages.warning(
-            request, "Unfortunatly, there are no enough problems for this scope"
+            request,
+            f"Unfortunatly, there are no enough problems for this scope.\n Only {len(problems)} are available.",
         )
         return redirect(request.META.get("HTTP_REFERER", "/"))
 
@@ -44,12 +66,12 @@ def exam_create(request):
 
     exam = Exam.objects.create(
         title=exam_title
-        or f"Exam for {scope.type}: {scope.title} - created by {request.user.username}",
+        or f"Exam for {scopes[0].type}: {scopes[0].title} - created by {request.user.username}",
         created_by=request.user,
-        scope=scope,
+        scope=scope_ids,
     )
 
-    for order, problem in enumerate(problems[: scope_problem_number[scope.type]]):
+    for order, problem in enumerate(problems[:number_of_problems]):
         ExamProblem.objects.create(exam=exam, problem=problem, order=(order + 1))
 
     return redirect("exam", exam_id=exam.id)
