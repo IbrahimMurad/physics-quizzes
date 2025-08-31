@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Create New Exam
+Create New Exam - QuizCraft
 {% endblock title %}
 
 {% block css %}
@@ -20,89 +20,133 @@ Create New Exam
 {% include "components/header.html" %}
 
 <div class="container">
-    <form action="{% url 'exam-create' %}" method="post" class="custom-exam-form">
+    <form action="{% url 'exam-create' %}" method="post" class="custom-exam-form" novalidate>
         {% csrf_token %}
-        <h2>Create An Exam</h2>
+        <h2><i class="fas fa-file-alt"></i> Create An Exam</h2>
+        
         <fieldset>
-            <legend>
-                Exam Type
-            </legend>
-            <div class="exam-type-selector">
-                <label for="single-scope-exam">
-                    <input id="single-scope-exam" type="radio" name="exam_type" value="single_scope" checked required>
-                    Single Scope
+            <legend>Select Scope Level</legend>
+            <div class="radio-group">
+                <label for="textbook-radio" title="Create exam from entire textbook">
+                    <input id="textbook-radio" type="radio" name="scope_type" value="textbook" checked required>
+                    <i class="fas fa-book"></i> Textbook
                 </label>
-                <label for="multiple-scope-exam">
-                    <input id="multiple-scope-exam" type="radio" name="exam_type" value="multiple_scope">
-                    Multiple Scopes
+                <label for="unit-radio" title="Create exam from specific unit">
+                    <input id="unit-radio" type="radio" name="scope_type" value="unit">
+                    <i class="fas fa-layer-group"></i> Unit
+                </label>
+                <label for="chapter-radio" title="Create exam from specific chapter">
+                    <input id="chapter-radio" type="radio" name="scope_type" value="chapter">
+                    <i class="fas fa-bookmark"></i> Chapter
+                </label>
+                <label for="lesson-radio" title="Create exam from specific lesson">
+                    <input id="lesson-radio" type="radio" name="scope_type" value="lesson">
+                    <i class="fas fa-graduation-cap"></i> Lesson
                 </label>
             </div>
         </fieldset>
-        <fieldset class="scope-selector">
-            <legend>Select Scope</legend>
-            <label for="textbook-radio">
-                <input id="textbook-radio" type="radio" name="scope_type" value="textbook" checked required>
-                Textbook
-            </label>
-            <label for="unit-radio">
-                <input id="unit-radio" type="radio" name="scope_type" value="unit">
-                Unit
-            </label>
-            <label for="chapter-radio">
-                <input id="chapter-radio" type="radio" name="scope_type" value="chapter">
-                Chapter
-            </label>
-            <label for="lesson-radio">
-                <input id="lesson-radio" type="radio" name="scope_type" value="lesson">
-                Lesson
-            </label>
-        </fieldset>
+        
         <div id="textbooks" class="scope active">
-            <label for="textbook-select">Textbook</label>
-            <div>
-                <select id="textbook-select" name="id" required>
+            <label for="textbook-select">
+                <i class="fas fa-book"></i> Textbook
+            </label>
+            <select id="textbook-select" name="id" required aria-label="Select textbook">
                 <option value="">Select Textbook</option>
                 {% for textbook in textbooks %}
                 <option value="{{ textbook.id }}">{{ textbook.title }}</option>
                 {% endfor %}
             </select>
-            <button type="button" class="add-btn">Add</button>
-            </div>
         </div>
+        
         <div id="units" class="scope">
-            <label for="unit-select">Unit</label>
-            <div>
-                <select id="unit-select">
-                </select>
-                <button type="button" class="add-btn">Add</button>
-            </div>
+            <label for="unit-select">
+                <i class="fas fa-layer-group"></i> Unit
+            </label>
+            <select id="unit-select" aria-label="Select unit">
+                <option value="">Select Unit</option>
+            </select>
         </div>
+        
         <div id="chapters" class="scope">
-            <label for="chapter-select">Chapter</label>
-            <div>
-                <select id="chapter-select"></select>
-                <button type="button" class="add-btn">Add</button>
-            </div>
+            <label for="chapter-select">
+                <i class="fas fa-bookmark"></i> Chapter
+            </label>
+            <select id="chapter-select" aria-label="Select chapter">
+                <option value="">Select Chapter</option>
+            </select>
         </div>
+        
         <div id="lessons" class="scope">
-            <label for="lesson-select">Lesson</label>
-            <div>
-                <select id="lesson-select"></select>
-                <button type="button" class="add-btn">Add</button>
-            </div>
+            <label for="lesson-select">
+                <i class="fas fa-graduation-cap"></i> Lesson
+            </label>
+            <select id="lesson-select" aria-label="Select lesson">
+                <option value="">Select Lesson</option>
+            </select>
         </div>
-        <fieldset class="multiple-scope-exam-scopes" style="display: none;">
-            <legend>Selected scopes</legend>
-            <div id="selected-scopes"></div>
-        </fieldset>
+        
         <div class="exam-title">
-            <label for="exam-title">Exam Title</label>
-            <input id="exam-title" type="text" name="exam_title" placeholder="Test exam for ....." required>
+            <label for="exam-title">
+                <i class="fas fa-pencil-alt"></i> Exam Title
+                <span class="required-indicator" aria-label="Required field">*</span>
+            </label>
+            <input 
+                id="exam-title" 
+                type="text" 
+                name="exam_title" 
+                placeholder="e.g., Midterm Exam - Physics Chapter 3" 
+                required
+                maxlength="256"
+                aria-describedby="title-help"
+                autocomplete="off"
+            >
+            <small id="title-help" class="help-text">
+                Give your exam a descriptive title (max 256 characters)
+            </small>
         </div>
+        
         <div class="action-buttons">
-            <button type="reset">Cancel</button>
-            <button type="submit">Create</button>
+            <button type="reset" title="Clear form">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="submit" title="Create exam">
+                <i class="fas fa-plus-circle"></i> <span>Create Exam</span>
+            </button>
         </div>
     </form>
 </div>
+
+<style>
+/* Additional inline styles for new elements */
+.required-indicator {
+    color: var(--destructive);
+    margin-left: 0.25rem;
+}
+
+.help-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+fieldset label i {
+    margin-right: 0.25rem;
+}
+
+.scope label i {
+    margin-right: 0.5rem;
+}
+
+.exam-title label i {
+    margin-right: 0.5rem;
+}
+</style>
+
 {% endblock content %}

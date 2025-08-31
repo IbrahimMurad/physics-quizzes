@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from exam.utils import get_exams, reload, scope_problem_number
@@ -15,15 +14,9 @@ from .models import Exam, ExamProblem, Submission
 from .service import correct_exam
 
 
+@login_required()
 @require_http_methods(["POST"])
 def exam_create(request):
-    if request.user.is_anonymous:
-        messages.error(request, "You must be logged in to create an exam")
-        redirect_url = (
-            f"{reverse('login')}?next={request.META.get('HTTP_REFERER', '/')}"
-        )
-        return redirect(redirect_url)
-
     ids = request.POST.get("id")
     exam_title = request.POST.get("exam_title")
     exam_type = request.POST.get("exam-type", "single_scope")
@@ -78,7 +71,7 @@ def exam_create(request):
     return redirect("exam", exam_id=exam.id)
 
 
-@login_required
+@login_required()
 @require_http_methods(["GET"])
 def exam_view(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
@@ -89,7 +82,7 @@ def exam_view(request, exam_id):
     return render(request, "exam/exam.html", {"exam": exam})
 
 
-@login_required
+@login_required()
 @require_http_methods(["POST", "GET"])
 def submit_exam(request, exam_id):
     exam = Exam.objects.prefetch_related(
@@ -133,8 +126,8 @@ def submit_exam(request, exam_id):
         )
 
 
+@login_required()
 @require_http_methods(["GET"])
-@login_required
 def exam_result(request, submission_id):
     submission = (
         Submission.objects.select_related("exam")
@@ -191,15 +184,13 @@ def exam_result(request, submission_id):
             for choice in problem.choices.all()
         ]
 
-        problem_data.append(
-            {
-                "id": problem.id,
-                "body": problem.body,
-                "figure": problem.figure,
-                "choices": choices,
-                "answered_correctly": problem_correct_map.get(problem.id, False),
-            }
-        )
+        problem_data.append({
+            "id": problem.id,
+            "body": problem.body,
+            "figure": problem.figure,
+            "choices": choices,
+            "answered_correctly": problem_correct_map.get(problem.id, False),
+        })
 
     context = {
         "score": submission.score,
@@ -217,16 +208,20 @@ def exam_result(request, submission_id):
     )
 
 
+@login_required()
 @require_http_methods(["GET"])
-@login_required
 def create_custom_exam(request):
     """This view renders the create exam page, but does not handle the creation of the exam"""
-    context = {"textbooks": Scope.objects.filter(level=0)}
+    context = {
+        "textbooks": Scope.objects.filter(level=0).prefetch_related(
+            "children__children__children"
+        ),
+    }
     return render(request, "exam/create_exam.html", context)
 
 
+@login_required()
 @require_http_methods(["GET"])
-@login_required
 def exam_list(request):
     solved = request.GET.get("solved", False)
     return render(
