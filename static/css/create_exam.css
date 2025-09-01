@@ -179,11 +179,13 @@ fieldset label input {
   max-height: 0;
   overflow: hidden;
   transition: all 0.3s ease;
+  transform: translateY(-10px);
 }
 
 .scope.active {
   opacity: 1;
-  max-height: 100px;
+  max-height: 200px;
+  transform: translateY(0);
 }
 
 .scope label,
@@ -221,6 +223,12 @@ fieldset label input {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
   background-color: var(--card);
+}
+
+.scope select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--muted);
 }
 
 .exam-title input::placeholder {
@@ -268,6 +276,13 @@ fieldset label input {
   border-radius: var(--radius);
   background-color: var(--background);
   font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.scope-search input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 .scope-search .search-icon {
@@ -277,6 +292,11 @@ fieldset label input {
   transform: translateY(-50%);
   color: var(--muted-foreground);
   pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.scope-search input:focus + .search-icon {
+  color: var(--primary);
 }
 
 /* Scope Tree */
@@ -287,6 +307,25 @@ fieldset label input {
   padding-right: 0.5rem;
 }
 
+/* Custom scrollbar */
+.scope-tree::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scope-tree::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 3px;
+}
+
+.scope-tree::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 3px;
+}
+
+.scope-tree::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}
+
 .scope-item {
   margin-bottom: 0.25rem;
 }
@@ -295,37 +334,46 @@ fieldset label input {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.75rem 0.5rem;
   border-radius: var(--radius);
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
+  position: relative;
 }
 
 .scope-item-header:hover {
+  background-color: var(--muted);
+  transform: translateX(2px);
+}
+
+.scope-item.expanded > .scope-item-header {
   background-color: var(--muted);
 }
 
 .scope-item.expanded > .scope-item-header .toggle-icon {
   transform: rotate(90deg);
+  color: var(--primary);
 }
 
 .toggle-icon {
   font-size: 0.75rem;
   color: var(--muted-foreground);
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
   width: 16px;
   text-align: center;
 }
 
-.scope-item i:not(.toggle-icon):not(.fa-plus) {
+.scope-item i:not(.toggle-icon):not(.fa-plus):not(.fa-check):not(.fa-level-up-alt):not(.fa-level-down-alt) {
   color: var(--primary);
+  font-size: 1rem;
 }
 
 .scope-title {
   flex: 1;
   font-size: 0.9rem;
   color: var(--foreground);
+  font-weight: 500;
 }
 
 .add-scope-btn {
@@ -339,6 +387,11 @@ fieldset label input {
   transition: all 0.2s ease;
   opacity: 0;
   transform: scale(0.9);
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scope-item-header:hover .add-scope-btn {
@@ -346,23 +399,71 @@ fieldset label input {
   transform: scale(1);
 }
 
-.add-scope-btn:hover {
+.add-scope-btn:hover:not(:disabled) {
   background-color: var(--accent);
   transform: scale(1.1);
 }
 
 .add-scope-btn:disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   cursor: not-allowed;
+  background-color: var(--muted-foreground);
+}
+
+.add-scope-btn.selected {
+  background-color: var(--accent);
+  opacity: 1;
+  transform: scale(1);
 }
 
 .scope-children {
   margin-left: 1.5rem;
   display: none;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--border);
+  margin-top: 0.5rem;
 }
 
 .scope-item.expanded > .scope-children {
   display: block;
+  animation: expandChildren 0.3s ease;
+}
+
+@keyframes expandChildren {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+/* Loading, Error, and Empty States */
+.loading-children,
+.error-children,
+.empty-children {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.error-children {
+  color: var(--destructive);
+}
+
+.retry-btn {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  cursor: pointer;
 }
 
 /* Selected Scopes */
@@ -401,6 +502,22 @@ fieldset label input {
   gap: 0.5rem;
   min-height: 200px;
   overflow-y: auto;
+  max-height: 350px;
+}
+
+/* Custom scrollbar for selected scopes */
+.selected-scopes-board::-webkit-scrollbar {
+  width: 6px;
+}
+
+.selected-scopes-board::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 3px;
+}
+
+.selected-scopes-board::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 3px;
 }
 
 /* Scope Card */
@@ -414,6 +531,7 @@ fieldset label input {
   gap: 1rem;
   transition: all 0.2s ease;
   animation: cardSlideIn 0.3s ease;
+  position: relative;
 }
 
 @keyframes cardSlideIn {
@@ -430,15 +548,18 @@ fieldset label input {
 .scope-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
 }
 
 .scope-card-icon {
   font-size: 1.5rem;
   color: var(--primary);
+  flex-shrink: 0;
 }
 
 .scope-card-content {
   flex: 1;
+  min-width: 0;
 }
 
 .scope-card-title {
@@ -446,12 +567,14 @@ fieldset label input {
   font-size: 0.95rem;
   color: var(--foreground);
   margin-bottom: 0.25rem;
+  word-wrap: break-word;
 }
 
 .scope-card-type {
   font-size: 0.75rem;
   color: var(--muted-foreground);
   text-transform: capitalize;
+  font-weight: 500;
 }
 
 .remove-scope-btn {
@@ -462,11 +585,18 @@ fieldset label input {
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .remove-scope-btn:hover {
   transform: scale(1.1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: rgba(239, 68, 68, 0.9);
 }
 
 /* Empty State */
@@ -485,11 +615,16 @@ fieldset label input {
   font-size: 3rem;
   margin-bottom: 1rem;
   opacity: 0.3;
+  color: var(--muted-foreground);
 }
 
 .empty-selected p {
   font-size: 0.9rem;
-  margin: 0;
+  margin: 0.25rem 0;
+}
+
+.empty-selected p:first-of-type {
+  font-weight: 600;
 }
 
 /* Loading State */
@@ -498,13 +633,6 @@ fieldset label input {
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 20px;
-}
-
-.loading-children {
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
 }
 
 /* Action Buttons */
@@ -528,6 +656,8 @@ fieldset label input {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 120px;
+  justify-content: center;
 }
 
 .action-buttons button[type="reset"] {
