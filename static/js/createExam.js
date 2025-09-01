@@ -1,4 +1,5 @@
-// Create Exam JavaScript - Enhanced Functionality
+// Create Exam JavaScript - Enhanced with Multi-Scope Support
+let examType = "single";
 let selectedScopeType = "textbook";
 const scopeTypes = ["textbook", "unit", "chapter", "lesson"];
 const scopeContainers = document.querySelectorAll(".scope");
@@ -8,13 +9,25 @@ const examForm = document.querySelector(".custom-exam-form");
 const submitButton = document.querySelector("button[type='submit']");
 const examTitleInput = document.getElementById("exam-title");
 
-// Cache for scope data to reduce API calls
+// Multi-scope specific elements
+const examTypeRadios = document.querySelectorAll("input[name='exam_type']");
+const singleScopeSection = document.getElementById("single-scope-section");
+const multiScopeSection = document.getElementById("multi-scope-section");
+const selectedScopesBoard = document.getElementById("selected-scopes-board");
+const selectedIdsInput = document.getElementById("selected-ids");
+const selectedCountSpan = document.querySelector(".selected-count");
+const scopeSearchInput = document.getElementById("scope-search");
+
+// Cache for scope data
 const scopeDataCache = new Map();
+const selectedScopes = new Map(); // Map of scope ID to scope data
+const scopeHierarchy = new Map(); // Map to track parent-child relationships
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
     initializeEventListeners();
     validateForm();
+    initializeMultiScope();
     
     // Add smooth entry animation
     examForm.style.opacity = "0";
@@ -29,12 +42,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Initialize all event listeners
 function initializeEventListeners() {
-    // Radio button changes
+    // Exam type change
+    examTypeRadios.forEach(radio => {
+        radio.addEventListener("change", handleExamTypeChange);
+    });
+
+    // Single scope listeners
     scopeRadioButtons.forEach((radioButton) => {
         radioButton.addEventListener("change", handleScopeTypeChange);
     });
 
-    // Select changes
     scopeSelects.forEach((select, index) => {
         select.addEventListener("change", () => handleSelectChange(select, index));
     });
@@ -58,50 +75,389 @@ function initializeEventListeners() {
 
     // Character counter for title input
     examTitleInput.addEventListener("input", updateCharacterCount);
-    updateCharacterCount(); // Initialize counter
+    updateCharacterCount();
 }
 
-// Update character count display
-function updateCharacterCount() {
-    const currentLength = examTitleInput.value.length;
-    const maxLength = examTitleInput.getAttribute("maxlength");
-    const helpText = document.getElementById("title-help");
+// Initialize multi-scope functionality
+function initializeMultiScope() {
+    // Scope tree item clicks
+    document.addEventListener("click", handleScopeTreeClick);
+
+    // Search functionality
+    if (scopeSearchInput) {
+        scopeSearchInput.addEventListener("input", debounce(handleScopeSearch, 300));
+    }
+
+    // Initialize empty state
+    updateSelectedScopesDisplay();
+}
+
+// Handle exam type change
+function handleExamTypeChange(event) {
+    examType = event.target.value;
     
-    if (helpText) {
-        helpText.setAttribute("data-chars", `${currentLength}/${maxLength}`);
+    if (examType === "single") {
+        singleScopeSection.classList.add("active");
+        multiScopeSection.classList.remove("active");
+    } else {
+        singleScopeSection.classList.remove("active");
+        multiScopeSection.classList.add("active");
+    }
+    
+    validateForm();
+}
+
+// Handle scope tree clicks
+function handleScopeTreeClick(event) {
+    const target = event.target;
+    
+    // Handle toggle icon click
+    if (target.classList.contains("toggle-icon") || target.closest(".toggle-icon")) {
+        const scopeItem = target.closest(".scope-item");
+        toggleScopeExpansion(scopeItem);
+        return;
+    }
+    
+    // Handle add button click
+    if (target.classList.contains("add-scope-btn") || target.closest(".add-scope-btn")) {
+        event.preventDefault();
+        const scopeItem = target.closest(".scope-item");
+        addScope(scopeItem);
+        return;
+    }
+    
+    // Handle remove button click
+    if (target.classList.contains("remove-scope-btn") || target.closest(".remove-scope-btn")) {
+        event.preventDefault();
+        const scopeId = target.closest(".scope-card").dataset.id;
+        removeScope(scopeId);
+        return;
     }
 }
 
-// Handle scope type change
+// Toggle scope expansion in tree
+async function toggleScopeExpansion(scopeItem) {
+    const isExpanded = scopeItem.classList.contains("expanded");
+    
+    if (isExpanded) {
+        scopeItem.classList.remove("expanded");
+    } else {
+        scopeItem.classList.add("expanded");
+        
+        // Load children if not already loaded
+        const childrenContainer = scopeItem.querySelector(".scope-children");
+        if (childrenContainer && !childrenContainer.dataset.loaded) {
+            await loadScopeChildren(scopeItem);
+        }
+    }
+}
+
+// Load scope children
+async function loadScopeChildren(scopeItem) {
+    const scopeId = scopeItem.dataset.id;
+    const scopeType = scopeItem.dataset.type;
+    const childrenContainer = scopeItem.querySelector(".scope-children");
+    
+    // Show loading state
+    childrenContainer.innerHTML = '<div class="loading-children"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+    
+    try {
+        const response = await fetch(`/scope/${scopeId}/`);
+        if (!response.ok) throw new Error("Failed to load children");
+        
+        const children = await response.json();
+        childrenContainer.innerHTML = "";
+        childrenContainer.dataset.loaded = "true";
+        
+        // Determine child type
+        const childType = getChildType(scopeType);
+        
+        children.forEach(child => {
+            const childItem = createScopeItem(child, childType);
+            childrenContainer.appendChild(childItem);
+            
+            // Track hierarchy
+            if (!scopeHierarchy.has(scopeId)) {
+                scopeHierarchy.set(scopeId, new Set());
+            }
+            scopeHierarchy.get(scopeId).add(child.id.toString());
+        });
+        
+        if (children.length === 0) {
+            childrenContainer.innerHTML = '<div class="empty-children">No items available</div>';
+        }
+    } catch (error) {
+        console.error("Error loading children:", error);
+        childrenContainer.innerHTML = '<div class="error-children">Failed to load items</div>';
+    }
+}
+
+// Create scope item element
+function createScopeItem(scope, type) {
+    const div = document.createElement("div");
+    div.className = "scope-item";
+    div.dataset.id = scope.id;
+    div.dataset.type = type;
+    div.dataset.title = scope.title;
+    
+    const hasChildren = type !== "lesson";
+    
+    div.innerHTML = `
+        <div class="scope-item-header">
+            ${hasChildren ? '<i class="fas fa-chevron-right toggle-icon"></i>' : '<span class="toggle-icon"></span>'}
+            <i class="fas fa-${getIconForType(type)}"></i>
+            <span class="scope-title">${scope.title}</span>
+            <button type="button" class="add-scope-btn" title="Add this scope">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        ${hasChildren ? '<div class="scope-children"></div>' : ''}
+    `;
+    
+    return div;
+}
+
+// Get child type based on parent type
+function getChildType(parentType) {
+    const typeIndex = scopeTypes.indexOf(parentType);
+    return typeIndex < scopeTypes.length - 1 ? scopeTypes[typeIndex + 1] : null;
+}
+
+// Get icon for scope type
+function getIconForType(type) {
+    const icons = {
+        textbook: "book",
+        unit: "layer-group",
+        chapter: "bookmark",
+        lesson: "graduation-cap"
+    };
+    return icons[type] || "folder";
+}
+
+// Add scope to selection
+function addScope(scopeItem) {
+    const scopeId = scopeItem.dataset.id;
+    const scopeType = scopeItem.dataset.type;
+    const scopeTitle = scopeItem.dataset.title;
+    
+    // Check if already selected
+    if (selectedScopes.has(scopeId)) {
+        showNotification("This scope is already selected", "warning");
+        return;
+    }
+    
+    // Remove any children of this scope from selection
+    const childrenToRemove = findAllChildren(scopeId);
+    childrenToRemove.forEach(childId => {
+        if (selectedScopes.has(childId)) {
+            selectedScopes.delete(childId);
+        }
+    });
+    
+    // Remove any parents of this scope from selection
+    const parentsToRemove = findAllParents(scopeId);
+    parentsToRemove.forEach(parentId => {
+        if (selectedScopes.has(parentId)) {
+            selectedScopes.delete(parentId);
+        }
+    });
+    
+    // Add the scope
+    selectedScopes.set(scopeId, {
+        id: scopeId,
+        type: scopeType,
+        title: scopeTitle
+    });
+    
+    updateSelectedScopesDisplay();
+    updateAddButtons();
+    validateForm();
+}
+
+// Remove scope from selection
+function removeScope(scopeId) {
+    selectedScopes.delete(scopeId);
+    updateSelectedScopesDisplay();
+    updateAddButtons();
+    validateForm();
+}
+
+// Find all children of a scope
+function findAllChildren(scopeId, children = new Set()) {
+    if (scopeHierarchy.has(scopeId)) {
+        scopeHierarchy.get(scopeId).forEach(childId => {
+            children.add(childId);
+            findAllChildren(childId, children);
+        });
+    }
+    return children;
+}
+
+// Find all parents of a scope
+function findAllParents(scopeId) {
+    const parents = new Set();
+    
+    // Search through all scope items in the DOM
+    document.querySelectorAll(".scope-item").forEach(item => {
+        const itemId = item.dataset.id;
+        const childrenContainer = item.querySelector(".scope-children");
+        
+        if (childrenContainer) {
+            const hasChild = childrenContainer.querySelector(`[data-id="${scopeId}"]`);
+            if (hasChild) {
+                parents.add(itemId);
+                // Recursively find parents of this parent
+                findAllParents(itemId).forEach(p => parents.add(p));
+            }
+        }
+    });
+    
+    return parents;
+}
+
+// Update selected scopes display
+function updateSelectedScopesDisplay() {
+    selectedCountSpan.textContent = `(${selectedScopes.size})`;
+    
+    if (selectedScopes.size === 0) {
+        selectedScopesBoard.innerHTML = `
+            <div class="empty-selected">
+                <i class="fas fa-inbox"></i>
+                <p>No scopes selected yet</p>
+                <p>Click the + button next to any scope to add it</p>
+            </div>
+        `;
+        selectedIdsInput.value = "";
+        return;
+    }
+    
+    selectedScopesBoard.innerHTML = "";
+    const idsArray = [];
+    
+    selectedScopes.forEach((scope, id) => {
+        idsArray.push(id);
+        const card = createScopeCard(scope);
+        selectedScopesBoard.appendChild(card);
+    });
+    
+    selectedIdsInput.value = idsArray.join(",");
+}
+
+// Create scope card for selected display
+function createScopeCard(scope) {
+    const div = document.createElement("div");
+    div.className = "scope-card";
+    div.dataset.id = scope.id;
+    
+    div.innerHTML = `
+        <i class="scope-card-icon fas fa-${getIconForType(scope.type)}"></i>
+        <div class="scope-card-content">
+            <div class="scope-card-title">${scope.title}</div>
+            <div class="scope-card-type">${scope.type}</div>
+        </div>
+        <button type="button" class="remove-scope-btn" title="Remove this scope">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    return div;
+}
+
+// Update add buttons state
+function updateAddButtons() {
+    document.querySelectorAll(".add-scope-btn").forEach(btn => {
+        const scopeItem = btn.closest(".scope-item");
+        const scopeId = scopeItem.dataset.id;
+        
+        // Disable if already selected or if a parent/child is selected
+        const isSelected = selectedScopes.has(scopeId);
+        const hasSelectedParent = Array.from(selectedScopes.keys()).some(selectedId => {
+            return findAllChildren(selectedId).has(scopeId);
+        });
+        const hasSelectedChild = Array.from(selectedScopes.keys()).some(selectedId => {
+            return findAllParents(selectedId).has(scopeId);
+        });
+        
+        btn.disabled = isSelected || hasSelectedParent || hasSelectedChild;
+        
+        if (isSelected) {
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            btn.title = "Already selected";
+        } else if (hasSelectedParent) {
+            btn.title = "Parent scope already selected";
+        } else if (hasSelectedChild) {
+            btn.title = "Child scope already selected";
+        } else {
+            btn.innerHTML = '<i class="fas fa-plus"></i>';
+            btn.title = "Add this scope";
+        }
+    });
+}
+
+// Handle scope search
+function handleScopeSearch() {
+    const searchTerm = scopeSearchInput.value.toLowerCase().trim();
+    
+    document.querySelectorAll(".scope-item").forEach(item => {
+        const title = item.dataset.title.toLowerCase();
+        const matches = title.includes(searchTerm);
+        
+        if (searchTerm === "") {
+            item.style.display = "";
+            // Collapse all if no search
+            item.classList.remove("expanded");
+        } else {
+            if (matches) {
+                item.style.display = "";
+                // Expand parents to show matching item
+                expandParentsOfItem(item);
+            } else {
+                // Check if any children match
+                const hasMatchingChild = item.querySelectorAll(".scope-item").length > 0 && 
+                    Array.from(item.querySelectorAll(".scope-item")).some(child => 
+                        child.dataset.title.toLowerCase().includes(searchTerm)
+                    );
+                
+                item.style.display = hasMatchingChild ? "" : "none";
+            }
+        }
+    });
+}
+
+// Expand all parents of an item
+function expandParentsOfItem(item) {
+    let parent = item.parentElement.closest(".scope-item");
+    while (parent) {
+        parent.classList.add("expanded");
+        parent = parent.parentElement.closest(".scope-item");
+    }
+}
+
+// Single Scope Functions (existing functionality)
 function handleScopeTypeChange(event) {
     selectedScopeType = event.target.value;
     adjustScopeFields();
     validateForm();
 }
 
-// Handle select changes
 function handleSelectChange(select, index) {
     const parentId = select.value;
     if (parentId) {
         fillScopeSelect(index + 1, parentId);
     } else {
-        // Clear subsequent selects if no value selected
         clearSubsequentSelects(index + 1);
     }
     validateForm();
 }
 
-// Adjust scope fields based on the selected scope type
 function adjustScopeFields() {
     let targetIndex = scopeTypes.indexOf(selectedScopeType);
     
-    // Show all scopes up to the selected type
     for (let i = 0; i < scopeTypes.length; i++) {
         const scopeSelect = scopeSelects[i];
         const scopeContainer = scopeContainers[i];
         
         if (i <= targetIndex) {
-            // Show this scope
             if (i === targetIndex && selectedScopeType !== "textbook") {
                 showScopeField(i);
             } else if (i < targetIndex) {
@@ -111,7 +467,6 @@ function adjustScopeFields() {
                 }
             }
             
-            // Set name attribute only for the target scope
             if (i === targetIndex) {
                 scopeSelect.setAttribute("name", "id");
                 scopeSelect.setAttribute("required", "required");
@@ -120,13 +475,11 @@ function adjustScopeFields() {
                 scopeSelect.removeAttribute("required");
             }
         } else {
-            // Hide this scope
             hideScopeField(i);
         }
     }
 }
 
-// Show scope field with animation
 function showScopeField(containerIndex) {
     const scopeContainer = scopeContainers[containerIndex];
     const scopeSelect = scopeSelects[containerIndex];
@@ -135,13 +488,11 @@ function showScopeField(containerIndex) {
     scopeSelect.setAttribute("name", "id");
     scopeSelect.setAttribute("required", "required");
     
-    // Fill with data if parent has value
     if (containerIndex > 0 && scopeSelects[containerIndex - 1].value) {
         fillScopeSelect(containerIndex, scopeSelects[containerIndex - 1].value);
     }
 }
 
-// Hide scope field with animation
 function hideScopeField(containerIndex) {
     const scopeContainer = scopeContainers[containerIndex];
     const scopeSelect = scopeSelects[containerIndex];
@@ -152,7 +503,6 @@ function hideScopeField(containerIndex) {
     scopeSelect.innerHTML = "";
 }
 
-// Fill scope select with data
 async function fillScopeSelect(containerIndex, parentId) {
     if (containerIndex >= scopeSelects.length || scopeTypes.indexOf(selectedScopeType) < containerIndex) {
         return;
@@ -161,14 +511,12 @@ async function fillScopeSelect(containerIndex, parentId) {
     const scopeSelect = scopeSelects[containerIndex];
     const cacheKey = `${containerIndex}-${parentId}`;
     
-    // Check cache first
     if (scopeDataCache.has(cacheKey)) {
         populateSelect(scopeSelect, scopeDataCache.get(cacheKey));
         fillScopeSelect(containerIndex + 1, scopeSelect.value);
         return;
     }
 
-    // Show loading state
     scopeSelect.dispatchEvent(new Event("loadstart"));
     scopeSelect.innerHTML = "<option value=''>Loading...</option>";
     scopeSelect.disabled = true;
@@ -181,14 +529,9 @@ async function fillScopeSelect(containerIndex, parentId) {
         }
         
         const data = await response.json();
-        
-        // Cache the data
         scopeDataCache.set(cacheKey, data);
-        
-        // Populate select
         populateSelect(scopeSelect, data);
         
-        // Fill next level if needed
         if (scopeSelect.value) {
             fillScopeSelect(containerIndex + 1, scopeSelect.value);
         }
@@ -202,7 +545,6 @@ async function fillScopeSelect(containerIndex, parentId) {
     }
 }
 
-// Populate select element with options
 function populateSelect(selectElement, data) {
     selectElement.innerHTML = "";
     
@@ -211,13 +553,11 @@ function populateSelect(selectElement, data) {
         return;
     }
     
-    // Add default option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
-    defaultOption.textContent = `Select ${selectElement.parentElement.querySelector("label").textContent}`;
+    defaultOption.textContent = `Select ${selectElement.parentElement.querySelector("label").textContent.trim()}`;
     selectElement.appendChild(defaultOption);
     
-    // Add data options
     data.forEach(item => {
         const option = document.createElement("option");
         option.value = item.id;
@@ -226,40 +566,38 @@ function populateSelect(selectElement, data) {
     });
 }
 
-// Clear subsequent selects
 function clearSubsequentSelects(startIndex) {
     for (let i = startIndex; i < scopeSelects.length; i++) {
         scopeSelects[i].innerHTML = "";
     }
 }
 
-// Validate form
+// Validation
 function validateForm() {
-    console.log("Validating...")
-    const targetIndex = scopeTypes.indexOf(selectedScopeType);
-    console.log("targetIndex -> ", targetIndex)
-    const targetSelect = scopeSelects[targetIndex];
-    console.log("targetSelect -> ", targetSelect)
-    const hasValidScope = targetSelect && targetSelect.value;
-    console.log("hasValidScope -> ", hasValidScope)
-    const hasTitle = examTitleInput.value.trim() !== "";
-    console.log("hasTitle -> ", hasTitle)
+    let isValid = false;
     
-    const isValid = hasValidScope && hasTitle;
-    console.log("isValid -> ", isValid)
-    submitButton.disabled = !isValid;
-    console.log("submitButton.disabled -> ", submitButton.disabled)
-    
-    // Update submit button appearance
-    if (isValid) {
-        submitButton.classList.add("ready");
-        console.log("Ready")
+    if (examType === "single") {
+        const targetIndex = scopeTypes.indexOf(selectedScopeType);
+        const targetSelect = scopeSelects[targetIndex];
+        const hasValidScope = targetSelect && targetSelect.value;
+        isValid = hasValidScope && examTitleInput.value.trim() !== "";
     } else {
-        submitButton.classList.remove("ready");
-        console.log("Not Ready")
+        isValid = selectedScopes.size > 0 && examTitleInput.value.trim() !== "";
     }
     
-    // Add visual feedback to inputs
+    // Enable/disable submit button without affecting the attribute
+    if (isValid) {
+        submitButton.classList.add("ready");
+        submitButton.classList.remove("disabled");
+        submitButton.style.pointerEvents = "";
+        submitButton.style.opacity = "";
+    } else {
+        submitButton.classList.remove("ready");
+        submitButton.classList.add("disabled");
+        submitButton.style.pointerEvents = "none";
+        submitButton.style.opacity = "0.6";
+    }
+    
     if (examTitleInput.value.trim() !== "") {
         examTitleInput.classList.add("valid");
     } else {
@@ -277,8 +615,18 @@ function handleSubmit(event) {
         return;
     }
     
+    // Remove name attribute from hidden fields based on exam type
+    if (examType === "single") {
+        selectedIdsInput.removeAttribute("name");
+    } else {
+        // For multi-scope, remove single scope fields
+        scopeSelects.forEach(select => {
+            select.removeAttribute("name");
+        });
+    }
+    
     // Add loading state to submit button
-    submitButton.disabled = true;
+    submitButton.classList.add("loading");
     submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creating...';
 }
 
@@ -286,39 +634,69 @@ function handleSubmit(event) {
 function handleReset(event) {
     event.preventDefault();
     
-    // Confirm reset
     if (confirm("Are you sure you want to reset the form?")) {
         examForm.reset();
+        examType = "single";
         selectedScopeType = "textbook";
+        selectedScopes.clear();
+        updateSelectedScopesDisplay();
         adjustScopeFields();
         validateForm();
         clearErrorMessages();
         
-        // Clear all selects except textbook
         for (let i = 1; i < scopeSelects.length; i++) {
             scopeSelects[i].innerHTML = "";
         }
+        
+        // Reset exam type UI
+        singleScopeSection.classList.add("active");
+        multiScopeSection.classList.remove("active");
+    }
+}
+
+// Update character count
+function updateCharacterCount() {
+    const currentLength = examTitleInput.value.length;
+    const maxLength = examTitleInput.getAttribute("maxlength");
+    const helpText = document.getElementById("title-help");
+    
+    if (helpText) {
+        helpText.setAttribute("data-chars", `${currentLength}/${maxLength}`);
     }
 }
 
 // Show error message
 function showErrorMessage(message) {
-    // Remove existing error messages
     clearErrorMessages();
     
-    // Create error element
     const errorDiv = document.createElement("div");
     errorDiv.className = "error-message show";
     errorDiv.innerHTML = `<i class="fa fa-exclamation-circle"></i> ${message}`;
     
-    // Insert after form title
     const formTitle = examForm.querySelector("h2");
     formTitle.insertAdjacentElement("afterend", errorDiv);
     
-    // Auto-remove after 5 seconds
     setTimeout(() => {
         errorDiv.remove();
     }, 5000);
+}
+
+// Show notification
+function showNotification(message, type = "info") {
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add("show");
+    }, 10);
+    
+    setTimeout(() => {
+        notification.classList.remove("show");
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
 // Clear error messages
@@ -327,12 +705,24 @@ function clearErrorMessages() {
     errors.forEach(error => error.remove());
 }
 
-// Add keyboard navigation support
+// Utility: Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Add keyboard navigation
 document.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && event.target.tagName !== "BUTTON") {
         event.preventDefault();
         
-        // Move to next input
         const inputs = Array.from(examForm.querySelectorAll("input:not([type='radio']), select"));
         const currentIndex = inputs.indexOf(event.target);
         
