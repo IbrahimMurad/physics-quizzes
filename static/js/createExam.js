@@ -1,5 +1,5 @@
 // Create Exam JavaScript - Enhanced with Multi-Scope Support
-let examType = "single";
+let examType = "single_scope";
 let selectedScopeType = "textbook";
 const scopeTypes = ["textbook", "unit", "chapter", "lesson"];
 const scopeContainers = document.querySelectorAll(".scope");
@@ -10,7 +10,7 @@ const submitButton = document.querySelector("button[type='submit']");
 const examTitleInput = document.getElementById("exam-title");
 
 // Multi-scope specific elements
-const examTypeRadios = document.querySelectorAll("input[name='exam_type']");
+const examTypeRadios = document.querySelectorAll("input[name='exam-type']");
 const singleScopeSection = document.getElementById("single-scope-section");
 const multiScopeSection = document.getElementById("multi-scope-section");
 const selectedScopesBoard = document.getElementById("selected-scopes-board");
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeEventListeners();
     validateForm();
     initializeMultiScope();
+    buildScopeHierarchy();
     
     // Add smooth entry animation
     examForm.style.opacity = "0";
@@ -92,16 +93,40 @@ function initializeMultiScope() {
     updateSelectedScopesDisplay();
 }
 
+// Build initial scope hierarchy from DOM
+function buildScopeHierarchy() {
+    document.querySelectorAll(".scope-item").forEach(item => {
+        const parentId = item.dataset.id;
+        if (!scopeHierarchy.has(parentId)) {
+            scopeHierarchy.set(parentId, new Set());
+        }
+    });
+}
+
 // Handle exam type change
 function handleExamTypeChange(event) {
     examType = event.target.value;
     
-    if (examType === "single") {
+    if (examType === "single_scope") {
         singleScopeSection.classList.add("active");
         multiScopeSection.classList.remove("active");
+        
+        // Clear multi-scope selection
+        selectedScopes.clear();
+        updateSelectedScopesDisplay();
     } else {
         singleScopeSection.classList.remove("active");
         multiScopeSection.classList.add("active");
+        
+        // Clear single scope selections
+        scopeSelects.forEach(select => {
+            if (select.id !== "textbook-select") {
+                select.value = "";
+                select.innerHTML = "";
+            }
+        });
+        
+        adjustScopeFields();
     }
     
     validateForm();
@@ -114,7 +139,9 @@ function handleScopeTreeClick(event) {
     // Handle toggle icon click
     if (target.classList.contains("toggle-icon") || target.closest(".toggle-icon")) {
         const scopeItem = target.closest(".scope-item");
-        toggleScopeExpansion(scopeItem);
+        if (scopeItem) {
+            toggleScopeExpansion(scopeItem);
+        }
         return;
     }
     
@@ -122,7 +149,9 @@ function handleScopeTreeClick(event) {
     if (target.classList.contains("add-scope-btn") || target.closest(".add-scope-btn")) {
         event.preventDefault();
         const scopeItem = target.closest(".scope-item");
-        addScope(scopeItem);
+        if (scopeItem) {
+            addScope(scopeItem);
+        }
         return;
     }
     
@@ -130,7 +159,9 @@ function handleScopeTreeClick(event) {
     if (target.classList.contains("remove-scope-btn") || target.closest(".remove-scope-btn")) {
         event.preventDefault();
         const scopeId = target.closest(".scope-card").dataset.id;
-        removeScope(scopeId);
+        if (scopeId) {
+            removeScope(scopeId);
+        }
         return;
     }
 }
@@ -158,6 +189,8 @@ async function loadScopeChildren(scopeItem) {
     const scopeType = scopeItem.dataset.type;
     const childrenContainer = scopeItem.querySelector(".scope-children");
     
+    if (!childrenContainer) return;
+    
     // Show loading state
     childrenContainer.innerHTML = '<div class="loading-children"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
     
@@ -172,23 +205,30 @@ async function loadScopeChildren(scopeItem) {
         // Determine child type
         const childType = getChildType(scopeType);
         
+        if (children.length === 0) {
+            childrenContainer.innerHTML = '<div class="empty-children">No items available</div>';
+            return;
+        }
+        
+        // Track hierarchy and create child elements
+        if (!scopeHierarchy.has(scopeId)) {
+            scopeHierarchy.set(scopeId, new Set());
+        }
+        
         children.forEach(child => {
             const childItem = createScopeItem(child, childType);
             childrenContainer.appendChild(childItem);
             
             // Track hierarchy
-            if (!scopeHierarchy.has(scopeId)) {
-                scopeHierarchy.set(scopeId, new Set());
-            }
             scopeHierarchy.get(scopeId).add(child.id.toString());
         });
         
-        if (children.length === 0) {
-            childrenContainer.innerHTML = '<div class="empty-children">No items available</div>';
-        }
+        // Update button states after loading children
+        updateAddButtons();
+        
     } catch (error) {
         console.error("Error loading children:", error);
-        childrenContainer.innerHTML = '<div class="error-children">Failed to load items</div>';
+        childrenContainer.innerHTML = '<div class="error-children">Failed to load items. <button type="button" onclick="loadScopeChildren(this.closest(\'.scope-item\'))" class="retry-btn">Retry</button></div>';
     }
 }
 
@@ -206,7 +246,7 @@ function createScopeItem(scope, type) {
         <div class="scope-item-header">
             ${hasChildren ? '<i class="fas fa-chevron-right toggle-icon"></i>' : '<span class="toggle-icon"></span>'}
             <i class="fas fa-${getIconForType(type)}"></i>
-            <span class="scope-title">${scope.title}</span>
+            <span class="scope-title">${escapeHtml(scope.title)}</span>
             <button type="button" class="add-scope-btn" title="Add this scope">
                 <i class="fas fa-plus"></i>
             </button>
@@ -272,17 +312,22 @@ function addScope(scopeItem) {
     updateSelectedScopesDisplay();
     updateAddButtons();
     validateForm();
+    showNotification(`${scopeType} "${scopeTitle}" added successfully`, "success");
 }
 
 // Remove scope from selection
 function removeScope(scopeId) {
-    selectedScopes.delete(scopeId);
-    updateSelectedScopesDisplay();
-    updateAddButtons();
-    validateForm();
+    const scope = selectedScopes.get(scopeId);
+    if (scope) {
+        selectedScopes.delete(scopeId);
+        updateSelectedScopesDisplay();
+        updateAddButtons();
+        validateForm();
+        showNotification(`${scope.type} "${scope.title}" removed`, "info");
+    }
 }
 
-// Find all children of a scope
+// Find all children of a scope (recursive)
 function findAllChildren(scopeId, children = new Set()) {
     if (scopeHierarchy.has(scopeId)) {
         scopeHierarchy.get(scopeId).forEach(childId => {
@@ -293,24 +338,25 @@ function findAllChildren(scopeId, children = new Set()) {
     return children;
 }
 
-// Find all parents of a scope
+// Find all parents of a scope (search through DOM structure)
 function findAllParents(scopeId) {
     const parents = new Set();
     
-    // Search through all scope items in the DOM
-    document.querySelectorAll(".scope-item").forEach(item => {
-        const itemId = item.dataset.id;
-        const childrenContainer = item.querySelector(".scope-children");
-        
-        if (childrenContainer) {
-            const hasChild = childrenContainer.querySelector(`[data-id="${scopeId}"]`);
-            if (hasChild) {
-                parents.add(itemId);
-                // Recursively find parents of this parent
-                findAllParents(itemId).forEach(p => parents.add(p));
-            }
+    // Find the scope item in the DOM
+    const targetItem = document.querySelector(`.scope-item[data-id="${scopeId}"]`);
+    if (!targetItem) return parents;
+    
+    // Walk up the DOM tree to find parent scope items
+    let currentElement = targetItem.parentElement;
+    while (currentElement) {
+        const parentScopeItem = currentElement.closest(".scope-item");
+        if (parentScopeItem && parentScopeItem !== targetItem) {
+            parents.add(parentScopeItem.dataset.id);
+            currentElement = parentScopeItem.parentElement;
+        } else {
+            break;
         }
-    });
+    }
     
     return parents;
 }
@@ -334,7 +380,13 @@ function updateSelectedScopesDisplay() {
     selectedScopesBoard.innerHTML = "";
     const idsArray = [];
     
-    selectedScopes.forEach((scope, id) => {
+    // Sort selected scopes by type hierarchy for better display
+    const sortedScopes = Array.from(selectedScopes.entries()).sort((a, b) => {
+        const typeOrder = { textbook: 0, unit: 1, chapter: 2, lesson: 3 };
+        return typeOrder[a[1].type] - typeOrder[b[1].type];
+    });
+    
+    sortedScopes.forEach(([id, scope]) => {
         idsArray.push(id);
         const card = createScopeCard(scope);
         selectedScopesBoard.appendChild(card);
@@ -352,7 +404,7 @@ function createScopeCard(scope) {
     div.innerHTML = `
         <i class="scope-card-icon fas fa-${getIconForType(scope.type)}"></i>
         <div class="scope-card-content">
-            <div class="scope-card-title">${scope.title}</div>
+            <div class="scope-card-title">${escapeHtml(scope.title)}</div>
             <div class="scope-card-type">${scope.type}</div>
         </div>
         <button type="button" class="remove-scope-btn" title="Remove this scope">
@@ -367,29 +419,36 @@ function createScopeCard(scope) {
 function updateAddButtons() {
     document.querySelectorAll(".add-scope-btn").forEach(btn => {
         const scopeItem = btn.closest(".scope-item");
+        if (!scopeItem) return;
+        
         const scopeId = scopeItem.dataset.id;
         
-        // Disable if already selected or if a parent/child is selected
+        // Check various states
         const isSelected = selectedScopes.has(scopeId);
-        const hasSelectedParent = Array.from(selectedScopes.keys()).some(selectedId => {
-            return findAllChildren(selectedId).has(scopeId);
-        });
-        const hasSelectedChild = Array.from(selectedScopes.keys()).some(selectedId => {
-            return findAllParents(selectedId).has(scopeId);
-        });
+        const hasSelectedParent = findAllParents(scopeId).size > 0 && 
+            Array.from(findAllParents(scopeId)).some(parentId => selectedScopes.has(parentId));
+        const hasSelectedChild = Array.from(findAllChildren(scopeId)).some(childId => 
+            selectedScopes.has(childId));
         
         btn.disabled = isSelected || hasSelectedParent || hasSelectedChild;
         
+        // Update button appearance and tooltip
         if (isSelected) {
             btn.innerHTML = '<i class="fas fa-check"></i>';
             btn.title = "Already selected";
+            btn.classList.add("selected");
         } else if (hasSelectedParent) {
+            btn.innerHTML = '<i class="fas fa-level-up-alt"></i>';
             btn.title = "Parent scope already selected";
+            btn.classList.remove("selected");
         } else if (hasSelectedChild) {
+            btn.innerHTML = '<i class="fas fa-level-down-alt"></i>';
             btn.title = "Child scope already selected";
+            btn.classList.remove("selected");
         } else {
             btn.innerHTML = '<i class="fas fa-plus"></i>';
             btn.title = "Add this scope";
+            btn.classList.remove("selected");
         }
     });
 }
@@ -398,28 +457,31 @@ function updateAddButtons() {
 function handleScopeSearch() {
     const searchTerm = scopeSearchInput.value.toLowerCase().trim();
     
+    if (searchTerm === "") {
+        // Reset all items and collapse
+        document.querySelectorAll(".scope-item").forEach(item => {
+            item.style.display = "";
+            item.classList.remove("expanded");
+        });
+        return;
+    }
+    
     document.querySelectorAll(".scope-item").forEach(item => {
         const title = item.dataset.title.toLowerCase();
         const matches = title.includes(searchTerm);
         
-        if (searchTerm === "") {
+        if (matches) {
             item.style.display = "";
-            // Collapse all if no search
-            item.classList.remove("expanded");
+            // Expand parents to show matching item
+            expandParentsOfItem(item);
         } else {
-            if (matches) {
-                item.style.display = "";
-                // Expand parents to show matching item
-                expandParentsOfItem(item);
-            } else {
-                // Check if any children match
-                const hasMatchingChild = item.querySelectorAll(".scope-item").length > 0 && 
-                    Array.from(item.querySelectorAll(".scope-item")).some(child => 
-                        child.dataset.title.toLowerCase().includes(searchTerm)
-                    );
-                
-                item.style.display = hasMatchingChild ? "" : "none";
-            }
+            // Check if any children match (need to load them first if not loaded)
+            const hasVisibleMatchingChild = Array.from(item.querySelectorAll(".scope-item")).some(child => 
+                child.dataset.title.toLowerCase().includes(searchTerm) && 
+                child.style.display !== "none"
+            );
+            
+            item.style.display = hasVisibleMatchingChild ? "" : "none";
         }
     });
 }
@@ -458,21 +520,13 @@ function adjustScopeFields() {
         const scopeContainer = scopeContainers[i];
         
         if (i <= targetIndex) {
-            if (i === targetIndex && selectedScopeType !== "textbook") {
+            if (i === targetIndex) {
                 showScopeField(i);
             } else if (i < targetIndex) {
                 scopeContainer.classList.add("active");
                 if (i > 0 && scopeSelects[i - 1].value) {
                     fillScopeSelect(i, scopeSelects[i - 1].value);
                 }
-            }
-            
-            if (i === targetIndex) {
-                scopeSelect.setAttribute("name", "id");
-                scopeSelect.setAttribute("required", "required");
-            } else {
-                scopeSelect.removeAttribute("name");
-                scopeSelect.removeAttribute("required");
             }
         } else {
             hideScopeField(i);
@@ -485,8 +539,12 @@ function showScopeField(containerIndex) {
     const scopeSelect = scopeSelects[containerIndex];
     
     scopeContainer.classList.add("active");
-    scopeSelect.setAttribute("name", "id");
-    scopeSelect.setAttribute("required", "required");
+    
+    // Only set name and required for the target scope type
+    if (examType === "single_scope") {
+        scopeSelect.setAttribute("name", "id");
+        scopeSelect.setAttribute("required", "required");
+    }
     
     if (containerIndex > 0 && scopeSelects[containerIndex - 1].value) {
         fillScopeSelect(containerIndex, scopeSelects[containerIndex - 1].value);
@@ -501,6 +559,7 @@ function hideScopeField(containerIndex) {
     scopeSelect.removeAttribute("name");
     scopeSelect.removeAttribute("required");
     scopeSelect.innerHTML = "";
+    scopeSelect.value = "";
 }
 
 async function fillScopeSelect(containerIndex, parentId) {
@@ -513,7 +572,6 @@ async function fillScopeSelect(containerIndex, parentId) {
     
     if (scopeDataCache.has(cacheKey)) {
         populateSelect(scopeSelect, scopeDataCache.get(cacheKey));
-        fillScopeSelect(containerIndex + 1, scopeSelect.value);
         return;
     }
 
@@ -532,13 +590,10 @@ async function fillScopeSelect(containerIndex, parentId) {
         scopeDataCache.set(cacheKey, data);
         populateSelect(scopeSelect, data);
         
-        if (scopeSelect.value) {
-            fillScopeSelect(containerIndex + 1, scopeSelect.value);
-        }
     } catch (error) {
         console.error("Error fetching scope data:", error);
         scopeSelect.innerHTML = "<option value=''>Error loading data</option>";
-        showErrorMessage("Failed to load data. Please try again.");
+        showNotification("Failed to load data. Please try again.", "error");
     } finally {
         scopeSelect.disabled = false;
         scopeSelect.dispatchEvent(new Event("loadend"));
@@ -546,6 +601,8 @@ async function fillScopeSelect(containerIndex, parentId) {
 }
 
 function populateSelect(selectElement, data) {
+    const scopeType = scopeTypes[Array.from(scopeSelects).indexOf(selectElement)];
+    
     selectElement.innerHTML = "";
     
     if (data.length === 0) {
@@ -555,7 +612,7 @@ function populateSelect(selectElement, data) {
     
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
-    defaultOption.textContent = `Select ${selectElement.parentElement.querySelector("label").textContent.trim()}`;
+    defaultOption.textContent = `Select ${scopeType}`;
     selectElement.appendChild(defaultOption);
     
     data.forEach(item => {
@@ -569,6 +626,7 @@ function populateSelect(selectElement, data) {
 function clearSubsequentSelects(startIndex) {
     for (let i = startIndex; i < scopeSelects.length; i++) {
         scopeSelects[i].innerHTML = "";
+        scopeSelects[i].value = "";
     }
 }
 
@@ -576,28 +634,27 @@ function clearSubsequentSelects(startIndex) {
 function validateForm() {
     let isValid = false;
     
-    if (examType === "single") {
+    if (examType === "single_scope") {
         const targetIndex = scopeTypes.indexOf(selectedScopeType);
         const targetSelect = scopeSelects[targetIndex];
-        const hasValidScope = targetSelect && targetSelect.value;
+        const hasValidScope = targetSelect && targetSelect.value && targetSelect.value !== "";
         isValid = hasValidScope && examTitleInput.value.trim() !== "";
     } else {
         isValid = selectedScopes.size > 0 && examTitleInput.value.trim() !== "";
     }
     
-    // Enable/disable submit button without affecting the attribute
+    // Update submit button state
     if (isValid) {
         submitButton.classList.add("ready");
         submitButton.classList.remove("disabled");
-        submitButton.style.pointerEvents = "";
-        submitButton.style.opacity = "";
+        submitButton.disabled = false;
     } else {
         submitButton.classList.remove("ready");
         submitButton.classList.add("disabled");
-        submitButton.style.pointerEvents = "none";
-        submitButton.style.opacity = "0.6";
+        submitButton.disabled = true;
     }
     
+    // Update title input validation state
     if (examTitleInput.value.trim() !== "") {
         examTitleInput.classList.add("valid");
     } else {
@@ -615,53 +672,92 @@ function handleSubmit(event) {
         return;
     }
     
-    // Remove name attribute from hidden fields based on exam type
-    if (examType === "single") {
+    // Ensure proper form field setup based on exam type
+    if (examType === "single_scope") {
+        // Remove multi-scope field
         selectedIdsInput.removeAttribute("name");
+        
+        // Ensure only the target scope select has the name attribute
+        scopeSelects.forEach((select, index) => {
+            if (index === scopeTypes.indexOf(selectedScopeType)) {
+                select.setAttribute("name", "id");
+            } else {
+                select.removeAttribute("name");
+            }
+        });
     } else {
-        // For multi-scope, remove single scope fields
+        // For multi-scope, remove single scope fields and ensure ids field is named
         scopeSelects.forEach(select => {
             select.removeAttribute("name");
         });
+        selectedIdsInput.setAttribute("name", "ids");
     }
     
     // Add loading state to submit button
-    submitButton.classList.add("loading");
-    submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creating...';
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
 }
 
 // Handle reset
 function handleReset(event) {
     event.preventDefault();
     
-    if (confirm("Are you sure you want to reset the form?")) {
+    if (confirm("Are you sure you want to reset the form? All your selections will be lost.")) {
+        // Reset all form values
         examForm.reset();
-        examType = "single";
+        
+        // Reset JavaScript state
+        examType = "single_scope";
         selectedScopeType = "textbook";
         selectedScopes.clear();
+        
+        // Reset UI state
         updateSelectedScopesDisplay();
         adjustScopeFields();
         validateForm();
         clearErrorMessages();
         
+        // Clear dynamic content
         for (let i = 1; i < scopeSelects.length; i++) {
             scopeSelects[i].innerHTML = "";
+            scopeSelects[i].value = "";
         }
         
         // Reset exam type UI
         singleScopeSection.classList.add("active");
         multiScopeSection.classList.remove("active");
+        
+        // Reset search
+        if (scopeSearchInput) {
+            scopeSearchInput.value = "";
+            handleScopeSearch();
+        }
+        
+        // Collapse all expanded items
+        document.querySelectorAll(".scope-item.expanded").forEach(item => {
+            item.classList.remove("expanded");
+        });
+        
+        updateAddButtons();
+        showNotification("Form reset successfully", "info");
     }
 }
 
 // Update character count
 function updateCharacterCount() {
     const currentLength = examTitleInput.value.length;
-    const maxLength = examTitleInput.getAttribute("maxlength");
+    const maxLength = examTitleInput.getAttribute("maxlength") || 256;
     const helpText = document.getElementById("title-help");
     
     if (helpText) {
         helpText.setAttribute("data-chars", `${currentLength}/${maxLength}`);
+        
+        // Add warning if approaching limit
+        if (currentLength > maxLength * 0.9) {
+            helpText.style.color = "var(--destructive)";
+        } else {
+            helpText.style.color = "";
+        }
     }
 }
 
@@ -671,31 +767,82 @@ function showErrorMessage(message) {
     
     const errorDiv = document.createElement("div");
     errorDiv.className = "error-message show";
-    errorDiv.innerHTML = `<i class="fa fa-exclamation-circle"></i> ${message}`;
+    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
     
     const formTitle = examForm.querySelector("h2");
     formTitle.insertAdjacentElement("afterend", errorDiv);
     
     setTimeout(() => {
-        errorDiv.remove();
+        if (errorDiv.parentNode) {
+            errorDiv.remove();
+        }
     }, 5000);
 }
 
 // Show notification
 function showNotification(message, type = "info") {
+    // Remove existing notifications
+    document.querySelectorAll(".notification").forEach(n => n.remove());
+    
     const notification = document.createElement("div");
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.className = `notification notification-${type}`;
+    
+    const icons = {
+        success: "check-circle",
+        warning: "exclamation-triangle", 
+        error: "times-circle",
+        info: "info-circle"
+    };
+    
+    notification.innerHTML = `
+        <i class="fas fa-${icons[type]}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add styles for notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        font-size: 0.875rem;
+        max-width: 300px;
+    `;
+    
+    // Type-specific colors
+    const colors = {
+        success: "var(--accent)",
+        warning: "var(--message-warning-fg)",
+        error: "var(--destructive)",
+        info: "var(--primary)"
+    };
+    
+    notification.style.borderColor = colors[type];
+    notification.querySelector("i").style.color = colors[type];
     
     document.body.appendChild(notification);
     
-    setTimeout(() => {
-        notification.classList.add("show");
-    }, 10);
+    requestAnimationFrame(() => {
+        notification.style.transform = "translateX(0)";
+    });
     
     setTimeout(() => {
-        notification.classList.remove("show");
-        setTimeout(() => notification.remove(), 300);
+        notification.style.transform = "translateX(100%)";
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
     }, 3000);
 }
 
@@ -718,12 +865,19 @@ function debounce(func, wait) {
     };
 }
 
+// Utility: Escape HTML
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // Add keyboard navigation
 document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && event.target.tagName !== "BUTTON") {
+    if (event.key === "Enter" && event.target.tagName !== "BUTTON" && event.target.type !== "radio") {
         event.preventDefault();
         
-        const inputs = Array.from(examForm.querySelectorAll("input:not([type='radio']), select"));
+        const inputs = Array.from(examForm.querySelectorAll("input:not([type='radio']):not([type='hidden']), select"));
         const currentIndex = inputs.indexOf(event.target);
         
         if (currentIndex > -1 && currentIndex < inputs.length - 1) {
@@ -732,4 +886,12 @@ document.addEventListener("keydown", (event) => {
             submitButton.click();
         }
     }
+    
+    // ESC key to close notifications
+    if (event.key === "Escape") {
+        document.querySelectorAll(".notification").forEach(n => n.remove());
+    }
 });
+
+// Initialize on page load
+adjustScopeFields();
