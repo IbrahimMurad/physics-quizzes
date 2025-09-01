@@ -137,7 +137,7 @@ function handleScopeTreeClick(event) {
     const target = event.target;
     
     // Handle toggle icon click
-    if (target.classList.contains("toggle-icon") || target.closest(".toggle-icon")) {
+    if (target.classList.contains("toggle-icon") || target.classList.contains("scope-title") || target.closest(".toggle-icon")) {
         const scopeItem = target.closest(".scope-item");
         if (scopeItem) {
             toggleScopeExpansion(scopeItem);
@@ -244,7 +244,7 @@ function createScopeItem(scope, type) {
     
     div.innerHTML = `
         <div class="scope-item-header">
-            ${hasChildren ? '<i class="fas fa-chevron-right toggle-icon"></i>' : '<span class="toggle-icon"></span>'}
+            ${hasChildren ? '<i class="fas fa-chevron-right toggle-icon"></i>' : ''}
             <i class="fas fa-${getIconForType(type)}"></i>
             <span class="scope-title">${escapeHtml(scope.title)}</span>
             <button type="button" class="add-scope-btn" title="Add this scope">

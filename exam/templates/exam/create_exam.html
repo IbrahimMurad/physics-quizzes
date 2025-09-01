@@ -122,9 +122,10 @@ Create New Exam - QuizCraft
                                 <i class="fas fa-chevron-right toggle-icon"></i>
                                 <i class="fas fa-book"></i>
                                 <span class="scope-title">{{ textbook.title }}</span>
-                                <button type="button" class="add-scope-btn" title="Add this scope">
+                                <label for="{{ textbook.id }}" class="add-scope-btn">
+                                <input type="checkbox" id="{{ textbook.id }}" name="ids" value="{{ textbook.id }}" hidden title="Add this scope">
                                     <i class="fas fa-plus"></i>
-                                </button>
+                                </label>
                             </div>
                             <div class="scope-children">
                                 <!-- Children will be loaded on demand -->
@@ -178,42 +179,4 @@ Create New Exam - QuizCraft
         </div>
     </form>
 </div>
-
-<style>
-/* Additional inline styles specific to multi-scope */
-.exam-type-group {
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-
-.exam-type-group label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1.5rem;
-}
-
-.type-description {
-    font-size: 0.75rem;
-    color: var(--muted-foreground);
-    text-align: center;
-    font-weight: normal;
-}
-
-.scope-section {
-    display: none;
-}
-
-.scope-section.active {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-</style>
-
 {% endblock content %}
