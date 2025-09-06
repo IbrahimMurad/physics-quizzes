@@ -16,6 +16,9 @@ const multiScopeSection = document.getElementById("multi-scope-section");
 const selectedScopesBoard = document.getElementById("selected-scopes-board");
 const selectedCountSpan = document.querySelector(".selected-count");
 const scopeSearchInput = document.getElementById("scope-search");
+const numberProblemsField = document.querySelector(".number-of-problems-field");
+const numberProblemsInput = document.getElementById("number-of-problems");
+const rangeValueDisplay = document.getElementById("range-value");
 
 // Cache for scope data
 const scopeDataCache = new Map();
@@ -57,6 +60,13 @@ function initializeEventListeners() {
 
     // Multi-scope checkbox listeners
     document.addEventListener("change", handleCheckboxChange);
+
+    if (numberProblemsInput) {
+        numberProblemsInput.addEventListener("input", handleRangeChange);
+        numberProblemsInput.addEventListener("change", handleRangeChange);
+        // Initialize the range display
+        handleRangeChange();
+    }
 
     // Form validation
     examForm.addEventListener("input", validateForm);
@@ -111,6 +121,7 @@ function handleExamTypeChange(event) {
     if (examType === "single_scope") {
         singleScopeSection.classList.add("active");
         multiScopeSection.classList.remove("active");
+        numberProblemsField.classList.remove("active");;
         
         // Uncheck all multi-scope checkboxes
         document.querySelectorAll("input[name='scope_ids'][type='checkbox']").forEach(checkbox => {
@@ -123,6 +134,7 @@ function handleExamTypeChange(event) {
     } else {
         singleScopeSection.classList.remove("active");
         multiScopeSection.classList.add("active");
+        numberProblemsField.classList.add("active");
         
         // Clear single scope selections
         scopeSelects.forEach(select => {
@@ -668,7 +680,11 @@ function validateForm() {
     } else {
         // Check if any checkboxes are checked
         const checkedBoxes = document.querySelectorAll("input[name='scope_ids'][type='checkbox']:checked");
-        isValid = checkedBoxes.length > 0 && examTitleInput.value.trim() !== "";
+        const numberOfProblems = parseInt(numberProblemsInput.value);
+        isValid = checkedBoxes.length > 0 && 
+                 examTitleInput.value.trim() !== "" && 
+                 numberOfProblems > 10 && 
+                 numberOfProblems <= 50;
     }
     
     // Update submit button state
@@ -687,6 +703,16 @@ function validateForm() {
         examTitleInput.classList.add("valid");
     } else {
         examTitleInput.classList.remove("valid");
+    }
+
+    // Add validation state for number of problems input
+    if (examType === "multi_scope") {
+        const numberOfProblems = parseInt(numberProblemsInput.value);
+        if (numberOfProblems > 0 && numberOfProblems <= 100) {
+            numberProblemsInput.classList.add("valid");
+        } else {
+            numberProblemsInput.classList.remove("valid");
+        }
     }
     
     return isValid;
@@ -715,6 +741,8 @@ function handleReset(event) {
     if (confirm("Are you sure you want to reset the form? All your selections will be lost.")) {
         // Reset all form values
         examForm.reset();
+        numberProblemsInput.value = "10";
+        handleRangeChange();
         
         // Reset JavaScript state
         examType = "single_scope";
@@ -902,5 +930,28 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+// handle range input changes
+function handleRangeChange() {
+    const value = numberProblemsInput.value;
+    const min = numberProblemsInput.min || 1;
+    const max = numberProblemsInput.max || 100;
+    
+    // Update display value with animation
+    rangeValueDisplay.classList.add("updating");
+    rangeValueDisplay.textContent = value;
+    
+    setTimeout(() => {
+        rangeValueDisplay.classList.remove("updating");
+    }, 150);
+    
+    // Update progress bar
+    const progress = ((value - min) / (max - min)) * 100;
+    numberProblemsInput.style.setProperty('--progress', `${progress}%`);
+    
+    // Validate form
+    validateForm();
+}
+
 // Initialize on page load
 adjustScopeFields();
+

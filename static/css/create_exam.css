@@ -1825,6 +1825,192 @@ input.valid:not(:focus) {
   }
 }
 
+/* Add this after the multi-scope-container styles */
+/* Number of Problems Field with Range Input */
+.number-of-problems-field {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  transform: translateY(-10px);
+  margin-top: 0;
+}
+
+.number-of-problems-field.active {
+  opacity: 1;
+  max-height: 150px;
+  transform: translateY(0);
+  margin-top: 1.2rem;
+}
+
+.number-of-problems-field label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.number-of-problems-field label .range-value {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 3rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+  transition: all 0.2s ease;
+}
+
+.number-of-problems-field label .range-value.updating {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+}
+
+/* Range Input Styling */
+.range-input {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--secondary);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.range-input:hover {
+  background: var(--muted);
+}
+
+.range-input:focus {
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Webkit Thumb */
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: 2px solid var(--background);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  background: var(--accent);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.range-input::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+}
+
+/* Firefox Thumb */
+.range-input::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: 2px solid var(--background);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.range-input::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  background: var(--accent);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+/* Firefox Track */
+.range-input::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--secondary);
+  border: none;
+}
+
+/* Range Labels */
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.range-labels span {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--secondary);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* Progress Fill Effect */
+.range-input {
+  background: linear-gradient(
+    to right, 
+    var(--primary) 0%, 
+    var(--primary) var(--progress, 20%), 
+    var(--secondary) var(--progress, 20%), 
+    var(--secondary) 100%
+  );
+}
+
+/* Dark Mode Enhancements */
+.dark .range-input::-webkit-slider-thumb {
+  border-color: var(--card);
+}
+
+.dark .range-input::-moz-range-thumb {
+  border-color: var(--card);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .number-of-problems-field.active {
+    margin-top: 1rem;
+    max-height: 160px;
+  }
+  
+  .number-of-problems-field label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .number-of-problems-field label .range-value {
+    align-self: flex-end;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .range-input::-webkit-slider-thumb,
+  .range-input::-moz-range-thumb,
+  .range-value {
+    transition: none !important;
+  }
+}
+/* End of Number of Problems Field styles */
+
 @media (max-width: 480px) {
 
   .custom-exam-form {

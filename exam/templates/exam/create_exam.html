@@ -145,6 +145,31 @@ Create New Exam - QuizCraft
                     </div>
                 </div>
             </div>
+                <div class="number-of-problems-field">
+                    <label for="number-of-problems">
+                        <i class="fas fa-hashtag"></i> Number of Problems
+                        <span class="required-indicator" aria-label="Required field">*</span>
+                        <span class="range-value" id="range-value">10</span>
+                    </label>
+                    <input 
+                        id="number-of-problems" 
+                        type="range" 
+                        name="number_of_problems" 
+                        min="10"
+                        max="50"
+                        value="10"
+                        step="5"
+                        aria-describedby="problems-help"
+                        class="range-input"
+                    >
+                    <div class="range-labels">
+                        <span class="range-min">10</span>
+                        <span class="range-max">50</span>
+                    </div>
+                    <small id="problems-help" class="help-text">
+                        Use the slider to select how many problems you want (10-50)
+                    </small>
+                </div>
         </div>
         
         <!-- Common Fields -->
