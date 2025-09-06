@@ -1,4 +1,4 @@
-// Create Exam JavaScript - Enhanced with Multi-Scope Support
+// Create Exam JavaScript - Enhanced with Multi-Scope Support and Native Form Handling
 let examType = "single_scope";
 let selectedScopeType = "textbook";
 const scopeTypes = ["textbook", "unit", "chapter", "lesson"];
@@ -14,13 +14,11 @@ const examTypeRadios = document.querySelectorAll("input[name='exam-type']");
 const singleScopeSection = document.getElementById("single-scope-section");
 const multiScopeSection = document.getElementById("multi-scope-section");
 const selectedScopesBoard = document.getElementById("selected-scopes-board");
-const selectedIdsInput = document.getElementById("selected-ids");
 const selectedCountSpan = document.querySelector(".selected-count");
 const scopeSearchInput = document.getElementById("scope-search");
 
 // Cache for scope data
 const scopeDataCache = new Map();
-const selectedScopes = new Map(); // Map of scope ID to scope data
 const scopeHierarchy = new Map(); // Map to track parent-child relationships
 
 // Initialize
@@ -57,6 +55,9 @@ function initializeEventListeners() {
         select.addEventListener("change", () => handleSelectChange(select, index));
     });
 
+    // Multi-scope checkbox listeners
+    document.addEventListener("change", handleCheckboxChange);
+
     // Form validation
     examForm.addEventListener("input", validateForm);
     examForm.addEventListener("change", validateForm);
@@ -89,7 +90,7 @@ function initializeMultiScope() {
         scopeSearchInput.addEventListener("input", debounce(handleScopeSearch, 300));
     }
 
-    // Initialize empty state
+    // Initialize display
     updateSelectedScopesDisplay();
 }
 
@@ -111,18 +112,23 @@ function handleExamTypeChange(event) {
         singleScopeSection.classList.add("active");
         multiScopeSection.classList.remove("active");
         
-        // Clear multi-scope selection
-        selectedScopes.clear();
+        // Uncheck all multi-scope checkboxes
+        document.querySelectorAll("input[name='scope_ids'][type='checkbox']").forEach(checkbox => {
+            checkbox.checked = false;
+        });
         updateSelectedScopesDisplay();
+        
+        // Reset single scope to active state
+        adjustScopeFields();
     } else {
         singleScopeSection.classList.remove("active");
         multiScopeSection.classList.add("active");
         
         // Clear single scope selections
         scopeSelects.forEach(select => {
+            select.value = "";
             if (select.id !== "textbook-select") {
-                select.value = "";
-                select.innerHTML = "";
+                select.innerHTML = '<option value="">Select ' + select.id.replace("-select", "").replace(/^\w/, c => c.toUpperCase()) + '</option>';
             }
         });
         
@@ -132,12 +138,66 @@ function handleExamTypeChange(event) {
     validateForm();
 }
 
+// Handle checkbox changes for multi-scope
+function handleCheckboxChange(event) {
+    if (event.target.type === "checkbox" && event.target.name === "scope_ids") {
+        const checkbox = event.target;
+        const scopeItem = checkbox.closest(".scope-item");
+        
+        if (checkbox.checked) {
+            handleScopeSelection(scopeItem);
+        } else {
+            handleScopeDeselection(scopeItem);
+        }
+        
+        updateSelectedScopesDisplay();
+        updateAddButtons();
+        validateForm();
+    }
+}
+
+// Handle scope selection
+function handleScopeSelection(scopeItem) {
+    const scopeId = scopeItem.dataset.id;
+    const scopeType = scopeItem.dataset.type;
+    const scopeTitle = scopeItem.dataset.title;
+    
+    // Uncheck any children of this scope
+    const childrenToUncheck = findAllChildren(scopeId);
+    childrenToUncheck.forEach(childId => {
+        const childCheckbox = document.querySelector(`input[name='scope_ids'][value='${childId}']`);
+        if (childCheckbox && childCheckbox.checked) {
+            childCheckbox.checked = false;
+        }
+    });
+    
+    // Uncheck any parents of this scope
+    const parentsToUncheck = findAllParents(scopeId);
+    parentsToUncheck.forEach(parentId => {
+        const parentCheckbox = document.querySelector(`input[name='scope_ids'][value='${parentId}']`);
+        if (parentCheckbox && parentCheckbox.checked) {
+            parentCheckbox.checked = false;
+        }
+    });
+    
+    showNotification(`${scopeType} "${scopeTitle}" added successfully`, "success");
+}
+
+// Handle scope deselection
+function handleScopeDeselection(scopeItem) {
+    const scopeType = scopeItem.dataset.type;
+    const scopeTitle = scopeItem.dataset.title;
+    
+    showNotification(`${scopeType} "${scopeTitle}" removed`, "info");
+}
+
 // Handle scope tree clicks
 function handleScopeTreeClick(event) {
     const target = event.target;
     
     // Handle toggle icon click
-    if (target.classList.contains("toggle-icon") || target.classList.contains("scope-title") || target.closest(".toggle-icon")) {
+    if (target.classList.contains("toggle-icon") || 
+        (target.classList.contains("scope-title") && !target.closest(".add-scope-btn"))) {
         const scopeItem = target.closest(".scope-item");
         if (scopeItem) {
             toggleScopeExpansion(scopeItem);
@@ -145,22 +205,27 @@ function handleScopeTreeClick(event) {
         return;
     }
     
-    // Handle add button click
-    if (target.classList.contains("add-scope-btn") || target.closest(".add-scope-btn")) {
-        event.preventDefault();
+    // Handle scope item header click (but not on buttons/labels)
+    if (target.classList.contains("scope-item-header") && 
+        !target.closest(".add-scope-btn")) {
         const scopeItem = target.closest(".scope-item");
         if (scopeItem) {
-            addScope(scopeItem);
+            toggleScopeExpansion(scopeItem);
         }
         return;
     }
     
-    // Handle remove button click
+    // Handle remove button click in selected scopes
     if (target.classList.contains("remove-scope-btn") || target.closest(".remove-scope-btn")) {
         event.preventDefault();
-        const scopeId = target.closest(".scope-card").dataset.id;
-        if (scopeId) {
-            removeScope(scopeId);
+        const scopeCard = target.closest(".scope-card");
+        if (scopeCard) {
+            const scopeId = scopeCard.dataset.id;
+            const checkbox = document.querySelector(`input[name='scope_ids'][value='${scopeId}']`);
+            if (checkbox) {
+                checkbox.checked = false;
+                handleCheckboxChange({ target: checkbox });
+            }
         }
         return;
     }
@@ -247,9 +312,10 @@ function createScopeItem(scope, type) {
             ${hasChildren ? '<i class="fas fa-chevron-right toggle-icon"></i>' : ''}
             <i class="fas fa-${getIconForType(type)}"></i>
             <span class="scope-title">${escapeHtml(scope.title)}</span>
-            <button type="button" class="add-scope-btn" title="Add this scope">
+            <label for="scope-${scope.id}" class="add-scope-btn" title="Add this scope">
+                <input type="checkbox" id="scope-${scope.id}" name="scope_ids" value="${scope.id}" hidden>
                 <i class="fas fa-plus"></i>
-            </button>
+            </label>
         </div>
         ${hasChildren ? '<div class="scope-children"></div>' : ''}
     `;
@@ -272,59 +338,6 @@ function getIconForType(type) {
         lesson: "graduation-cap"
     };
     return icons[type] || "folder";
-}
-
-// Add scope to selection
-function addScope(scopeItem) {
-    const scopeId = scopeItem.dataset.id;
-    const scopeType = scopeItem.dataset.type;
-    const scopeTitle = scopeItem.dataset.title;
-    
-    // Check if already selected
-    if (selectedScopes.has(scopeId)) {
-        showNotification("This scope is already selected", "warning");
-        return;
-    }
-    
-    // Remove any children of this scope from selection
-    const childrenToRemove = findAllChildren(scopeId);
-    childrenToRemove.forEach(childId => {
-        if (selectedScopes.has(childId)) {
-            selectedScopes.delete(childId);
-        }
-    });
-    
-    // Remove any parents of this scope from selection
-    const parentsToRemove = findAllParents(scopeId);
-    parentsToRemove.forEach(parentId => {
-        if (selectedScopes.has(parentId)) {
-            selectedScopes.delete(parentId);
-        }
-    });
-    
-    // Add the scope
-    selectedScopes.set(scopeId, {
-        id: scopeId,
-        type: scopeType,
-        title: scopeTitle
-    });
-    
-    updateSelectedScopesDisplay();
-    updateAddButtons();
-    validateForm();
-    showNotification(`${scopeType} "${scopeTitle}" added successfully`, "success");
-}
-
-// Remove scope from selection
-function removeScope(scopeId) {
-    const scope = selectedScopes.get(scopeId);
-    if (scope) {
-        selectedScopes.delete(scopeId);
-        updateSelectedScopesDisplay();
-        updateAddButtons();
-        validateForm();
-        showNotification(`${scope.type} "${scope.title}" removed`, "info");
-    }
 }
 
 // Find all children of a scope (recursive)
@@ -363,36 +376,46 @@ function findAllParents(scopeId) {
 
 // Update selected scopes display
 function updateSelectedScopesDisplay() {
-    selectedCountSpan.textContent = `(${selectedScopes.size})`;
+    const checkedBoxes = document.querySelectorAll("input[name='scope_ids'][type='checkbox']:checked");
+    const selectedCount = checkedBoxes.length;
     
-    if (selectedScopes.size === 0) {
+    selectedCountSpan.textContent = `(${selectedCount})`;
+    
+    if (selectedCount === 0) {
         selectedScopesBoard.innerHTML = `
             <div class="empty-selected">
                 <i class="fas fa-inbox"></i>
                 <p>No scopes selected yet</p>
-                <p>Click the + button next to any scope to add it</p>
+                <p>Click the checkboxes next to any scope to add them</p>
             </div>
         `;
-        selectedIdsInput.value = "";
         return;
     }
     
     selectedScopesBoard.innerHTML = "";
-    const idsArray = [];
     
-    // Sort selected scopes by type hierarchy for better display
-    const sortedScopes = Array.from(selectedScopes.entries()).sort((a, b) => {
-        const typeOrder = { textbook: 0, unit: 1, chapter: 2, lesson: 3 };
-        return typeOrder[a[1].type] - typeOrder[b[1].type];
+    // Group selected scopes by type for better display
+    const scopesByType = { textbook: [], unit: [], chapter: [], lesson: [] };
+    
+    checkedBoxes.forEach(checkbox => {
+        const scopeItem = checkbox.closest(".scope-item");
+        if (scopeItem) {
+            const scope = {
+                id: scopeItem.dataset.id,
+                type: scopeItem.dataset.type,
+                title: scopeItem.dataset.title
+            };
+            scopesByType[scope.type].push(scope);
+        }
     });
     
-    sortedScopes.forEach(([id, scope]) => {
-        idsArray.push(id);
-        const card = createScopeCard(scope);
-        selectedScopesBoard.appendChild(card);
+    // Add scopes to display in order
+    scopeTypes.forEach(type => {
+        scopesByType[type].forEach(scope => {
+            const card = createScopeCard(scope);
+            selectedScopesBoard.appendChild(card);
+        });
     });
-    
-    selectedIdsInput.value = idsArray.join(",");
 }
 
 // Create scope card for selected display
@@ -422,33 +445,44 @@ function updateAddButtons() {
         if (!scopeItem) return;
         
         const scopeId = scopeItem.dataset.id;
+        const checkbox = btn.querySelector("input[type='checkbox']");
         
         // Check various states
-        const isSelected = selectedScopes.has(scopeId);
+        const isSelected = checkbox && checkbox.checked;
         const hasSelectedParent = findAllParents(scopeId).size > 0 && 
-            Array.from(findAllParents(scopeId)).some(parentId => selectedScopes.has(parentId));
-        const hasSelectedChild = Array.from(findAllChildren(scopeId)).some(childId => 
-            selectedScopes.has(childId));
+            Array.from(findAllParents(scopeId)).some(parentId => {
+                const parentCheckbox = document.querySelector(`input[name='scope_ids'][value='${parentId}']`);
+                return parentCheckbox && parentCheckbox.checked;
+            });
+        const hasSelectedChild = Array.from(findAllChildren(scopeId)).some(childId => {
+            const childCheckbox = document.querySelector(`input[name='scope_ids'][value='${childId}']`);
+            return childCheckbox && childCheckbox.checked;
+        });
         
-        btn.disabled = isSelected || hasSelectedParent || hasSelectedChild;
+        // Update button appearance and state
+        const icon = btn.querySelector("i");
         
-        // Update button appearance and tooltip
         if (isSelected) {
-            btn.innerHTML = '<i class="fas fa-check"></i>';
+            icon.className = "fas fa-check";
             btn.title = "Already selected";
             btn.classList.add("selected");
         } else if (hasSelectedParent) {
-            btn.innerHTML = '<i class="fas fa-level-up-alt"></i>';
+            icon.className = "fas fa-level-up-alt";
             btn.title = "Parent scope already selected";
             btn.classList.remove("selected");
         } else if (hasSelectedChild) {
-            btn.innerHTML = '<i class="fas fa-level-down-alt"></i>';
+            icon.className = "fas fa-level-down-alt";
             btn.title = "Child scope already selected";
             btn.classList.remove("selected");
         } else {
-            btn.innerHTML = '<i class="fas fa-plus"></i>';
+            icon.className = "fas fa-plus";
             btn.title = "Add this scope";
             btn.classList.remove("selected");
+        }
+        
+        // Handle disabled state for browsers that don't support :has()
+        if (!CSS.supports("selector(:has(*))")) {
+            btn.disabled = isSelected || hasSelectedParent || hasSelectedChild;
         }
     });
 }
@@ -475,7 +509,7 @@ function handleScopeSearch() {
             // Expand parents to show matching item
             expandParentsOfItem(item);
         } else {
-            // Check if any children match (need to load them first if not loaded)
+            // Check if any children match
             const hasVisibleMatchingChild = Array.from(item.querySelectorAll(".scope-item")).some(child => 
                 child.dataset.title.toLowerCase().includes(searchTerm) && 
                 child.style.display !== "none"
@@ -495,7 +529,7 @@ function expandParentsOfItem(item) {
     }
 }
 
-// Single Scope Functions (existing functionality)
+// Single Scope Functions
 function handleScopeTypeChange(event) {
     selectedScopeType = event.target.value;
     adjustScopeFields();
@@ -536,15 +570,8 @@ function adjustScopeFields() {
 
 function showScopeField(containerIndex) {
     const scopeContainer = scopeContainers[containerIndex];
-    const scopeSelect = scopeSelects[containerIndex];
     
     scopeContainer.classList.add("active");
-    
-    // Only set name and required for the target scope type
-    if (examType === "single_scope") {
-        scopeSelect.setAttribute("name", "id");
-        scopeSelect.setAttribute("required", "required");
-    }
     
     if (containerIndex > 0 && scopeSelects[containerIndex - 1].value) {
         fillScopeSelect(containerIndex, scopeSelects[containerIndex - 1].value);
@@ -556,8 +583,6 @@ function hideScopeField(containerIndex) {
     const scopeSelect = scopeSelects[containerIndex];
     
     scopeContainer.classList.remove("active");
-    scopeSelect.removeAttribute("name");
-    scopeSelect.removeAttribute("required");
     scopeSelect.innerHTML = "";
     scopeSelect.value = "";
 }
@@ -635,12 +660,15 @@ function validateForm() {
     let isValid = false;
     
     if (examType === "single_scope") {
+        // Check if the active scope level has a selected value
         const targetIndex = scopeTypes.indexOf(selectedScopeType);
         const targetSelect = scopeSelects[targetIndex];
         const hasValidScope = targetSelect && targetSelect.value && targetSelect.value !== "";
         isValid = hasValidScope && examTitleInput.value.trim() !== "";
     } else {
-        isValid = selectedScopes.size > 0 && examTitleInput.value.trim() !== "";
+        // Check if any checkboxes are checked
+        const checkedBoxes = document.querySelectorAll("input[name='scope_ids'][type='checkbox']:checked");
+        isValid = checkedBoxes.length > 0 && examTitleInput.value.trim() !== "";
     }
     
     // Update submit button state
@@ -672,30 +700,12 @@ function handleSubmit(event) {
         return;
     }
     
-    // Ensure proper form field setup based on exam type
-    if (examType === "single_scope") {
-        // Remove multi-scope field
-        selectedIdsInput.removeAttribute("name");
-        
-        // Ensure only the target scope select has the name attribute
-        scopeSelects.forEach((select, index) => {
-            if (index === scopeTypes.indexOf(selectedScopeType)) {
-                select.setAttribute("name", "id");
-            } else {
-                select.removeAttribute("name");
-            }
-        });
-    } else {
-        // For multi-scope, remove single scope fields and ensure ids field is named
-        scopeSelects.forEach(select => {
-            select.removeAttribute("name");
-        });
-        selectedIdsInput.setAttribute("name", "ids");
-    }
-    
     // Add loading state to submit button
     submitButton.disabled = true;
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    
+    // Form will be submitted with native HTML behavior
+    // All selected checkboxes will be automatically included
 }
 
 // Handle reset
@@ -709,7 +719,6 @@ function handleReset(event) {
         // Reset JavaScript state
         examType = "single_scope";
         selectedScopeType = "textbook";
-        selectedScopes.clear();
         
         // Reset UI state
         updateSelectedScopesDisplay();
@@ -874,10 +883,10 @@ function escapeHtml(text) {
 
 // Add keyboard navigation
 document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && event.target.tagName !== "BUTTON" && event.target.type !== "radio") {
+    if (event.key === "Enter" && event.target.tagName !== "BUTTON" && event.target.type !== "radio" && event.target.type !== "checkbox") {
         event.preventDefault();
         
-        const inputs = Array.from(examForm.querySelectorAll("input:not([type='radio']):not([type='hidden']), select"));
+        const inputs = Array.from(examForm.querySelectorAll("input:not([type='radio']):not([type='hidden']):not([type='checkbox']), select"));
         const currentIndex = inputs.indexOf(event.target);
         
         if (currentIndex > -1 && currentIndex < inputs.length - 1) {
