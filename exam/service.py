@@ -36,5 +36,6 @@ def correct_exam(exam_problems, submission, submitted_answers):
     Answer.objects.bulk_create(answers)
 
     submission.score = score
+    submission.percentage = score / exam_problems.count() * 100
     submission.status = Submission.Status.COMPLETED
     submission.save()
