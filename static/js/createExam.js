@@ -577,6 +577,10 @@ function adjustScopeFields() {
         } else {
             hideScopeField(i);
         }
+        scopeSelects.forEach(select => {
+            select.removeAttribute("name")
+        });
+        scopeSelects[targetIndex].setAttribute("name", "scope_ids");
     }
 }
 
