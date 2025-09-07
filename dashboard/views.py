@@ -19,7 +19,7 @@ def dashboard(request):
     prev_avg_score = 0
     if submissions_stats["count"] > 1:
         prev_avg_score = submissions[: submissions_stats["count"] - 1].aggregate(
-            avg_score=Avg("score")
+            avg_score=Avg("percentage")
         )["avg_score"]
 
     context = {
