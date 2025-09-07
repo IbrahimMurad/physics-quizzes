@@ -103,12 +103,14 @@ class Scope(models.Model):
         from problem.models import Problem
 
         if self.level == 0:
-            return Problem.objects.filter(scope__parent__parent__parent=self)
+            return Problem.objects.filter(
+                scope__parent__parent__parent=self, is_published=True
+            )
         elif self.level == 1:
-            return Problem.objects.filter(scope__parent__parent=self)
+            return Problem.objects.filter(scope__parent__parent=self, is_published=True)
         elif self.level == 2:
-            return Problem.objects.filter(scope__parent=self)
+            return Problem.objects.filter(scope__parent=self, is_published=True)
         elif self.level == 3:
-            return Problem.objects.filter(scope=self)
+            return Problem.objects.filter(scope=self, is_published=True)
         else:
             raise ValueError("Unrecognized scope level.")

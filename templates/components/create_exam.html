@@ -1,5 +1,5 @@
 <form action="{% url 'exam-create' %}" method="post" class="create-exam-form">
     {% csrf_token %}
-    <input type="hidden" name="id" value="{{ id }}">
+    <input type="hidden" name="scope_ids" value="{{ id }}">
     <button type="submit" class="create-exam-btn">Create {% if not is_card %}Full {{ type }} {% endif %} Exam</button>
   </form>

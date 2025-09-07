@@ -25,6 +25,7 @@ class Problem(models.Model):
     difficulty = models.PositiveSmallIntegerField(
         choices=Difficulty, default=Difficulty.EASY
     )
+    is_published = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["difficulty", "created_at"]
