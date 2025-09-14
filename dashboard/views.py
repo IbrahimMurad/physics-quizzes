@@ -13,12 +13,12 @@ def dashboard(request):
     ).order_by("-updated_at")
 
     submissions_stats = submissions.aggregate(
-        count=Count("id"), average_score=Avg("score")
+        count=Count("id"), average_score=Avg("percentage")
     )
 
     prev_avg_score = 0
     if submissions_stats["count"] > 1:
-        prev_avg_score = submissions[: submissions_stats["count"] - 1].aggregate(
+        prev_avg_score = submissions[1:].aggregate(
             avg_score=Avg("percentage")
         )["avg_score"]
 
