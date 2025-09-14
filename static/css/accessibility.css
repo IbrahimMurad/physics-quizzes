@@ -20,9 +20,26 @@
     border-radius: 4px;
 }
 
+/* Enhanced focus styles for different element types */
+button:focus-visible,
+.btn-primary:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+    border-color: var(--primary);
+}
+
 /* Required field indicator */
 .required {
     color: var(--destructive);
+    font-weight: bold;
+    margin-left: 0.25rem;
 }
 
 /* Form help text */
@@ -31,11 +48,14 @@
     margin-top: 0.25rem;
     font-size: 0.875rem;
     color: var(--muted-foreground);
+    line-height: 1.4;
 }
 
 /* Error states */
-.error {
-    border-color: var(--destructive);
+.error,
+[aria-invalid="true"] {
+    border-color: var(--destructive) !important;
+    box-shadow: 0 0 0 1px var(--destructive);
 }
 
 .error-message {
@@ -43,6 +63,7 @@
     margin-top: 0.25rem;
     color: var(--destructive);
     font-size: 0.875rem;
+    font-weight: 500;
 }
 
 /* Loading state for buttons */
@@ -50,6 +71,23 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+}
+
+.btn-loading::after {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Skip to main content link */
@@ -57,13 +95,16 @@
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.75rem 1rem;
     background: var(--background);
-    border: 1px solid var(--border);
+    color: var(--foreground);
+    border: 2px solid var(--primary);
     border-radius: 0.25rem;
-    transform: translateY(-100%);
-    transition: transform 0.2s ease-in-out;
-    z-index: 100;
+    text-decoration: none;
+    font-weight: 600;
+    transform: translateY(-150%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 9999;
 }
 
 .skip-to-content:focus {

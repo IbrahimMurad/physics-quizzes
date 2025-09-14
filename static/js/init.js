@@ -5,6 +5,7 @@
     const userName = document.querySelectorAll(".user-name");
     const logoutButtonContainer = document.querySelectorAll(".logout-button-container");
     const messages = document.querySelectorAll(".message");
+    const closeMessageButtons = document.querySelectorAll(".close-message");
 
     function setTheme(mode) {
         if (mode !== "light" && mode !== "dark" && mode !== "auto") {
@@ -53,13 +54,92 @@
         currentTheme ? setTheme(currentTheme) : setTheme("auto");
     }
 
+    function dismissMessage(messageElement) {
+        if (!messageElement) return;
+        
+        messageElement.classList.add("dismissing");
+        
+        setTimeout(() => {
+            if (messageElement.parentNode) {
+                messageElement.remove();
+            }
+        }, 300);
+    }
+
+    function showMessages() {
+        messages.forEach((message, index) => {
+            setTimeout(() => {
+                message.classList.add("active");
+            }, index * 100); // Stagger the animation
+        });
+        
+        // Auto-hide messages after 5 seconds (more reasonable than 500 seconds)
+        setTimeout(hideMessages, 5000);
+    }
+
+    function hideMessages() {
+        messages.forEach((message) => {
+            if (!message.classList.contains("dismissing")) {
+                dismissMessage(message);
+            }
+        });
+    }
+
+    function initMessages() {
+        // Add click handlers for close buttons
+        closeMessageButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const message = btn.closest(".message");
+                dismissMessage(message);
+            });
+        });
+
+        // Add click handlers for messages themselves (optional dismiss)
+        messages.forEach((message) => {
+            message.addEventListener("click", (e) => {
+                // Only dismiss if clicking the message itself, not the close button
+                if (!e.target.closest(".close-message")) {
+                    dismissMessage(message);
+                }
+            });
+
+            // Add keyboard support for message dismissal
+            message.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    dismissMessage(message);
+                }
+            });
+
+            // Make messages focusable for keyboard users
+            if (!message.hasAttribute("tabindex")) {
+                message.setAttribute("tabindex", "0");
+            }
+        });
+
+        // Pause auto-hide when hovering over messages
+        const messagesContainer = document.querySelector(".messages");
+        if (messagesContainer) {
+            let hideTimeout;
+            
+            messagesContainer.addEventListener("mouseenter", () => {
+                clearTimeout(hideTimeout);
+            });
+
+            messagesContainer.addEventListener("mouseleave", () => {
+                hideTimeout = setTimeout(hideMessages, 3000);
+            });
+        }
+    }
+
     window.addEventListener('load', () => {
+        // Initialize theme toggle buttons
         themeToggleButton.forEach((btn) => {
             btn.addEventListener("click", cycleTheme);
         });
 
-        setTimeout(showMessages, 100);
-
+        // Initialize user name dropdowns
         userName.forEach((name) => {
             name.addEventListener("click", () => {
                 logoutButtonContainer.forEach((container) => {
@@ -67,30 +147,20 @@
                 });
             });
         });
+
+        // Initialize messages
+        if (messages.length > 0) {
+            initMessages();
+            setTimeout(showMessages, 100);
+        }
     });
 
-    function showMessages() {
-        messages.forEach((message) => {
-            message.classList.add("active");
-        })
-        setTimeout(hideMessages, 5000);
-    }
-
-    function hideMessages() {
-        messages.forEach((message) => {
-            message.classList.remove("active");
-        })
-        setTimeout(() => {
-            messages.forEach((message) => {
-                message.remove();
-            })
-        }, 500)
-    }
-
-    messages.forEach((message) => {
-        message.addEventListener("click", () => {
-            message.remove();
-        });
+    // Add global escape key handler for dismissing messages
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            const activeMessages = document.querySelectorAll(".message.active");
+            activeMessages.forEach(dismissMessage);
+        }
     });
 
     initTheme();

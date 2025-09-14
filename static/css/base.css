@@ -84,8 +84,8 @@
   --message-error-fg: rgb(244, 199, 199);
   --message-error-bg: rgb(22, 11, 11);
 
-  --message-success-fg: rgb(1, 164, 1);
-  --message-success-bg: rgb(22, 11, 11);
+  --message-success-fg: rgb(226, 255, 226);
+  --message-success-bg: rgb(11, 22, 11);
 
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(210, 40%, 98%);
@@ -153,66 +153,161 @@ body {
   }
 }
 
+/* Keyframe Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-100%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%) translateY(-10px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
 
 /* Messages */
 .messages {
-  position: relative;
+  position: static;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  max-width: calc(100vw - 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   z-index: 1000;
-  color: black;
-  width: 100%;
-  margin: 0 auto;
-  max-width: 40rem;
-}
-
-.message-container {
-  position: absolute;
-  padding: 1rem;
-  width: 100%;
+  pointer-events: none;
 }
 
 .message {
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  width: 100%;
-  border-width: 1.5px;
-  border-style: solid;
+  pointer-events: auto;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 1rem;
-  transition: all 0.3s ease;
-  top: 1rem;
-  transform: translateY(-150%);
+  min-width: 300px;
+  max-width: 500px;
+  opacity: 0;
+  transform: translateX(-100%) translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  font-size: 0.875rem;
 }
 
 .message.active {
-  transform: translateY(0);
-  transition: all 0.3s ease;
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.message.dismissing {
+  animation: slideOut 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(-100%) translateY(-10px);
+}
+
+.message:hover {
+  transform: translateX(0) translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.message:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .message.success {
-  border-color: var(--message-success-fg);
-  color: var(--message-success-fg);
   background-color: var(--message-success-bg);
-}
-
-.message.warning {
-  border-color: var(--message-warning-fg);
-  color: var(--message-warning-fg);
-  background-color: var(--message-warning-bg);
+  color: var(--message-success-fg);
+  border: 1px solid var(--message-success-fg);
 }
 
 .message.error {
-  border-color: var(--message-error-fg);
-  color: var(--message-error-fg);
   background-color: var(--message-error-bg);
+  color: var(--message-error-fg);
+  border: 1px solid var(--message-error-fg);
+}
+
+.message.error:hover {
+  animation: shake 0.5s ease-in-out;
+}
+
+.message.warning {
+  background-color: var(--message-warning-bg);
+  color: var(--message-warning-fg);
+  border: 1px solid var(--message-warning-fg);
 }
 
 .message-text {
   flex: 1;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.close-message {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.close-message:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.close-message:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+  opacity: 1;
+}
+
+.close-message i {
+  font-size: 0.875rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .messages {
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    max-width: none;
+  }
+  
+  .message {
+    min-width: auto;
+    max-width: none;
+  }
 }
 
 .empty {
@@ -238,11 +333,13 @@ body {
   font-weight: 500;
   text-decoration: none;
   outline: none;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
   color: var(--primary-foreground);
   background-color: var(--primary);
   height: 2.5rem;
   padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-primary:hover,
@@ -251,4 +348,5 @@ body {
   background-color: var(--primary);
   color: var(--primary-foreground);
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }

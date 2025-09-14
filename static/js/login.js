@@ -11,10 +11,13 @@ loginForm.addEventListener('submit', (e) => {
     }
     
     if (username === '') {
+        console.log("login files")
         usernameError.textContent = 'Username is required';
+        usernameInput.focus();
     }
 
     if (password === '') {
         passwordError.textContent = 'Password is required';
+        passwordInput.focus();
     }
 });

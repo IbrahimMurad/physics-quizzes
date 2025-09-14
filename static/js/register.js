@@ -1,3 +1,5 @@
+import { loading, stopLoading } from './accessibility.js';
+
 // Enhanced registration form validation and UX
 const registerForm = document.getElementById('register-form');
 const emailInput = document.getElementById('email');
@@ -153,6 +155,8 @@ confirmPasswordToggle.addEventListener('click', () => {
 // Form submission
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const submitButton = registerForm.querySelector('button[type="submit"]');
+    loading(submitButton);
     
     const username = usernameInput.value.trim();
     const email = emailInput.value.trim();
@@ -210,6 +214,7 @@ registerForm.addEventListener('submit', (e) => {
         // Submit the form
         e.target.submit();
     }
+    stopLoading(submitButton);
 });
 
 // Add styles for password strength meter

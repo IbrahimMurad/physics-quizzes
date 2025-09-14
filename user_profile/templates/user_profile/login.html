@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock css %}
@@ -22,21 +21,6 @@
             <h1>QuizCraft</h1>
             <p>Your personal study assistant</p>
         </div>
-        
-        <!-- Display Messages -->
-        {% if messages %}
-            <div class="messages" role="alert">
-                {% for message in messages %}
-                    <div class="message {{ message.tags }}" aria-live="polite">
-                        <span class="message-text">{{ message }}</span>
-                        <button type="button" class="close-message" aria-label="Close message">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
         <!-- Login Form -->
         <div class="auth-form">
             <div class="auth-form-header">

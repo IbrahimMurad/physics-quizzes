@@ -1,136 +1,220 @@
+'use strict';
+
 /**
  * Accessibility enhancements for the application
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize password toggle functionality
-    const passwordToggles = document.querySelectorAll('.password-toggle');
-    
-    passwordToggles.forEach(toggle => {
-        const input = document.querySelector(toggle.getAttribute('aria-controls'));
-        if (!input) return;
-
-        // Set initial state
-        toggle.setAttribute('aria-label', 'Show password');
-        
-        // Toggle password visibility
-        toggle.addEventListener('click', function() {
-            const isPassword = input.type === 'password';
-            input.type = isPassword ? 'text' : 'password';
-            const icon = this.querySelector('i');
-            
-            if (isPassword) {
-                this.setAttribute('aria-label', 'Hide password');
-                this.setAttribute('aria-pressed', 'true');
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                this.setAttribute('aria-label', 'Show password');
-                this.setAttribute('aria-pressed', 'false');
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-            
-            // Return focus to the password field
-            input.focus();
-        });
-        
-        // Handle keyboard events
-        toggle.addEventListener('keydown', function(e) {
-            if (e.key === ' ' || e.key === 'Enter') {
-                e.preventDefault();
-                this.click();
-            }
-        });
-    });
-
-    // Add error class to form fields with errors
-    const formFields = document.querySelectorAll('input, select, textarea');
-    formFields.forEach(field => {
-        const errorId = field.getAttribute('aria-describedby')?.split(' ').find(id => id.endsWith('-error'));
-        if (errorId) {
-            const errorElement = document.getElementById(errorId);
-            if (errorElement && errorElement.textContent.trim() !== '') {
-                field.classList.add('error');
-                field.setAttribute('aria-invalid', 'true');
-            }
-        }
-    });
-
-    // Handle form submission feedback
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const submitButton = this.querySelector('button[type="submit"]');
-            if (submitButton) {
-                const loadingText = submitButton.querySelector('.btn-loading');
-                const buttonText = submitButton.querySelector('.btn-text');
-                
-                if (loadingText && buttonText) {
-                    buttonText.style.display = 'none';
-                    loadingText.style.display = 'inline-flex';
-                    submitButton.disabled = true;
-                    submitButton.setAttribute('aria-busy', 'true');
+{
+    // Enhanced focus management
+    function initFocusManagement() {
+        // Trap focus in modals/dialogs
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                const activeModal = document.querySelector('.modal.active, .dialog.active');
+                if (activeModal) {
+                    trapFocus(e, activeModal);
                 }
             }
         });
-    });
-});
+    }
 
-// Focus management for modals and dialogs
-function trapFocus(element) {
-    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const focusableContent = element.querySelectorAll(focusableElements);
-    const firstFocusableElement = focusableContent[0];
-    const lastFocusableElement = focusableContent[focusableContent.length - 1];
-
-    element.addEventListener('keydown', function(e) {
-        const isTabPressed = e.key === 'Tab';
-
-        if (!isTabPressed) {
-            return;
-        }
+    function trapFocus(e, container) {
+        const focusableElements = container.querySelectorAll(
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
 
         if (e.shiftKey) {
-            if (document.activeElement === firstFocusableElement) {
-                lastFocusableElement.focus();
+            if (document.activeElement === firstElement) {
                 e.preventDefault();
+                lastElement.focus();
             }
         } else {
-            if (document.activeElement === lastFocusableElement) {
-                firstFocusableElement.focus();
+            if (document.activeElement === lastElement) {
                 e.preventDefault();
+                firstElement.focus();
             }
         }
-    });
+    }
 
-    firstFocusableElement.focus();
-}
+    // Enhanced keyboard navigation for messages
+    function initMessageKeyboardSupport() {
+        document.addEventListener('keydown', (e) => {
+            const messages = document.querySelectorAll('.message.active');
+            
+            if (messages.length === 0) return;
 
-// Initialize any modals or dialogs on the page
-document.addEventListener('DOMContentLoaded', function() {
-    const modals = document.querySelectorAll('[role="dialog"], .modal');
-    modals.forEach(modal => {
-        if (modal.getAttribute('aria-hidden') !== 'true') {
-            trapFocus(modal);
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                const currentMessage = document.activeElement.closest('.message');
+                if (!currentMessage) return;
+
+                e.preventDefault();
+                const messagesArray = Array.from(messages);
+                const currentIndex = messagesArray.indexOf(currentMessage);
+                
+                let nextIndex;
+                if (e.key === 'ArrowDown') {
+                    nextIndex = (currentIndex + 1) % messagesArray.length;
+                } else {
+                    nextIndex = currentIndex === 0 ? messagesArray.length - 1 : currentIndex - 1;
+                }
+                
+                messagesArray[nextIndex].focus();
+            }
+        });
+    }
+
+    // Announce dynamic content changes to screen readers
+    function announceToScreenReader(message, priority = 'polite') {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', priority);
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
+        
+        document.body.appendChild(announcement);
+        
+        // Remove after announcement
+        setTimeout(() => {
+            document.body.removeChild(announcement);
+        }, 1000);
+    }
+
+    // Enhanced form validation announcements
+    function initFormAccessibility() {
+        const forms = document.querySelectorAll('form');
+        
+        forms.forEach(form => {
+            form.addEventListener('submit', (e) => {
+                const errors = form.querySelectorAll('.error, [aria-invalid="true"]');
+                if (errors.length > 0) {
+                    const errorCount = errors.length;
+                    const message = `Form has ${errorCount} error${errorCount > 1 ? 's' : ''}. Please correct the errors and try again.`;
+                    announceToScreenReader(message, 'assertive');
+                    
+                    // Focus first error
+                    errors[0].focus();
+                }
+            });
+            
+            // Real-time validation announcements
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => {
+                    const errorElement = input.parentNode.querySelector('.error-message');
+                    if (errorElement && errorElement.textContent.trim()) {
+                        announceToScreenReader(errorElement.textContent, 'assertive');
+                    }
+                });
+            });
+        });
+    }
+
+    // Reduced motion preferences
+    function respectReducedMotion() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        function updateAnimations(mediaQuery) {
+            if (mediaQuery.matches) {
+                document.documentElement.classList.add('reduce-motion');
+            } else {
+                document.documentElement.classList.remove('reduce-motion');
+            }
         }
-    });
-});
+        
+        updateAnimations(prefersReducedMotion);
+        prefersReducedMotion.addEventListener('change', updateAnimations);
+    }
 
-// Announce dynamic content changes
-function announce(message, priority = 'polite') {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', priority);
-    announcement.classList.add('sr-only');
-    announcement.textContent = message;
-    document.body.appendChild(announcement);
-    
-    // Remove the announcement after a short delay
-    setTimeout(() => {
-        announcement.remove();
-    }, 1000);
+    // High contrast mode detection
+    function detectHighContrast() {
+        const highContrast = window.matchMedia('(-ms-high-contrast: active), (forced-colors: active)');
+        
+        function updateHighContrast(mediaQuery) {
+            if (mediaQuery.matches) {
+                document.documentElement.classList.add('high-contrast');
+            } else {
+                document.documentElement.classList.remove('high-contrast');
+            }
+        }
+        
+        updateHighContrast(highContrast);
+        highContrast.addEventListener('change', updateHighContrast);
+    }
+
+    // Skip link functionality
+    function initSkipLinks() {
+        const skipLinks = document.querySelectorAll('.skip-to-content');
+        skipLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.focus();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    // Color contrast warnings for developers (in development mode)
+    function checkColorContrast() {
+        if (process?.env?.NODE_ENV === 'development') {
+            const elements = document.querySelectorAll('*');
+            elements.forEach(el => {
+                const style = window.getComputedStyle(el);
+                const bgColor = style.backgroundColor;
+                const textColor = style.color;
+                
+                // Basic contrast checking would go here
+                // This is a placeholder for more complex contrast calculations
+            });
+        }
+    }
+
+    // Initialize all accessibility features
+    function initAccessibility() {
+        initFocusManagement();
+        initMessageKeyboardSupport();
+        initFormAccessibility();
+        respectReducedMotion();
+        detectHighContrast();
+        initSkipLinks();
+        
+        // Announce when messages are added
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('message')) {
+                        const messageText = node.querySelector('.message-text')?.textContent;
+                        const messageType = node.classList.contains('error') ? 'Error' : 
+                                          node.classList.contains('warning') ? 'Warning' : 
+                                          node.classList.contains('success') ? 'Success' : 'Message';
+                        
+                        if (messageText) {
+                            announceToScreenReader(`${messageType}: ${messageText}`, 'assertive');
+                        }
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    // Initialize when DOM is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAccessibility);
+    } else {
+        initAccessibility();
+    }
+
+    // Export functions for use in other modules
+    window.accessibility = {
+        announceToScreenReader,
+        trapFocus
+    };
 }
-
-// Export functions for use in other modules
-window.Accessibility = {
-    trapFocus,
-    announce
-};

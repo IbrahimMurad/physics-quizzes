@@ -4,3 +4,6 @@ staticfiles/
 physics-quizzes.pdf
 physics-quizzes.md
 physics-quizzes.html
+media/
+physics_quizzes/settings.py
+db.sqlite3
