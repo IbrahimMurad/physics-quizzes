@@ -1,21 +1,228 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/init.js' %}" defer></script>
+{% endblock js %}
+
 {% block content %}
-<div class="container">
-  <p class="logout-message">
-    You have been successfully logged out.
-  </p>
-  <p class="logout-redirects">
-    <a class="home-link" href="{% url "home" %}">Go to textbooks</a>
-    <span>or</span>
-    <a class="login-link" href="{% url "login" %}">Login back</a>
-    <span>or</span>
-    <a class="register-link" href="{% url "register" %}">Register</a>
-  </p>
+<div class="auth-page">
+    <div class="auth-page-content">
+        <!-- Logo and Header -->
+        <div class="auth-header">
+            <h1>QuizCraft</h1>
+            <p>Your personal study assistant</p>
+        </div>
+
+        <!-- Logout Success Card -->
+        <div class="auth-form logout-card">
+            <div class="logout-icon">
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+            </div>
+            
+            <div class="auth-form-header">
+                <h2>Successfully Logged Out</h2>
+                <p>You have been securely logged out of your account</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="logout-actions">
+                <a href="{% url 'login' %}" class="btn-primary" tabindex="0">
+                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                    <span>Login Again</span>
+                </a>
+                
+                <div class="secondary-actions">
+                    <a href="{% url 'dashboard' %}" class="btn-secondary" tabindex="0">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Go to Dashboard</span>
+                    </a>
+                    
+                    <a href="{% url 'register' %}" class="btn-secondary" tabindex="0">
+                        <i class="fas fa-user-plus" aria-hidden="true"></i>
+                        <span>Create New Account</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="logout-info">
+                <div class="info-item">
+                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                    <span>For your security, please close all browser windows if you're using a shared computer</span>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    <span>Your session data has been cleared</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <p class="rights-reserved">
+            &copy; 2025 QuizCraft. All rights reserved.
+        </p>
+    </div>
 </div>
+
+<style>
+    .logout-card {
+        text-align: center;
+        padding: 2.5rem;
+    }
+
+    .logout-icon {
+        margin-bottom: 1.5rem;
+    }
+
+    .logout-icon i {
+        font-size: 3.5rem;
+        color: var(--message-success-fg);
+        animation: checkmark 0.5s ease-in-out;
+    }
+
+    @keyframes checkmark {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .logout-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin: 2rem 0;
+        width: 100%;
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary);
+        color: var(--primary-foreground);
+        border: none;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        opacity: 0.9;
+    }
+
+    .btn-primary:focus-visible {
+        outline: 3px solid var(--sidebar-ring);
+        outline-offset: 2px;
+    }
+
+    .secondary-actions {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .btn-secondary {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1rem;
+        background-color: var(--background);
+        color: var(--foreground);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .btn-secondary:focus-visible {
+        outline: 2px solid var(--sidebar-ring);
+        outline-offset: 2px;
+    }
+
+    .logout-info {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        text-align: left;
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        line-height: 1.5;
+    }
+
+    .info-item i {
+        color: var(--primary);
+        margin-top: 0.125rem;
+        flex-shrink: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .logout-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .logout-icon i {
+            font-size: 3rem;
+        }
+
+        .secondary-actions {
+            flex-direction: column;
+        }
+
+        .btn-secondary {
+            width: 100%;
+        }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        .logout-icon i {
+            animation: none;
+        }
+    }
+</style>
 {% endblock content %}

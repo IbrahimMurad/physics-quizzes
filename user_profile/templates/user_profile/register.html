@@ -9,105 +9,318 @@
 
 {% block js %}
 <script src="{% static 'js/init.js' %}" defer></script>
+<script src="{% static 'js/accessibility.js' %}" defer></script>
 <script src="{% static 'js/auth.js' %}" defer></script>
 <script src="{% static 'js/register.js' %}" defer></script>
 {% endblock js %}
 
-
 {% block content %}
 <div class="auth-page">
     <div class="auth-page-content">
+        <!-- Logo and Header -->
         <div class="auth-header">
             <h1>QuizCraft</h1>
             <p>Your personal study assistant</p>
         </div>
+        
+        <!-- Display Messages -->
+        {% if messages %}
+            <div class="messages" role="alert">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}" aria-live="polite">
+                        <span class="message-text">{{ message }}</span>
+                        <button type="button" class="close-message" aria-label="Close message">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Registration Form -->
         <div class="auth-form">
             <div class="auth-form-header">
-                <h2>Welcome to QuizCraft</h2>
-                <p>Create an account to continue</p>
+                <h2>Create your account</h2>
+                <p>Join QuizCraft to start your learning journey</p>
             </div>
-            <form id="register-form" method="post" action="{% url 'register' %}" novalidate>
+
+            <form id="register-form" method="post" action="{% url 'register' %}" novalidate aria-label="Registration form">
                 {% csrf_token %}
+
+                <!-- Username Field -->
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input
+                    <label for="username">Username <span class="required" aria-hidden="true">*</span></label>
+                    <input 
                         type="text"
                         name="username"
                         id="username"
-                        placeholder="Enter a username"
-                        autocomplete="off"
-                        aria-describedby="username-error"
+                        class="{% if form.username.errors %}error{% endif %}"
+                        placeholder="Choose a username"
+                        aria-describedby="username-help username-error"
+                        aria-required="true"
+                        aria-invalid="{% if form.username.errors %}true{% else %}false{% endif %}"
+                        autocomplete="username"
+                        autofocus
+                        tabindex="0"
+                        value="{{ form.username.value|default:'' }}"
                         required
                     >
-                    <span id="username-error" aria-live="polite">{{ form.errors.username }}</span>
+                    <small id="username-help" class="form-help-text">At least 3 characters, letters, numbers, and underscores only</small>
+                    <span id="username-error" class="error-message" role="alert" aria-live="assertive">
+                        {% if form.username.errors %}
+                            {{ form.username.errors.0 }}
+                        {% endif %}
+                    </span>
                 </div>
+
+                <!-- Email Field -->
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email <span class="required" aria-hidden="true">*</span></label>
                     <input
                         type="email"
                         name="email"
                         id="email"
-                        placeholder="Enter an Email"
-                        autocomplete="off"
-                        aria-describedby="email-error"
+                        class="{% if form.email.errors %}error{% endif %}"
+                        placeholder="Enter your email"
+                        aria-describedby="email-help email-error"
+                        aria-required="true"
+                        aria-invalid="{% if form.email.errors %}true{% else %}false{% endif %}"
+                        autocomplete="email"
+                        tabindex="0"
+                        value="{{ form.email.value|default:'' }}"
                         required
                     >
-                    <span id="email-error" aria-live="polite">{{ form.errors.email }}</span>
+                    <small id="email-help" class="form-help-text">We'll never share your email with anyone else</small>
+                    <span id="email-error" class="error-message" role="alert" aria-live="assertive">
+                        {% if form.email.errors %}
+                            {{ form.email.errors.0 }}
+                        {% endif %}
+                    </span>
                 </div>
+
+                <!-- Password Field -->
                 <div class="form-group">
-                    <div class="form-group-header">
-                        <label for="password">Password</label>
-                    </div>
+                    <label for="password">Password <span class="required" aria-hidden="true">*</span></label>
                     <div class="password-input-container">
                         <input
-                        type="password"
-                        name="password1"
-                        id="password"
-                        placeholder="Enter your password"
-                        autocomplete="new-password"
-                        aria-describedby="password-error"
-                        required
-                    >
-                        <span class="password-toggle">
-                            <i class="fas fa-eye"></i>
+                            type="password"
+                            name="password1"
+                            id="password"
+                            class="{% if form.password1.errors %}error{% endif %}"
+                            placeholder="Create a strong password"
+                            aria-describedby="password-help password-error password-requirements"
+                            aria-required="true"
+                            aria-invalid="{% if form.password1.errors %}true{% else %}false{% endif %}"
+                            autocomplete="new-password"
+                            tabindex="0"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            aria-label="Show password"
+                            aria-controls="password"
+                            aria-pressed="false"
+                            tabindex="0"
+                        >
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                            <span class="sr-only">Show password</span>
+                        </button>
+                    </div>
+                    <small id="password-help" class="form-help-text">
+                        <span id="password-requirements">
+                            Must contain: 8+ characters, uppercase, lowercase, number, and special character
                         </span>
-                    </div>
-                    <span id="password-error" aria-live="polite">{{ form.errors.password1 }}</span>
+                    </small>
+                    <span id="password-error" class="error-message" role="alert" aria-live="assertive">
+                        {% if form.password1.errors %}
+                            {{ form.password1.errors.0 }}
+                        {% endif %}
+                    </span>
+                    <!-- Password strength indicator will be inserted here by JS -->
                 </div>
+
+                <!-- Confirm Password Field -->
                 <div class="form-group">
-                    <div class="form-group-header">
-                        <label for="confirm-password">Confirm Password</label>
-                    </div>
+                    <label for="confirm-password">Confirm Password <span class="required" aria-hidden="true">*</span></label>
                     <div class="password-input-container">
                         <input 
                             type="password"
                             name="password2"
                             id="confirm-password"
-                            placeholder="Enter your password"
+                            class="{% if form.password2.errors %}error{% endif %}"
+                            placeholder="Confirm your password"
+                            aria-describedby="confirm-password-help confirm-password-error"
+                            aria-required="true"
+                            aria-invalid="{% if form.password2.errors %}true{% else %}false{% endif %}"
                             autocomplete="new-password"
-                            aria-describedby="confirm_password-error"
+                            tabindex="0"
                             required
                         >
-                        <span class="confirm-password-toggle">
-                            <i class="fas fa-eye"></i>
-                        </span>
+                        <button 
+                            type="button" 
+                            class="confirm-password-toggle" 
+                            aria-label="Show password"
+                            aria-controls="confirm-password"
+                            aria-pressed="false"
+                            tabindex="0"
+                        >
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                            <span class="sr-only">Show password</span>
+                        </button>
                     </div>
-                    <span id="confirm-password-error" aria-live="polite">{{ form.errors.password2 }}</span>
+                    <small id="confirm-password-help" class="form-help-text">Re-enter your password to confirm</small>
+                    <span id="confirm-password-error" class="error-message" role="alert" aria-live="assertive">
+                        {% if form.password2.errors %}
+                            {{ form.password2.errors.0 }}
+                        {% endif %}
+                    </span>
                 </div>
-                <button type="submit">Register</button>
+
+                <!-- Terms and Conditions (Optional) -->
+                <div class="form-group checkbox-group">
+                    <label for="terms" class="checkbox-label">
+                        <input
+                            type="checkbox"
+                            name="terms"
+                            id="terms"
+                            class="checkbox-input"
+                            tabindex="0"
+                            aria-describedby="terms-help"
+                            required
+                        >
+                        I agree to the <a href="#" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="#" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                    </label>
+                    <small id="terms-help" class="form-help-text">Please review our terms before creating an account</small>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit" tabindex="0" aria-live="polite">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loading" style="display: none;" aria-hidden="true">
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Creating account...
+                    </span>
+                </button>
+
+                <!-- Non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="form-errors" role="alert" aria-live="assertive">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </form>
-            {% if form.errors %}
-                <div class="form-errors">
-                    <p>{{ form.errors.non_field_errors }}</p>
-                </div>
-            {% endif %}
+
+            <!-- Footer Links -->
             <div class="form-footer">
-                <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+                <p>Already have an account? <a href="{% url 'login' %}" tabindex="0">Login</a></p>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <span>Your information is secure and encrypted</span>
             </div>
         </div>
+
+        <!-- Copyright -->
         <p class="rights-reserved">
             &copy; 2025 QuizCraft. All rights reserved.
         </p>
     </div>
 </div>
+
+<style>
+    .checkbox-input {
+        width: auto;
+        margin-right: 0.5rem;
+    }
+
+    .checkbox-label {
+        font-weight: normal;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        line-height: 1.5;
+    }
+
+    .checkbox-label input {
+        width: auto;
+        margin-top: 0.2rem;
+    }
+
+    .checkbox-label a {
+        text-decoration: underline;
+        font-weight: 500;
+    }
+
+    .btn-submit {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .security-notice {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--muted-foreground);
+        margin-top: 1rem;
+    }
+
+    .close-message {
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 0.25rem;
+    }
+
+    .error-message {
+        display: block;
+        min-height: 1.2rem;
+    }
+
+    /* Password strength meter styles - will be enhanced by JS */
+    .password-strength {
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .strength-meter {
+        flex: 1;
+        height: 4px;
+        background-color: var(--muted);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    
+    .strength-meter-fill {
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+    
+    .strength-text {
+        font-size: 0.8rem;
+        font-weight: 600;
+        min-width: 60px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .checkbox-label {
+            font-size: 0.875rem;
+        }
+    }
+</style>
 {% endblock content %}

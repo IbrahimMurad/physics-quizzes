@@ -219,24 +219,6 @@
   }
 }
 
-.logout-button {
-  padding: 0.5rem 1rem;
-  &>button {
-    border: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    background-color: transparent;
-    color: var(--foreground);
-
-    &:hover {
-      color: var(--destructive);
-      text-decoration: underline;
-    }
-  }
-}
-
 /* menu button */
 
 .menu-button,
