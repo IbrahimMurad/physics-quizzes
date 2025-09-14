@@ -1,7 +1,7 @@
 """
 Django settings for physics_quizzes project.
 """
-import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-r(gkcpgb649jk!_&bbkpoxjxe#gvo6g17^lw-)mqrj_(vzq@$7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # Static files configuration - MOVED TO TOP BEFORE INSTALLED_APPS
