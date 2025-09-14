@@ -302,7 +302,7 @@ def exam_result(request, submission_id):
 def create_custom_exam(request):
     """This view renders the create exam page, but does not handle the creation of the exam"""
     context = {
-        "textbooks": Scope.objects.filter(level=0).prefetch_related(
+        "textbooks": Scope.objects.filter(is_published=True, level=0).prefetch_related(
             "children__children__children"
         ),
     }

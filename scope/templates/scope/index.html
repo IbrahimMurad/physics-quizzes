@@ -32,9 +32,13 @@
   {% endif %}
   <h2 class="cards-title">{{ list_title }}</h2>
   <section class="cards">
+    {% if scopes %}
     {% for scope in scopes %}
       {% include "components/card.html" with scope=scope %}
     {% endfor %}
-  </div>
+    {% else %}
+    <p>No {{ list_title|lower }} found</p>
+    {% endif %}
+  </section>
 </main>
 {% endblock content %}

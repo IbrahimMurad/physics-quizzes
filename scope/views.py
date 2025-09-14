@@ -48,12 +48,21 @@ def scope_browser(request, slug=None):
         ).annotate(is_fav=Exists(favorites_subquery))
         breadcrumbs = []
 
+    list_title = "Textbooks"
+    if scope:
+        if scope.level == 0:
+            list_title = "Units"
+        elif scope.level == 1:
+            list_title = "Chapters"
+        elif scope.level == 2:
+            list_title = "Lessons"
+
     return render(
         request,
         "scope/index.html",
         context={
             "title": scope.title if scope else "Textbooks",
-            "list_title": f"{children[0].type}s" if scope else "Textbooks",
+            "list_title": list_title,
             "parent": scope,
             "scopes": children,
             "breadcrumbs": breadcrumbs,
@@ -63,7 +72,12 @@ def scope_browser(request, slug=None):
 
 @require_http_methods(["GET"])
 def scope_list_api(request, id):
-    scope = get_object_or_404(Scope.objects.prefetch_related("children"), id=id)
+    scope = get_object_or_404(
+        Scope.objects.prefetch_related(
+            Prefetch("children", queryset=Scope.objects.filter(is_published=True))
+        ),
+        id=id,
+    )
     children = scope.children.values("id", "title")
     return JsonResponse(list(children), safe=False)
 
