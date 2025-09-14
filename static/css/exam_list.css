@@ -78,6 +78,8 @@
 
 .exam-card-body {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   justify-content: space-between;
   align-items: center;
 }

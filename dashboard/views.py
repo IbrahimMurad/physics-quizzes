@@ -41,7 +41,7 @@ def dashboard(request):
                 else None,
             },
         ],
-        "favorites": request.user.profile.favorites.all(),
+        "favorites": request.user.profile.favorites.filter(is_published=True),
         "recent_exams": get_exams(request=request, limit=5),
     }
     return render(request, "dashboard/dashboard.html", context)
