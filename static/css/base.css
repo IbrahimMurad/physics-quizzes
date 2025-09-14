@@ -184,7 +184,7 @@ body {
 
 /* Messages */
 .messages {
-  position: static;
+  position: fixed;
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
