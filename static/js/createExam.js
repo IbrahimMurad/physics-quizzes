@@ -687,7 +687,7 @@ function validateForm() {
         const numberOfProblems = parseInt(numberProblemsInput.value);
         isValid = checkedBoxes.length > 0 && 
                  examTitleInput.value.trim() !== "" && 
-                 numberOfProblems > 10 && 
+                 numberOfProblems >= 10 && 
                  numberOfProblems <= 50;
     }
     
@@ -712,7 +712,7 @@ function validateForm() {
     // Add validation state for number of problems input
     if (examType === "multi_scope") {
         const numberOfProblems = parseInt(numberProblemsInput.value);
-        if (numberOfProblems > 0 && numberOfProblems <= 100) {
+        if (numberOfProblems >= 10 && numberOfProblems <= 50) {
             numberProblemsInput.classList.add("valid");
         } else {
             numberProblemsInput.classList.remove("valid");
@@ -937,8 +937,8 @@ document.addEventListener("keydown", (event) => {
 // handle range input changes
 function handleRangeChange() {
     const value = numberProblemsInput.value;
-    const min = numberProblemsInput.min || 1;
-    const max = numberProblemsInput.max || 100;
+    const min = numberProblemsInput.min || 10;
+    const max = numberProblemsInput.max || 50;
     
     // Update display value with animation
     rangeValueDisplay.classList.add("updating");
