@@ -90,10 +90,15 @@ def favorites(request):
     favorites = request.user.profile.favorites
     scope_id = request.POST.get("scope_id")
     scope = get_object_or_404(Scope, id=scope_id)
-    if favorites.filter(id=scope_id).exists():
-        favorites.remove(scope)
-        message = f"{scope} removed from favorites successfully"
+    if scope.is_published:
+        if favorites.filter(id=scope_id).exists():
+            favorites.remove(scope)
+            message = f"{scope} removed from favorites successfully"
+        else:
+            favorites.add(scope)
+            message = f"{scope} added to favorites successfully"
+        return JsonResponse({"message": message}, status=200)
     else:
-        favorites.add(scope)
-        message = f"{scope} added to favorites successfully"
-    return JsonResponse({"message": message}, status=200)
+        scope.is_published = False
+        scope.save()
+        return JsonResponse({"message": "This scope is not accessible."}, status=400)
