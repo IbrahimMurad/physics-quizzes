@@ -50,7 +50,6 @@
                         aria-invalid="{% if form.username.errors %}true{% else %}false{% endif %}"
                         autocomplete="username"
                         autofocus
-                        tabindex="0"
                         value="{{ form.username.value|default:'' }}"
                         required
                     >
@@ -78,7 +77,6 @@
                             aria-required="true"
                             aria-invalid="{% if form.password.errors %}true{% else %}false{% endif %}"
                             autocomplete="current-password"
-                            tabindex="0"
                             required
                         >
                         <button 
@@ -87,7 +85,7 @@
                             aria-label="Show password"
                             aria-controls="password"
                             aria-pressed="false"
-                            tabindex="0"
+                            tabindex="-1"
                         >
                             <i class="fas fa-eye" aria-hidden="true"></i>
                             <span class="sr-only">Show password</span>
@@ -109,7 +107,6 @@
                         name="remember_me" 
                         id="remember-me"
                         class="checkbox-input"
-                        tabindex="0"
                         aria-describedby="remember-me-help"
                     >
                         Remember me for 30 days
@@ -137,9 +134,9 @@
 
             <!-- Footer Links -->
             <div class="form-footer">
-                <p>Don't have an account? <a href="{% url 'register' %}" tabindex="0">Register</a></p>
+                <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
                 <p class="forgot-password">
-                    <a href="{% url 'password_reset' %}" tabindex="0">
+                    <a href="{% url 'password_reset' %}">
                         Forgot your password?<span class="sr-only"> (opens in same window)</span>
                     </a>
                 </p>
