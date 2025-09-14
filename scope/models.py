@@ -36,6 +36,7 @@ class Scope(models.Model):
     level = models.PositiveSmallIntegerField(
         choices=LevelChoices, default=LevelChoices.TEXTBOOK, editable=False
     )
+    is_published = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["in_scope_order"]
