@@ -14,15 +14,19 @@
     <script src="{% static 'js/init.js' %}" defer></script>
     <script src="{% static 'js/accessibility.js' %}" defer></script>
     <script>
-      MathJax = {
+      window.MathJax = {
         tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']]
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
         },
-        svg: {
-          fontCache: 'global'
+        options: {
+          enableMenu: false   // 🚫 disables right-click context menu
+        },
+        loader: {
+          load: ['input/tex', 'output/chtml']  // ✅ only TeX + CHTML
         }
       };
-      </script>
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <title>{% block title %}Physics quizzes{% endblock title %}</title>
   </head>
