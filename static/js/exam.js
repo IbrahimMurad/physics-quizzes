@@ -151,12 +151,8 @@ allChoices.forEach((choice) => {
         } else if (blurCount === maxBlurCount) {
           alert('Excessive window focus loss will abort the exam leading to a zero score.');
         } else {
-          if (confirm('You have lost focus too many times. The exam will be reloaded. Continue?')) {
-            window.location.reload();
-          } else {
-            window.location.reload(); // Reload anyway
-          }
-          return; // Don't reset flags if we're reloading
+          window.location.reload(true);
+          return;
         }
       } finally {
         // Always reset the flag after a delay
