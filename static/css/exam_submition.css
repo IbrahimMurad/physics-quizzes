@@ -258,13 +258,14 @@ mjx-container * {
 .img-container {
     flex: 1 1 14rem;
     max-width: 20rem;
+    height: fit-content;
     border-radius: 0.8rem;
     background-color: white;
 }
 
 .problem-figure,
 .choice-figure {
-    width: 100%;
+    max-width: 100%;
     height: auto;
     margin: 0.5rem;
 }
