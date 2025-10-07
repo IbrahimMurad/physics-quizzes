@@ -248,6 +248,7 @@ mjx-container * {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    justify-content: center;
 }
 
 .problem-text {
@@ -255,13 +256,15 @@ mjx-container * {
 }
 
 .img-container {
+    flex: 1 1 14rem;
+    max-width: 20rem;
     border-radius: 0.8rem;
     background-color: white;
 }
 
 .problem-figure,
 .choice-figure {
-    width: 14rem;
+    width: 100%;
     height: auto;
     margin: 0.5rem;
 }
