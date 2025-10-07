@@ -1,3 +1,4 @@
+import nested_admin
 from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import gettext_lazy as _
@@ -30,16 +31,11 @@ class ParentFilter(SimpleListFilter):
         return queryset
 
 
-class ScopeInline(admin.StackedInline):
-    model = Scope
-    extra = 0
-
-
-class ScopeAdmin(admin.ModelAdmin):
+class ScopeAdmin(nested_admin.NestedModelAdmin):
     list_display = ("title", "level", "is_published", "parent")
     list_filter = ("level", "is_published", ParentFilter)
     search_fields = ["title"]
-    inlines = [ScopeInline, ProblemInline]
+    inlines = [ProblemInline]
 
     @admin.action(description="Publish selected scopes")
     def publish(self, request, queryset):
