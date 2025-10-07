@@ -1,7 +1,7 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from scope.models import Scope
-from django.core.validators import FileExtensionValidator
 
 
 class Problem(models.Model):
@@ -22,7 +22,12 @@ class Problem(models.Model):
     )
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    figure = models.FileField(upload_to="problems/", null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['svg', 'png', 'jpg'])])
+    figure = models.FileField(
+        upload_to="problems/",
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=["svg", "png", "jpg"])],
+    )
     difficulty = models.PositiveSmallIntegerField(
         choices=Difficulty, default=Difficulty.EASY
     )
@@ -45,7 +50,12 @@ class Choice(models.Model):
         related_query_name="choice",
     )
     body = models.CharField(max_length=256, null=True, blank=True)
-    figure = models.FileField(upload_to="choices/", null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['svg', 'png', 'jpg'])])
+    figure = models.FileField(
+        upload_to="choices/",
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=["svg", "png", "jpg"])],
+    )
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):

@@ -38,14 +38,18 @@
                     <p>{{ problem.body }}</p>
                 </div>
                 {% if problem.figure %}
-                <img src="{{ problem.figure.url }}" alt="{{ problem.figure.name }}" class="problem-figure">
+                <div class="img-container">
+                    <img src="{{ problem.figure.url }}" alt="{{ problem.figure.name }}" class="problem-figure">
+                </div>
                 {% endif %}
             </div>
             <div class="problem-options">
                 {% for choice in problem.choices %}
                 <div class="problem-option {% if choice.is_correct %}correct{% endif %} {% if choice.checked %}checked{% endif %}">
                     {% if choice.figure %}
-                    <img src="{{ choice.figure.url }}" alt="{{ choice.figure.name }}" class="choice-figure">
+                    <div class="img-container">
+                        <img src="{{ choice.figure.url }}" alt="{{ choice.figure.name }}" class="choice-figure">
+                    </div>
                     {% else %}
                     <p>{{ choice.body }}</p>
                     {% endif %}

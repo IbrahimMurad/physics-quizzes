@@ -78,9 +78,14 @@
     flex: 1 1 14rem;
 }
 
-.problem-figure {
-    width: 100%;
-    max-width: 24rem;
+.img-container {
+    border-radius: 0.8rem;
+    background-color: white;
+}
+
+.problem-figure,
+.choice-figure {
+    max-width: 14rem;
     height: auto;
     margin: 0.5rem;
 }
