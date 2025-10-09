@@ -76,6 +76,9 @@
 
 .problem-text {
     flex: 1 1 14rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
 .img-container {
