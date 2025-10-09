@@ -79,13 +79,19 @@
 }
 
 .img-container {
+    flex: 1 1 14rem;
+    max-width: 20rem;
     border-radius: 0.8rem;
     background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
 }
 
 .problem-figure,
 .choice-figure {
-    max-width: 14rem;
+    max-width: 100%;
     height: auto;
-    margin: 0.5rem;
+    object-fit: contain;
 }

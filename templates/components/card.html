@@ -10,9 +10,12 @@
     <p class="card-caption">{{ scope.caption }}</p>
     <div class="card-actions">
       {% if scope.type != "Lesson" %}
-        <a href="{{ scope.url }}">Explore</a>
+        <a class="explore-button" href="{{ scope.url }}">Explore</a>
       {% endif %}
       {% include "components/create_exam.html" with is_card=True type=scope.type id=scope.id %}
+      {% if user.is_superuser %}
+        <a class="problems-button" href="{{ scope.url }}problems/">Problems</a>
+      {% endif %}
     </div>
   </div>
 </div>

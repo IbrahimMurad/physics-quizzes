@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/exam_submition.css' %}">
+<link rel="stylesheet" href="{% static 'css/breadcrumbs.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock css %}
+
+{% block title %}
+{{ scope.title }}
+{% endblock title %}
+
+{% block content %}
+{% include "components/header.html" %}
+<div class="container">
+    {% if scope %}
+    {% include "components/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+    {% endif %}
+    <div class="exam-header">
+        {% if scope %}
+        <h1> {{ scope.type|title }}: {{ scope.title }}</h1>
+        {% else %}
+        <h1>All Problems</h1>
+        {% endif %}
+    </div>
+    <div class="exam-form">
+        {% for problem in problems %}
+        <div class="problem">
+            <div class="problem-body">
+                <div class="problem-text">
+                    <h3>Problem {{ forloop.counter }}</h3>
+                    <p>{{ problem.body }}</p>
+                </div>
+                {% if problem.figure %}
+                <div class="img-container">
+                    <img src="{{ problem.figure.url }}" alt="{{ problem.figure.name }}" class="problem-figure">
+                </div>
+                {% endif %}
+            </div>
+            <div class="problem-options">
+                {% for choice in problem.choices.all %}
+                <div class="problem-option {% if choice.is_correct %}correct{% endif %}">
+                    {% if choice.figure %}
+                    <div class="img-container">
+                        <img src="{{ choice.figure.url }}" alt="{{ choice.figure.name }}" class="choice-figure">
+                    </div>
+                    {% else %}
+                    <p>{{ choice.body }}</p>
+                    {% endif %}
+                    {% if choice.is_correct %}
+                    <i class="fas fa-check"></i>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="exit-exam-btn">
+        <a href="{% url 'dashboard' %}">
+            <i class="fas fa-arrow-left"></i>
+            Back to dashboard
+        </a>
+    </div>
+</div>
+{% endblock content %}

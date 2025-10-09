@@ -14,6 +14,7 @@ urlpatterns = [
     path("scope/", include("scope.urls")),
     path("exam/", include("exam.urls")),
     path("auth/", include("user_profile.urls")),
+    path("problem/", include("problem.urls")),
     path("admin/", admin.site.urls),
     re_path(r"^_nested_admin/", include("nested_admin.urls")),
 ]
