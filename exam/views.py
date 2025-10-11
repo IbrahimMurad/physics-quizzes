@@ -17,6 +17,14 @@ from .service import correct_exam
 @login_required()
 @require_http_methods(["POST"])
 def exam_create(request):
+    if not request.user.exam_tracker.can_create_exam():
+        messages.error(
+            request,
+            "You have reached the maximum number of exams for this week. "
+            f"This limit will be renewed in {request.user.exam_tracker.next_week_start.strftime('%Y-%m-%d %H:%M:%S')}.",
+        )
+        return reload(request)
+
     # Get form data
     exam_title = request.POST.get("exam_title")
     exam_type = request.POST.get("exam-type", "single_scope")
