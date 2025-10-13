@@ -5,6 +5,27 @@
 <link rel="stylesheet" href="{% static 'css/exam_submition.css' %}">
 <link rel="stylesheet" href="{% static 'css/breadcrumbs.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    .problem-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .problem-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: rgb(1, 85, 169);
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .problem-header a:hover {
+        color:rgb(0, 126, 252);
+    }
+
+</style>
 {% endblock css %}
 
 {% block title %}
@@ -27,9 +48,12 @@
     <div class="exam-form">
         {% for problem in problems %}
         <div class="problem">
+            <div class="problem-header">
+                <h3>Problem {{ forloop.counter }}</h3>
+                <a href="/admin/problem/problem/{{ problem.id }}/change/"><i class="fas fa-edit"></i>Edit</a>
+            </div>
             <div class="problem-body">
                 <div class="problem-text">
-                    <h3>Problem {{ forloop.counter }}</h3>
                     <p>{{ problem.body }}</p>
                 </div>
                 {% if problem.figure %}
