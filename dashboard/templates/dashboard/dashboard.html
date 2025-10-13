@@ -55,19 +55,23 @@
           {% include "components/card.html" with scope=scope %}
         {% endfor %}
       {% else %}
-        <p class="empty">No favorites found</p>
+      <div class="empty">
+        <img src="{% static 'assets/no-favorites.svg' %}" alt="Start study now." width="340">
+      </div>
       {% endif %}
     </div>
   </div>
 
   <div id="tab-recent" class="tab-content">
     <div class="exam-grid">
-      {% if recent_exams %}
+      {% if recent_exams|length > 0 %}
         {% for exam in recent_exams %}
           {% include "components/exam_card.html" with exam=exam %}
         {% endfor %}
       {% else %}
-        <p class="empty">No recent exams found</p>
+        <div class="empty">
+          <img src="{% static 'assets/empty-exams.svg' %}" alt="Start study now." width="340">
+        </div>
       {% endif %}
     </div>
     <div class="all-exams">
