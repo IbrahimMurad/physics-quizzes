@@ -63,7 +63,6 @@ def scope_browser(request, slug=None):
         request,
         "scope/index.html",
         context={
-            "title": scope.title if scope else "Textbooks",
             "list_title": list_title,
             "parent": scope,
             "scopes": children,
