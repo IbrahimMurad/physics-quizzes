@@ -48,14 +48,16 @@ def scope_browser(request, slug=None):
         ).annotate(is_fav=Exists(favorites_subquery))
         breadcrumbs = []
 
+    # Get the children list title
+    # If there are children, use the their level's name
+    # Otherwise, use next level name of the current scope
     list_title = "Textbooks"
-    if scope:
-        if scope.level == 0:
-            list_title = "Units"
-        elif scope.level == 1:
-            list_title = "Chapters"
-        elif scope.level == 2:
-            list_title = "Lessons"
+    if children.exists():
+        child_level = children.first().level
+        list_title = Scope.LevelChoices(child_level).label + "s"
+    elif scope:
+        next_level = scope.level + 1
+        list_title = Scope.LevelChoices(next_level).label + "s"
 
     return render(
         request,
