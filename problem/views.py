@@ -20,7 +20,7 @@ def scope_problem_list(request, slug):
     if not request.user.is_superuser:
         return redirect("dashboard")
     scope = get_object_or_404(Scope, slug=slug)
-    problems = scope.problems_set.all()
+    problems = scope.problems
     return render(
         request,
         "problem/problem_list.html",
