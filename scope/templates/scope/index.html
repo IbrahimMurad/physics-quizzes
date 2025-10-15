@@ -12,7 +12,9 @@
 {% endblock js %}
 
 
-{% block title %}{{ title }}{% endblock title %}
+{% block title %}
+{% if parent %}{{ parent.title }}{% else %}Textbooks{% endif %}
+{% endblock title %}
 
 {% block content %}
 
