@@ -107,6 +107,6 @@ class Scope(models.Model):
         elif self.level == 2:
             return Problem.objects.filter(scope__parent=self, is_published=True)
         elif self.level == 3:
-            return self.problems.filter(is_published=True)
+            return self.problems_set.filter(is_published=True)
         else:
             raise ValueError("Unrecognized scope level.")
