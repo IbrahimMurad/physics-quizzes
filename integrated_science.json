@@ -1,0 +1,2083 @@
+[
+  {
+    "title": "The Hydrosphere on Planet Earth",
+    "problems": [
+      {
+        "body": "The continuous change between the states of matter on Earth's surface through an almost closed system is known as …. cycle.",
+        "choices": [
+          {
+            "body": "Nitrogen",
+            "is_correct": false
+          },
+          {
+            "body": "Carbon",
+            "is_correct": false
+          },
+          {
+            "body": "Oxygen",
+            "is_correct": false
+          },
+          {
+            "body": "Water",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "The percentage of Earth's surface covered with water is …..",
+        "choices": [
+          {
+            "body": "1%",
+            "is_correct": false
+          },
+          {
+            "body": "3%",
+            "is_correct": false
+          },
+          {
+            "body": "70%",
+            "is_correct": true
+          },
+          {
+            "body": "30%",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which process of the following if stopped, could directly disturb the balance of water cycle on Earth's surface and in the atmosphere?",
+        "choices": [
+          {
+            "body": "Surface runoff",
+            "is_correct": false
+          },
+          {
+            "body": "Evaporation",
+            "is_correct": true
+          },
+          {
+            "body": "Infiltration into soil",
+            "is_correct": false
+          },
+          {
+            "body": "Transpiration",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "An increase in the rate of plant transpiration can indirectly affect the water cycle in nature through ....",
+        "choices": [
+          {
+            "body": "Decreasing rainfall",
+            "is_correct": false
+          },
+          {
+            "body": "Increasing water vapor in the atmosphere",
+            "is_correct": true
+          },
+          {
+            "body": "Reducing evaporation from water bodies",
+            "is_correct": false
+          },
+          {
+            "body": "Fixing carbon dioxide in leaves",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Chemical Properties of Water",
+    "problems": [
+      {
+        "body": "Which of the following shapes correctly represents the structure of water molecule and the angle between the two covalent bonds?",
+        "choices": [
+          {
+            "body": "Option a",
+            "is_correct": false
+          },
+          {
+            "body": "Option b",
+            "is_correct": true
+          },
+          {
+            "body": "Option c",
+            "is_correct": false
+          },
+          {
+            "body": "Option d",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The polarity of water molecule is due to the fact that .....",
+        "choices": [
+          {
+            "body": "Oxygen atom in water molecule becomes a positive ion, and hydrogen atom becomes a negative ion.",
+            "is_correct": false
+          },
+          {
+            "body": "Electronegativity of hydrogen is greater than electronegativity of oxygen.",
+            "is_correct": false
+          },
+          {
+            "body": "Oxygen atom in water molecule carries a partial positive charge, and hydrogen atom carries a partial negative charge.",
+            "is_correct": false
+          },
+          {
+            "body": "Oxygen atom in water molecule carries a partial negative charge, and hydrogen atom carries a partial positive charge.",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "The solution resulting from the hydrolysis of ammonium chloride salt is considered acidic because .....",
+        "choices": [
+          {
+            "body": "The concentration of OH⁻ ions in the solution is less than the concentration of H⁺ ions.",
+            "is_correct": true
+          },
+          {
+            "body": "The concentration of OH⁻ ions in the solution is greater than the concentration of H⁺ ions.",
+            "is_correct": false
+          },
+          {
+            "body": "The concentration of OH⁻ ions in the solution equals the concentration of H⁺ ions.",
+            "is_correct": false
+          },
+          {
+            "body": "The concentration of OH⁻ ions in the solution is less than or equal to the concentration of H⁺ ions.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The solution resulting from the hydrolysis of sodium bicarbonate salt is considered alkaline because......",
+        "choices": [
+          {
+            "body": "The concentration of OH⁻ ions in the solution is less than the concentration of H⁺ ions.",
+            "is_correct": false
+          },
+          {
+            "body": "The concentration of OH⁻ ions in the solution is greater than the concentration of H⁺ ions.",
+            "is_correct": true
+          },
+          {
+            "body": "The concentration of OH⁻ ions in the solution equals the concentration of H⁺ ions.",
+            "is_correct": false
+          },
+          {
+            "body": "The concentration of OH⁻ ions in the solution is less than or equal to the concentration of H⁺ ions.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What are the two elements that make up water molecule?",
+        "choices": [
+          {
+            "body": "Carbon and hydrogen",
+            "is_correct": false
+          },
+          {
+            "body": "Nitrogen and oxygen",
+            "is_correct": false
+          },
+          {
+            "body": "Oxygen and hydrogen",
+            "is_correct": true
+          },
+          {
+            "body": "Chlorine and sodium",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the mass ratio of hydrogen to oxygen, respectively, in a water molecule?",
+        "choices": [
+          {
+            "body": "1/8",
+            "is_correct": true
+          },
+          {
+            "body": "1/9",
+            "is_correct": false
+          },
+          {
+            "body": "2/1",
+            "is_correct": false
+          },
+          {
+            "body": "8/9",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following correctly describes the composition of the water molecule?",
+        "choices": [
+          {
+            "body": "The percentage of hydrogen mass in the molecule is 66.67%",
+            "is_correct": false
+          },
+          {
+            "body": "The percentage of oxygen mass in the molecule is 33.33%",
+            "is_correct": false
+          },
+          {
+            "body": "The percentage of hydrogen mass in the molecule is 11.11%",
+            "is_correct": true
+          },
+          {
+            "body": "The percentage of oxygen mass in the molecule is 50%",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Physical Properties of Water",
+    "problems": [
+      {
+        "body": "Given that the density of water at 4°C equals 1g/cm³, then when is raised to 8°C .......",
+        "choices": [
+          {
+            "body": "density increases",
+            "is_correct": false
+          },
+          {
+            "body": "density decreases",
+            "is_correct": true
+          },
+          {
+            "body": "density remains constant",
+            "is_correct": false
+          },
+          {
+            "body": "cannot be determined",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Given that the density of water at 4°C equals 1g/cm³, then mass of 4m³ is:",
+        "choices": [
+          {
+            "body": "0.004 kg",
+            "is_correct": false
+          },
+          {
+            "body": "1 kg",
+            "is_correct": false
+          },
+          {
+            "body": "4 kg",
+            "is_correct": false
+          },
+          {
+            "body": "4000 kg",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "Four samples of water, each is of mass 1 kg. Which sample has the greatest volume?",
+        "choices": [
+          {
+            "body": "Salt water at 4°C",
+            "is_correct": false
+          },
+          {
+            "body": "Salt water at 8°C",
+            "is_correct": false
+          },
+          {
+            "body": "Fresh water at 4°C",
+            "is_correct": false
+          },
+          {
+            "body": "Fresh water at 0°C",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "In the opposite figure, when a large amount of salt is dissolved in pure water, the volume of the submerged part of a hydrometer placed in this water...",
+        "choices": [
+          {
+            "body": "increases",
+            "is_correct": false
+          },
+          {
+            "body": "decreases",
+            "is_correct": true
+          },
+          {
+            "body": "does not change",
+            "is_correct": false
+          },
+          {
+            "body": "cannot be determined",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Given that the density of water at 4°C equals 1g/cm³, this means .....",
+        "choices": [
+          {
+            "body": "The mass of 1 cm³ of water equals 4 kg.",
+            "is_correct": false
+          },
+          {
+            "body": "The mass of 1 cm³ of water equals 1 g.",
+            "is_correct": true
+          },
+          {
+            "body": "The mass of 1 m³ of water equals 1 g.",
+            "is_correct": false
+          },
+          {
+            "body": "The mass of 1 cm³ of water equals 1 L.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The temperature at which the density of water is at its maximum value is...",
+        "choices": [
+          {
+            "body": "0°C",
+            "is_correct": false
+          },
+          {
+            "body": "4°C",
+            "is_correct": true
+          },
+          {
+            "body": "2°C",
+            "is_correct": false
+          },
+          {
+            "body": "6°C",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The figure shows three cups of water with different salinities, with densities (X, Y, and Z), all at the same temperature. An identical egg was placed in each cup. What is the correct order of water samples according to their densities?",
+        "choices": [
+          {
+            "body": "X = Y = Z",
+            "is_correct": false
+          },
+          {
+            "body": "X > Y > Z",
+            "is_correct": false
+          },
+          {
+            "body": "Z > Y > X",
+            "is_correct": true
+          },
+          {
+            "body": "Z > Y = X",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following devices is used to measure the density of liquids?",
+        "choices": [
+          {
+            "body": "Hydrometer",
+            "is_correct": true
+          },
+          {
+            "body": "Barometer",
+            "is_correct": false
+          },
+          {
+            "body": "Manometer",
+            "is_correct": false
+          },
+          {
+            "body": "Thermometer",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The international unit of temperature is...",
+        "choices": [
+          {
+            "body": "Celsius",
+            "is_correct": false
+          },
+          {
+            "body": "Kelvin",
+            "is_correct": true
+          },
+          {
+            "body": "Fahrenheit",
+            "is_correct": false
+          },
+          {
+            "body": "Rankine",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The freezing point of pure water is equal to...",
+        "choices": [
+          {
+            "body": "-273°C",
+            "is_correct": false
+          },
+          {
+            "body": "0 K",
+            "is_correct": false
+          },
+          {
+            "body": "273°C",
+            "is_correct": false
+          },
+          {
+            "body": "273 K",
+            "is_correct": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Biological Importance of Water",
+    "problems": [
+      {
+        "body": "If a living organism has its genetic material free in the cytoplasm and lacks mitochondria, then this organism is a/an ...",
+        "choices": [
+          {
+            "body": "Prokaryote",
+            "is_correct": true
+          },
+          {
+            "body": "Eukaryote",
+            "is_correct": false
+          },
+          {
+            "body": "Plant",
+            "is_correct": false
+          },
+          {
+            "body": "Animal",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following correctly links water and metabolic reactions?",
+        "choices": [
+          {
+            "body": "Water stores energy directly",
+            "is_correct": false
+          },
+          {
+            "body": "Water is a medium for biochemical reactions",
+            "is_correct": true
+          },
+          {
+            "body": "Water stops enzyme activity",
+            "is_correct": false
+          },
+          {
+            "body": "Water forms the plasma membrane",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following factors directly slows down enzyme activity?",
+        "choices": [
+          {
+            "body": "Increasing the number of mitochondria",
+            "is_correct": false
+          },
+          {
+            "body": "Raising the temperature above the optimal limit",
+            "is_correct": true
+          },
+          {
+            "body": "Availability of substrate molecules in abundance",
+            "is_correct": false
+          },
+          {
+            "body": "Increasing the size of the sap vacuole",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "If the nuclear membrane is removed from a eukaryotic cell, the cell with this feature will resemble that of ...",
+        "choices": [
+          {
+            "body": "Bacteria",
+            "is_correct": true
+          },
+          {
+            "body": "Protists",
+            "is_correct": false
+          },
+          {
+            "body": "Fungi",
+            "is_correct": false
+          },
+          {
+            "body": "Multicellular algae",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Dysfunction of mitochondria in the cell directly leads to ...",
+        "choices": [
+          {
+            "body": "Cessation of protein synthesis",
+            "is_correct": false
+          },
+          {
+            "body": "Reduction of ATP production",
+            "is_correct": true
+          },
+          {
+            "body": "Failure of cell division",
+            "is_correct": false
+          },
+          {
+            "body": "Cessation of transpiration maintain",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Biological Adaptations of Organisms in the Aquatic Environment",
+    "problems": [
+      {
+        "body": "Which of the following is considered a physiological adaptation for ocean fish?",
+        "choices": [
+          {
+            "body": "Compressed body",
+            "is_correct": false
+          },
+          {
+            "body": "Strong arteries",
+            "is_correct": false
+          },
+          {
+            "body": "Increased blood pressure",
+            "is_correct": true
+          },
+          {
+            "body": "Large-sized gills",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following adaptations enables deep-sea fish to cope with oxygen deficiency?",
+        "choices": [
+          {
+            "body": "Slowing metabolic rate",
+            "is_correct": true
+          },
+          {
+            "body": "Compressed body",
+            "is_correct": false
+          },
+          {
+            "body": "Increased salt concentration in cells",
+            "is_correct": false
+          },
+          {
+            "body": "Strong blood vessels",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What type of osmotic adaptation is found in salmon fish?",
+        "choices": [
+          {
+            "body": "Behavioral adaptation",
+            "is_correct": false
+          },
+          {
+            "body": "Physiological adaptation",
+            "is_correct": true
+          },
+          {
+            "body": "Structural adaptation",
+            "is_correct": false
+          },
+          {
+            "body": "Physiological and structural adaptation",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The figure shows the migration of salmon fish, which is considered:",
+        "choices": [
+          {
+            "body": "Only a behavioral adaptation",
+            "is_correct": false
+          },
+          {
+            "body": "Only a functional adaptation",
+            "is_correct": false
+          },
+          {
+            "body": "Both behavioral and functional adaptation together",
+            "is_correct": true
+          },
+          {
+            "body": "Not considered an adaptation",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Icefish live in the cold Southern Oceans at depths of up to approximately........",
+        "choices": [
+          {
+            "body": "2 km",
+            "is_correct": true
+          },
+          {
+            "body": "20 km",
+            "is_correct": false
+          },
+          {
+            "body": "200 km",
+            "is_correct": false
+          },
+          {
+            "body": "2000 km",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The streamlined body, mucus, and scales in fish help reduce water resistance to their movement. This is considered a _____ adaptation.",
+        "choices": [
+          {
+            "body": "Behavioral",
+            "is_correct": false
+          },
+          {
+            "body": "Functional",
+            "is_correct": false
+          },
+          {
+            "body": "Structural",
+            "is_correct": true
+          },
+          {
+            "body": "Osmotic",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the importance of the swim bladder for bony fish?",
+        "choices": [
+          {
+            "body": "It helps with buoyancy.",
+            "is_correct": true
+          },
+          {
+            "body": "It improves the fish's ability to extract oxygen.",
+            "is_correct": false
+          },
+          {
+            "body": "It reduces water resistance to their movement.",
+            "is_correct": false
+          },
+          {
+            "body": "It makes fish withstand high pressure in the depths.",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Effect of Atmospheric Gases on Aquatic Environments",
+    "problems": [
+      {
+        "body": "All of the following are sources of dissolved carbon dioxide in water, except:",
+        "choices": [
+          {
+            "body": "The atmosphere",
+            "is_correct": false
+          },
+          {
+            "body": "Marine organisms",
+            "is_correct": false
+          },
+          {
+            "body": "Decomposition of organic materials",
+            "is_correct": false
+          },
+          {
+            "body": "Photosynthesis",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "From the two graphs, it is clear that by raising the temperature:",
+        "choices": [
+          {
+            "body": "The solubility of O₂ decreases at a greater rate than the decrease in the solubility of CO₂.",
+            "is_correct": false
+          },
+          {
+            "body": "The solubility of CO₂ decreases at a greater rate than the decrease in the solubility of O₂.",
+            "is_correct": true
+          },
+          {
+            "body": "The solubility of both O₂ and CO₂ decreases at the same rate.",
+            "is_correct": false
+          },
+          {
+            "body": "The solubility of both O₂ and CO₂ increases at the same rate.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "An increase in the percentage of CO₂ gas in water leads to.............",
+        "choices": [
+          {
+            "body": "Increased water acidification, and increased coral calcification.",
+            "is_correct": false
+          },
+          {
+            "body": "Increased water acidification, and reduced coral calcification.",
+            "is_correct": true
+          },
+          {
+            "body": "Reduced water acidification, and increased coral calcification.",
+            "is_correct": false
+          },
+          {
+            "body": "Reduced water acidification, and reduced coral calcification.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following causes a decrease in pH value of water?",
+        "choices": [
+          {
+            "body": "Increase in dissolved O₂ in water",
+            "is_correct": false
+          },
+          {
+            "body": "Increase in dissolved CO₂ in water",
+            "is_correct": true
+          },
+          {
+            "body": "Decrease in dissolved O₂ in water",
+            "is_correct": false
+          },
+          {
+            "body": "Decrease in dissolved CO₂ in water",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "When carbon dioxide gas combines with water, it produces .................. acid.",
+        "choices": [
+          {
+            "body": "H₂CO₂",
+            "is_correct": false
+          },
+          {
+            "body": "H₂CO₃",
+            "is_correct": true
+          },
+          {
+            "body": "H₂CO₄",
+            "is_correct": false
+          },
+          {
+            "body": "H₂CO₅",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "An increase in the percentage of dissolved carbon dioxide gas in water leads to converting:",
+        "choices": [
+          {
+            "body": "Calcium carbonate, which does not dissolve in water, into calcium bicarbonate, which dissolves in water.",
+            "is_correct": true
+          },
+          {
+            "body": "Calcium carbonate, which dissolves in water, into calcium bicarbonate, which does not dissolve in water.",
+            "is_correct": false
+          },
+          {
+            "body": "Calcium bicarbonate, which does not dissolve in water, into calcium carbonate, which dissolves in water.",
+            "is_correct": false
+          },
+          {
+            "body": "Calcium bicarbonate, which dissolves in water, into calcium carbonate, which does not dissolve in water.",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Effect of Light and Solar Radiation on Aquatic Environments",
+    "problems": [
+      {
+        "body": "As water depth increases, the intensity of light under the water surface...",
+        "choices": [
+          {
+            "body": "gradually increases",
+            "is_correct": false
+          },
+          {
+            "body": "gradually decreases",
+            "is_correct": true
+          },
+          {
+            "body": "decreases then increases",
+            "is_correct": false
+          },
+          {
+            "body": "increases then decreases",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following statements represents the correct order of the light zones in water according to their depth from top to bottom?",
+        "choices": [
+          {
+            "body": "Twilight zone – Dark zone – Sunlit zone",
+            "is_correct": false
+          },
+          {
+            "body": "Dark zone – Sunlit zone – Twilight zone",
+            "is_correct": false
+          },
+          {
+            "body": "Sunlit zone – Twilight zone – Dark zone",
+            "is_correct": true
+          },
+          {
+            "body": "Twilight zone – Sunlit zone – Dark zone",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The amount of light that penetrates the water surface is greatest when the angle between the incident sun's rays and the water surface equals...",
+        "choices": [
+          {
+            "body": "0°",
+            "is_correct": false
+          },
+          {
+            "body": "45°",
+            "is_correct": false
+          },
+          {
+            "body": "90°",
+            "is_correct": true
+          },
+          {
+            "body": "120°",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following light colors is absorbed first after penetrating the surface of a body of water?",
+        "choices": [
+          {
+            "body": "Red and blue",
+            "is_correct": false
+          },
+          {
+            "body": "Orange and blue",
+            "is_correct": false
+          },
+          {
+            "body": "Orange and red",
+            "is_correct": true
+          },
+          {
+            "body": "Red and yellow",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following statements is correct?",
+        "choices": [
+          {
+            "body": "Water depth affects only the absorption of light.",
+            "is_correct": false
+          },
+          {
+            "body": "Water depth affects only the intensity of light.",
+            "is_correct": false
+          },
+          {
+            "body": "Water depth affects both the absorption and intensity of light.",
+            "is_correct": true
+          },
+          {
+            "body": "Water depth affects neither the absorption nor the intensity of light.",
+            "is_correct": false
+          }
+        ]
+      },
+{
+        "body": "Photosynthesis mainly occurs in the ........... layers of bodies of water.",
+        "choices": [
+          {
+            "body": "Surface",
+            "is_correct": true
+          },
+          {
+            "body": "Mid-depth",
+            "is_correct": false
+          },
+          {
+            "body": "Deep",
+            "is_correct": false
+          },
+          {
+            "body": "Abyssal floor",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Effect of Water Pressure on Living Organisms",
+    "problems": [
+      {
+        "body": "A liquid has pressure at any point inside it that is equal to the weight of the liquid column above that point, and act on the unit of area around that point.",
+        "choices": [
+          {
+            "body": "density",
+            "is_correct": false
+          },
+          {
+            "body": "volume",
+            "is_correct": false
+          },
+          {
+            "body": "weight",
+            "is_correct": true
+          },
+          {
+            "body": "mass",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Water pressure increases by approximately .................. for every 10 meters below the surface.",
+        "choices": [
+          {
+            "body": "one Pascal",
+            "is_correct": false
+          },
+          {
+            "body": "10 Pascal",
+            "is_correct": false
+          },
+          {
+            "body": "one atmosphere",
+            "is_correct": true
+          },
+          {
+            "body": "10 atmosphere",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the main function of the swim bladder in fish that live at intermediate depths?",
+        "choices": [
+          {
+            "body": "Producing heat to maintain body temperature.",
+            "is_correct": false
+          },
+          {
+            "body": "Assisting in digestion",
+            "is_correct": false
+          },
+          {
+            "body": "Controlling Buoyancy",
+            "is_correct": true
+          },
+          {
+            "body": "Storing oxygen for respiration",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "How do fish that live at great depths adapt to high pressure?",
+        "choices": [
+          {
+            "body": "By increasing the size of their swim bladder.",
+            "is_correct": false
+          },
+          {
+            "body": "By decreasing their body density.",
+            "is_correct": false
+          },
+          {
+            "body": "By increasing their heart rate.",
+            "is_correct": false
+          },
+          {
+            "body": "By increasing the size of their gills.",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "What is the importance of lipoproteins in the cell membranes of marine organisms that live in the depths?",
+        "choices": [
+          {
+            "body": "They increase membrane rigidity.",
+            "is_correct": false
+          },
+          {
+            "body": "They increase membrane flexibility.",
+            "is_correct": true
+          },
+          {
+            "body": "They increase membrane permeability.",
+            "is_correct": false
+          },
+          {
+            "body": "They reduce membrane surface area.",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Ecological Balance and the Role of Humans in the Sustainability of Aquatic Life",
+    "problems": [
+      {
+        "body": "The role of predatory fish in maintaining ecological balance in aquatic ecosystems is:",
+        "choices": [
+          {
+            "body": "Reducing the number of small fish",
+            "is_correct": true
+          },
+          {
+            "body": "Controlling the number of predatory fish",
+            "is_correct": false
+          },
+          {
+            "body": "Reducing nutrient levels",
+            "is_correct": false
+          },
+          {
+            "body": "Reducing algae growth",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "When nutrient levels in an aquatic ecosystem are excessive, it leads to:",
+        "choices": [
+          {
+            "body": "Decreased plant growth rate",
+            "is_correct": false
+          },
+          {
+            "body": "Increased biodiversity",
+            "is_correct": false
+          },
+          {
+            "body": "Abnormal algae bloom",
+            "is_correct": true
+          },
+          {
+            "body": "Ecosystem stability",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following is an example of the impact of overfishing on ecological balance?",
+        "choices": [
+          {
+            "body": "Improved water quality",
+            "is_correct": false
+          },
+          {
+            "body": "Decline in numbers of predatory fish",
+            "is_correct": true
+          },
+          {
+            "body": "Increased biodiversity",
+            "is_correct": false
+          },
+          {
+            "body": "Stable prey populations",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the main cause of biodiversity loss in aquatic ecosystems?",
+        "choices": [
+          {
+            "body": "Sustainable fishing",
+            "is_correct": false
+          },
+          {
+            "body": "Habitat destruction",
+            "is_correct": true
+          },
+          {
+            "body": "Natural predation",
+            "is_correct": false
+          },
+          {
+            "body": "Balanced nutrient levels",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The role of humans in maintaining ecological balance is:",
+        "choices": [
+          {
+            "body": "Ignoring resource management",
+            "is_correct": false
+          },
+          {
+            "body": "Preserving natural resources",
+            "is_correct": true
+          },
+          {
+            "body": "Increasing pollution levels",
+            "is_correct": false
+          },
+          {
+            "body": "Overusing water resources",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the primary strategy for protecting aquatic ecosystems?",
+        "choices": [
+          {
+            "body": "Ignoring climate change",
+            "is_correct": false
+          },
+          {
+            "body": "Developing comprehensive protection plans",
+            "is_correct": true
+          },
+          {
+            "body": "Promoting industrial pollution",
+            "is_correct": false
+          },
+          {
+            "body": "Overexploiting natural resources",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following is NOT a role that humans can play to help maintain ecological balance?",
+        "choices": [
+          {
+            "body": "Preserving natural resources",
+            "is_correct": false
+          },
+          {
+            "body": "Limiting environmental awareness programs",
+            "is_correct": true
+          },
+          {
+            "body": "Promoting sustainable development",
+            "is_correct": false
+          },
+          {
+            "body": "Avoiding pollution and overuse of resource",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Sustainable development contributes to maintaining ecological balance by:",
+        "choices": [
+          {
+            "body": "Increasing pollution",
+            "is_correct": false
+          },
+          {
+            "body": "Responsibly meeting current needs",
+            "is_correct": true
+          },
+          {
+            "body": "Ignoring the needs of future generations",
+            "is_correct": false
+          },
+          {
+            "body": "Promoting unsustainable agricultural practices",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following human activities positively contributes to maintaining ecological balance?",
+        "choices": [
+          {
+            "body": "Overfishing marine species",
+            "is_correct": false
+          },
+          {
+            "body": "Using clean and sustainable technologies",
+            "is_correct": true
+          },
+          {
+            "body": "Increasing fertilizer use in aquatic environments",
+            "is_correct": false
+          },
+          {
+            "body": "Overfishing to control fish populations",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the most effective way to rise awareness about ecological balance?",
+        "choices": [
+          {
+            "body": "Reducing educational programs",
+            "is_correct": false
+          },
+          {
+            "body": "Conducting environmental awareness campaigns in schools and through media",
+            "is_correct": true
+          },
+          {
+            "body": "Reducing the study of ecosystems in school curricula",
+            "is_correct": false
+          },
+          {
+            "body": "Encouraging overuse of natural resources",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following is NOT a negative impact of human activities on aquatic ecosystems?",
+        "choices": [
+          {
+            "body": "Pollution from pesticides and heavy metals",
+            "is_correct": false
+          },
+          {
+            "body": "Sustainable development programs",
+            "is_correct": true
+          },
+          {
+            "body": "Overfishing",
+            "is_correct": false
+          },
+          {
+            "body": "Destruction of natural habitats, such as coral reefs",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "How can humans contribute effectively to preserving natural resources?",
+        "choices": [
+          {
+            "body": "By promoting pollution",
+            "is_correct": false
+          },
+          {
+            "body": "By using resources sustainably and avoiding overexploitation",
+            "is_correct": true
+          },
+          {
+            "body": "By destroying coral reefs for economic purposes",
+            "is_correct": false
+          },
+          {
+            "body": "By reducing environmental awareness initiatives",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "How does energy flow in an aquatic food web?",
+        "choices": [
+          {
+            "body": "From producers, such as algae, to consumers, such as herbivorous and predatory fish",
+            "is_correct": true
+          },
+          {
+            "body": "Directly from predators to plants",
+            "is_correct": false
+          },
+          {
+            "body": "From nitrogen to phosphorus",
+            "is_correct": false
+          },
+          {
+            "body": "From deep-sea organisms to surface-dwelling organisms",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "One of the major consequences of not protecting aquatic ecosystems is:",
+        "choices": [
+          {
+            "body": "Improved ecological balance",
+            "is_correct": false
+          },
+          {
+            "body": "Loss of biodiversity",
+            "is_correct": true
+          },
+          {
+            "body": "Improved water quality",
+            "is_correct": false
+          },
+          {
+            "body": "Increased species diversity",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the main purpose of maintaining ecological balance in aquatic ecosystems?",
+        "choices": [
+          {
+            "body": "To increase the population of all organisms",
+            "is_correct": false
+          },
+          {
+            "body": "To ensure the continuous flow of energy through the food web",
+            "is_correct": false
+          },
+          {
+            "body": "To increase the production of fish and other seafood",
+            "is_correct": false
+          },
+          {
+            "body": "To maintain the dynamic stability of the ecosystem",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "Which of the following human activities can lead to ecological imbalance in aquatic ecosystems?",
+        "choices": [
+          {
+            "body": "Pollution",
+            "is_correct": false
+          },
+          {
+            "body": "Overfishing",
+            "is_correct": false
+          },
+          {
+            "body": "Habitat destruction",
+            "is_correct": false
+          },
+          {
+            "body": "All of the above",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "Which of the following is not a strategy humans can use to maintain ecological balance in aquatic ecosystems?",
+        "choices": [
+          {
+            "body": "Preserving natural resources",
+            "is_correct": false
+          },
+          {
+            "body": "Promoting unsustainable development",
+            "is_correct": true
+          },
+          {
+            "body": "Increasing environmental awareness and education",
+            "is_correct": false
+          },
+          {
+            "body": "Participating in environmental policy initiatives",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Components and Layers of the Atmosphere",
+    "problems": [
+      {
+        "body": "Although nitrogen gas is highly abundant in the atmosphere, its oxides are found in very small quantities because...",
+        "choices": [
+          {
+            "body": "Nitrogen gas is produced from the decomposition of animals and plants.",
+            "is_correct": false
+          },
+          {
+            "body": "There is a strong triple bond between the two nitrogen atoms in its molecule, making it largely inert.",
+            "is_correct": true
+          },
+          {
+            "body": "It reacts with oxygen at low temperatures.",
+            "is_correct": false
+          },
+          {
+            "body": "It reacts with oxygen during natural phenomena such as rainfall.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The most abundant gas in Earth's atmosphere is ............",
+        "choices": [
+          {
+            "body": "Oxygen",
+            "is_correct": false
+          },
+          {
+            "body": "Argon",
+            "is_correct": false
+          },
+          {
+            "body": "Nitrogen",
+            "is_correct": true
+          },
+          {
+            "body": "Carbon dioxide",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Oxygen gas makes up approximately .......... of the volume of atmospheric air.",
+        "choices": [
+          {
+            "body": "0.04%",
+            "is_correct": false
+          },
+          {
+            "body": "0.93%",
+            "is_correct": false
+          },
+          {
+            "body": "21%",
+            "is_correct": true
+          },
+          {
+            "body": "78%",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The layer that absorbs short-wavelength ultraviolet (UV) radiation is ..........",
+        "choices": [
+          {
+            "body": "Argon",
+            "is_correct": false
+          },
+          {
+            "body": "Ozone",
+            "is_correct": true
+          },
+          {
+            "body": "Nitrogen",
+            "is_correct": false
+          },
+          {
+            "body": "Oxygen",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The ozone layer in the atmosphere extends approximately from an altitude of .......... above Earth's surface.",
+        "choices": [
+          {
+            "body": "10 km – 20 km",
+            "is_correct": false
+          },
+          {
+            "body": "10 km – 50 km",
+            "is_correct": false
+          },
+          {
+            "body": "20 km – 40 km",
+            "is_correct": true
+          },
+          {
+            "body": "20 km – 50 km",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The thickness of the thermosphere is approximately ..........",
+        "choices": [
+          {
+            "body": "30 km",
+            "is_correct": false
+          },
+          {
+            "body": "40 km",
+            "is_correct": false
+          },
+          {
+            "body": "620 km",
+            "is_correct": true
+          },
+          {
+            "body": "700 km",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What is the temperature at the top of a mountain 2 km high, if the air temperature at ground level is 5°C?",
+        "choices": [
+          {
+            "body": "0°C",
+            "is_correct": false
+          },
+          {
+            "body": "1.5°C",
+            "is_correct": false
+          },
+          {
+            "body": "–1.5°C",
+            "is_correct": false
+          },
+          {
+            "body": "–8°C",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "The layer of the atmosphere with the lowest temperature, reaching approximately –93°C, is:",
+        "choices": [
+          {
+            "body": "Mesosphere",
+            "is_correct": true
+          },
+          {
+            "body": "Exosphere",
+            "is_correct": false
+          },
+          {
+            "body": "Stratosphere",
+            "is_correct": false
+          },
+          {
+            "body": "Troposphere",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Chemical Reactions in the Atmosphere",
+    "problems": [
+      {
+        "body": "Which of the following could represent the first step in the formation of ozone gas?",
+        "choices": [
+          {
+            "body": "Option a",
+            "is_correct": true
+          },
+          {
+            "body": "Option b",
+            "is_correct": false
+          },
+          {
+            "body": "Option c",
+            "is_correct": false
+          },
+          {
+            "body": "Option d",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Ozone can absorb photons with a wavelength equal to...",
+        "choices": [
+          {
+            "body": "200 nm",
+            "is_correct": false
+          },
+          {
+            "body": "250 nm",
+            "is_correct": true
+          },
+          {
+            "body": "350 nm",
+            "is_correct": false
+          },
+          {
+            "body": "400 nm",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "What type of reaction is represented by the equation O₂ → O + O?",
+        "choices": [
+          {
+            "body": "Photodissociation",
+            "is_correct": true
+          },
+          {
+            "body": "Nuclear dissociation",
+            "is_correct": false
+          },
+          {
+            "body": "Thermal dissociation",
+            "is_correct": false
+          },
+          {
+            "body": "Ionic dissociation",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "When the bond between the two oxygen atoms in an oxygen molecule breaks due to photodissociation...",
+        "choices": [
+          {
+            "body": "two oxygen ions (O⁻²)",
+            "is_correct": false
+          },
+          {
+            "body": "two single oxygen atoms (O)",
+            "is_correct": true
+          },
+          {
+            "body": "one oxygen atom (O) and one oxygen ion (O⁻²)",
+            "is_correct": false
+          },
+          {
+            "body": "two single oxygen atoms (O) and two oxygen ion (O⁻²)",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following ultraviolet wavelengths causes photodissociation of the covalent bond in an oxygen molecule?",
+        "choices": [
+          {
+            "body": "230 nm",
+            "is_correct": true
+          },
+          {
+            "body": "240 nm",
+            "is_correct": false
+          },
+          {
+            "body": "290 nm",
+            "is_correct": false
+          },
+          {
+            "body": "305 nm",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "An ozone molecule is formed by the combination of...",
+        "choices": [
+          {
+            "body": "two oxygen molecules (O₂)",
+            "is_correct": false
+          },
+          {
+            "body": "two individual oxygen atoms (O)",
+            "is_correct": false
+          },
+          {
+            "body": "three individual oxygen atoms (O)",
+            "is_correct": false
+          },
+          {
+            "body": "one individual oxygen atom (O) and one oxygen molecule (O₂)",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "Smog is formed as a result of the accumulation of products from all the following reactions except...",
+        "choices": [
+          {
+            "body": "the reaction of nitrogen and atmospheric oxygen during lightning",
+            "is_correct": false
+          },
+          {
+            "body": "the reaction of oxygen with sulfur under suitable conditions",
+            "is_correct": false
+          },
+          {
+            "body": "the reaction of hydrogen with oxygen under suitable conditions",
+            "is_correct": true
+          },
+          {
+            "body": "the reaction of nitrogen oxides with hydrocarbons in the presence of sunlight",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following options represents some of the health effects of ozone gas on humans?",
+        "choices": [
+          {
+            "body": "Cataracts, skin cancer, and decline in bee populations",
+            "is_correct": false
+          },
+          {
+            "body": "Skin cancer, weakened immunity, and destruction of plankton",
+            "is_correct": false
+          },
+          {
+            "body": "Reduced photosynthesis, impaired brain development, and delayed child growth",
+            "is_correct": false
+          },
+          {
+            "body": "Allergies, bronchitis, and cardiovascular diseases.",
+            "is_correct": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Physical Factors and Their Effect on the Atmosphere",
+    "problems": [
+      {
+        "body": "........... is used to measure atmospheric pressure.",
+        "choices": [
+          {
+            "body": "Thermometer",
+            "is_correct": false
+          },
+          {
+            "body": "Hydrometer",
+            "is_correct": false
+          },
+          {
+            "body": "Barometer",
+            "is_correct": true
+          },
+          {
+            "body": "Hygrometer",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "If the atmospheric pressure at the top of a mountain is 750mm.Hg, it equals ....... (Given that the usual atmospheric pressure equals 1.013x10⁵ N/m² = 76 cm.Hg)",
+        "choices": [
+          {
+            "body": "99967.11 N/m²",
+            "is_correct": true
+          },
+          {
+            "body": "89967.11 N/m²",
+            "is_correct": false
+          },
+          {
+            "body": "101300 N/m²",
+            "is_correct": false
+          },
+          {
+            "body": "1013 N/m²",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Which of the following correctly expresses the effect of atmospheric pressure on the amount of oxygen available for breathing?",
+        "choices": [
+          {
+            "body": "Less in areas of low pressure",
+            "is_correct": true
+          },
+          {
+            "body": "More in areas of low pressure",
+            "is_correct": false
+          },
+          {
+            "body": "Equal in all areas of different pressures",
+            "is_correct": false
+          },
+          {
+            "body": "The amount in low-pressure areas is less than or equal to that in high-pressure areas",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "A body with a temperature of 283 K equals ........... on the Fahrenheit scale.",
+        "choices": [
+          {
+            "body": "10°F",
+            "is_correct": false
+          },
+          {
+            "body": "30°F",
+            "is_correct": false
+          },
+          {
+            "body": "50°F",
+            "is_correct": true
+          },
+          {
+            "body": "70°F",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The boiling point of pure water equals ........",
+        "choices": [
+          {
+            "body": "100 K",
+            "is_correct": false
+          },
+          {
+            "body": "212°F",
+            "is_correct": true
+          },
+          {
+            "body": "373°F",
+            "is_correct": false
+          },
+          {
+            "body": "373 K",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Mount Sinai is approximately 2285 meters above sea level. If the temperature at the base of the mountain is 32°C, the temperature at an altitude of 528 meters above the base equals:",
+        "choices": [
+          {
+            "body": "16°C",
+            "is_correct": false
+          },
+          {
+            "body": "35°C",
+            "is_correct": false
+          },
+          {
+            "body": "19°C",
+            "is_correct": false
+          },
+          {
+            "body": "29°C",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "8 millibar = …………………….",
+        "choices": [
+          {
+            "body": "1000 N/m²",
+            "is_correct": false
+          },
+          {
+            "body": "100 N/m²",
+            "is_correct": false
+          },
+          {
+            "body": "0.01 N/m²",
+            "is_correct": false
+          },
+          {
+            "body": "800 N/m²",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "Which of the following expresses a form of adaptation to freezing?",
+        "choices": [
+          {
+            "body": "Producing a large amount of proteins before entering hibernation, as in the wood frog",
+            "is_correct": false
+          },
+          {
+            "body": "Producing a large amount of fats before entering hibernation, as in the wood frog",
+            "is_correct": false
+          },
+          {
+            "body": "Producing a large amount of antifreeze proteins, as in the ice fish",
+            "is_correct": true
+          },
+          {
+            "body": "Producing a large amount of antifreeze glucose, as in the ice fish",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Atmosphere and the Role of Science in Its Sustainability",
+    "problems": [
+      {
+        "body": "All of the following are greenhouse gases that cause global warming except:",
+        "choices": [
+          {
+            "body": "CH₄",
+            "is_correct": false
+          },
+          {
+            "body": "CFCs",
+            "is_correct": false
+          },
+          {
+            "body": "O₃",
+            "is_correct": false
+          },
+          {
+            "body": "N₂",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "All of the following are negative effects of global warming except:",
+        "choices": [
+          {
+            "body": "melting ice and flooding of coasts",
+            "is_correct": false
+          },
+          {
+            "body": "decreased biodiversity due to extinction of polar organisms",
+            "is_correct": false
+          },
+          {
+            "body": "drought waves and hurricanes",
+            "is_correct": false
+          },
+          {
+            "body": "decreased biodiversity due to extinction of desert organisms",
+            "is_correct": true
+          }
+        ]
+      },
+      {
+        "body": "The increase in greenhouse gases in the atmosphere prevents the penetration of ____________, causing global warming.",
+        "choices": [
+          {
+            "body": "ultraviolet rays",
+            "is_correct": false
+          },
+          {
+            "body": "infrared rays",
+            "is_correct": true
+          },
+          {
+            "body": "radio waves",
+            "is_correct": false
+          },
+          {
+            "body": "microwave waves",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "The main role of emissions from burning fossil fuels in causing global warming is...",
+        "choices": [
+          {
+            "body": "increasing Earth's surface absorption of sunlight.",
+            "is_correct": false
+          },
+          {
+            "body": "forming a layer in the atmosphere that traps heat and prevents it from escaping.",
+            "is_correct": true
+          },
+          {
+            "body": "directly reacting with polar ice, causing its melting.",
+            "is_correct": false
+          },
+          {
+            "body": "increasing the amount of oxygen in the air, which raises its temperature.",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "body": "Earth's surface absorbs short-wavelength solar radiation and then re-emits it in the form of...",
+        "choices": [
+          {
+            "body": "thermal radiation",
+            "is_correct": true
+          },
+          {
+            "body": "visible rays",
+            "is_correct": false
+          },
+          {
+            "body": "ionizing radiation",
+            "is_correct": false
+          },
+          {
+            "body": "ultraviolet rays",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  }
+]

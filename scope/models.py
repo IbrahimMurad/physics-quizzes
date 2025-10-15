@@ -98,15 +98,10 @@ class Scope(models.Model):
         """returns all the probelms under this scope"""
         from problem.models import Problem
 
-        if self.level == 0:
-            return Problem.objects.filter(
-                scope__parent__parent__parent=self, is_published=True
-            )
-        elif self.level == 1:
-            return Problem.objects.filter(scope__parent__parent=self, is_published=True)
-        elif self.level == 2:
-            return Problem.objects.filter(scope__parent=self, is_published=True)
-        elif self.level == 3:
-            return self.problems_set.filter(is_published=True)
-        else:
-            raise ValueError("Unrecognized scope level.")
+        return Problem.objects.filter(
+            models.Q(scope=self)
+            | models.Q(scope__parent=self)
+            | models.Q(scope__parent__parent=self)
+            | models.Q(scope__parent__parent__parent=self),
+            is_published=True,
+        )
