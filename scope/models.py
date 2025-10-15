@@ -34,7 +34,7 @@ class Scope(models.Model):
         db_index=True,
     )
     level = models.PositiveSmallIntegerField(
-        choices=LevelChoices, default=LevelChoices.TEXTBOOK, editable=False
+        choices=LevelChoices, default=LevelChoices.TEXTBOOK
     )
     is_published = models.BooleanField(default=False)
 
@@ -76,11 +76,6 @@ class Scope(models.Model):
                 self.slug = f"{base_slug}-{counter}"
                 counter += 1
 
-        if self.parent:
-            self.level = self.parent.level + 1
-        else:
-            self.level = self.LevelChoices.TEXTBOOK
-
         self.full_clean()
         super().save()
 
@@ -112,6 +107,6 @@ class Scope(models.Model):
         elif self.level == 2:
             return Problem.objects.filter(scope__parent=self, is_published=True)
         elif self.level == 3:
-            return Problem.objects.filter(scope=self, is_published=True)
+            return self.problems.filter(is_published=True)
         else:
             raise ValueError("Unrecognized scope level.")
