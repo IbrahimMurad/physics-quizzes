@@ -1,4 +1,5 @@
 from django.urls import path
+
 from problem.views import scope_problem_list
 from scope.views import (
     favorites,

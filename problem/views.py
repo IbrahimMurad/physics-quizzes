@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from scope.models import Scope
-from django.shortcuts import get_object_or_404
-from problem.models import Problem
 from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import get_object_or_404, redirect, render
+
+from problem.models import Problem
+from scope.models import Scope
 from scope.views import _get_breadcrumbs
+
 
 @login_required()
 @permission_required('problem.view_problem', raise_exception=True)
